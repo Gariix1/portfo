@@ -9,6 +9,35 @@
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
+        html,
+        body {
+            min-height: 100vh;
+            margin-left: 10px;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #f3a79093, #eb7ea880, #71c7e67e, #a6e6d7a6);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
+            /* Esto evita que el fondo se repita al scroll */
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .sidebar-expanded {
             width: 250px;
         }
@@ -31,6 +60,12 @@
             visibility: visible;
         }
 
+        .sidebar-collapsed~#mainContent {
+            margin-left: 60px;
+            /* Igual al ancho de .sidebar-collapsed */
+        }
+
+
         .icon {
             min-width: 1.5rem;
         }
@@ -43,13 +78,55 @@
         .sidebar-collapsed #toggleSidebar {
             transform: translateX(50px);
         }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+        }
+
+        .submenu.expanded {
+            max-height: 500px;
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .fa-chevron-down {
+            transition: transform 0.3s ease-out;
+        }
+
+        .fa-chevron-down.rotated {
+            transform: rotate(180deg);
+        }
+
+        #sidebar {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        #mainContent {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            margin-right: 20px;
+            margin-left: 250px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
     </style>
 </head>
 
-<body class="flex bg-gray-100">
+<body class="flex">
     <!-- Sidebar -->
     <div id="sidebar"
-        class="sidebar-expanded fixed top-0 left-0 h-full bg-white text-gray-800 transition-all duration-300 ease-in-out z-50 shadow-lg border-r border-gray-200 overflow-x-hidden"
+        class="sidebar-expanded fixed top-0 left-0 h-full text-gray-800 transition-all duration-300 ease-in-out z-50 shadow-lg border-r border-gray-200 overflow-x-hidden"
         aria-label="Sidebar">
         <div class="flex items-center justify-between p-4 border-b border-gray-200">
             <h2 class="text-xl font-bold text-green-600 sidebar-content">Menú</h2>
@@ -60,7 +137,7 @@
                     <a href="#"
                         class="block px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center"
                         hx-get="/content/index" hx-target="#mainContent">
-                        <i class="fas fa-index icon mr-3"></i>
+                        <i class="fas fa-home icon mr-3"></i>
                         <span class="sidebar-content">Inicio</span>
                     </a>
                 </li>
@@ -74,10 +151,10 @@
                         </div>
                         <i class="fas fa-chevron-down sidebar-content"></i>
                     </button>
-                    <ul class="submenu pl-6 bg-green-50 hidden" aria-hidden="true">
+                    <ul class="submenu pl-6 bg-green-50" aria-hidden="true">
                         <li><a href="./content/service1.html"
-                            class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                            hx-get="./content/service1.html" hx-target="#mainContent">Demostraciones</a></li>
+                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
+                                hx-get="./content/service1.html" hx-target="#mainContent">Demostraciones</a></li>
                         <li><a href="#"
                                 class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
                                 hx-get="/content/service2" hx-target="#mainContent">Pronto...</a></li>
@@ -86,12 +163,11 @@
                                 hx-get="/content/service3" hx-target="#mainContent">Pronto...</a></li>
                     </ul>
                 </li>
-                <!-- Más elementos del menú... -->
             </ul>
         </nav>
     </div>
 
-    <!-- Botón de toggle fuera de la sidebar -->
+    <!-- Botón de toggle -->
     <button id="toggleSidebar"
         class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out">
         <i class="fas fa-bars"></i>
@@ -100,7 +176,9 @@
     <!-- Contenido principal -->
     <main id="mainContent" class="flex-grow p-6 ml-60 transition-all duration-300 ease-in-out">
         <h1 class="text-3xl font-bold text-green-600 mb-4">Contenido Principal</h1>
-        <p class="text-gray-700">Este inicio interactivo tiene animaciones y funcionalidades, como una plantilla para un sistema con una sidebar escalable, en el apartado de Utilidad hay mas opciones a revisar acerca de diseños.</p>
+        <p class="text-gray-700">Este inicio interactivo tiene animaciones y funcionalidades, como una plantilla para un
+            sistema con una sidebar escalable, en el apartado de Utilidad hay mas opciones a revisar acerca de diseños.
+        </p>
     </main>
 
     <script>
@@ -108,13 +186,18 @@
         const mainContent = document.getElementById('mainContent');
         const toggleButton = document.getElementById('toggleSidebar');
 
+        // Asegurar que el botón de toggle esté en la posición correcta inicialmente
+        toggleButton.style.left = '208px'; // Posición inicial cuando está expandido
+
         function toggleSidebar() {
             const isExpanded = sidebar.classList.contains('sidebar-expanded');
             sidebar.classList.toggle('sidebar-expanded', !isExpanded);
             sidebar.classList.toggle('sidebar-collapsed', isExpanded);
-            mainContent.style.marginLeft = isExpanded ? '60px' : '240px';
             toggleButton.style.left = isExpanded ? '16px' : '208px';
-            toggleButton.innerHTML = isExpanded ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-bars"></i>';
+            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+
+            // Ya no necesitamos modificar mainContent.style.marginLeft aquí
+            // porque lo manejamos con CSS
         }
 
         toggleButton.addEventListener('click', toggleSidebar);
@@ -122,9 +205,8 @@
         document.querySelectorAll('.menu-item > button').forEach(button => {
             button.addEventListener('click', function () {
                 if (sidebar.classList.contains('sidebar-collapsed')) {
-                    // Si la sidebar está colapsada, expándela primero
                     toggleSidebar();
-                    setTimeout(() => toggleSubmenu(this), 300); // Espera a que termine la animación
+                    setTimeout(() => toggleSubmenu(this), 300);
                 } else {
                     toggleSubmenu(this);
                 }
@@ -134,12 +216,14 @@
         function toggleSubmenu(button) {
             const submenu = button.nextElementSibling;
             const icon = button.querySelector('.fa-chevron-down');
-            submenu.classList.toggle('hidden');
-            icon.classList.toggle('transform');
-            icon.classList.toggle('rotate-180');
-            button.setAttribute('aria-expanded', !submenu.classList.contains('hidden'));
-            submenu.setAttribute('aria-hidden', submenu.classList.contains('hidden'));
+
+            submenu.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+
+            button.setAttribute('aria-expanded', submenu.classList.contains('expanded'));
+            submenu.setAttribute('aria-hidden', !submenu.classList.contains('expanded'));
         }
     </script>
 </body>
+
 </html>
