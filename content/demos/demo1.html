@@ -15,7 +15,10 @@
 
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f4f4f9 0%, #e8e8ef 100%);
+            background: linear-gradient(-45deg, #f3a79093, #c9ffa580, #71c7e67e, #a6e6d7a6);
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,11 +27,25 @@
             margin: 0;
         }
 
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
         .back-button {
             position: fixed;
             top: 20px;
             left: 20px;
-            background: #4299e1;
+            background: #43b838;
             color: white;
             width: 50px;
             height: 50px;
@@ -37,15 +54,21 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.521);
             transition: all 0.3s ease;
             z-index: 1000;
         }
 
         .back-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-            background: #3182ce;
+            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
+            background: #002e58;
+        }
+
+        .back-button:focus {
+            transform: translateY(-0.1px);
+            box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.621);
+            background: #ff5454;
         }
 
         .notification {
@@ -156,7 +179,7 @@
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            background: #0e3a00;
             color: white;
             font-size: 16px;
             font-weight: 600;
@@ -166,16 +189,21 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
         }
 
         button:hover {
-            background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+            color: rgb(43, 43, 43);
+            background: #c6ff28;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
         }
 
         button:active {
+            color: rgb(43, 43, 43);
             transform: translateY(0);
+            background: #00ff0d;
+            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
         }
 
         @keyframes shake {
@@ -241,8 +269,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="Just numbers, it can be as: 0998765432"
-                    required>
+                <input type="tel" id="phone" name="phone" placeholder="Just numbers, it can be as: 0998765432" required>
                 <div class="error-message"></div>
             </div>
 
@@ -257,8 +284,8 @@
 
         <div class="form-group">
             <label for="identificacion">Your ID (DNI, NIE, etc.)</label>
-            <input type="text" id="identificacion" name="identificacion"
-                placeholder="It can be as: 1234567890" required>
+            <input type="text" id="identificacion" name="identificacion" placeholder="It can be as: 1234567890"
+                required>
             <div class="error-message"></div>
         </div>
 
