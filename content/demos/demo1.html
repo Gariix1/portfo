@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>Formulario Validado</title>
+    <title>Validation Form</title>
     <style>
         * {
             margin: 0;
@@ -218,62 +218,68 @@
     <div id="notification" class="notification"></div>
 
     <form id="registrationForm">
-        <h2>Formulario de Registro</h2>
+        <h2>Register</h2>
 
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingresa tu nombre" required>
+            <label for="nombre">Name</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Here your name, John" required>
             <div class="error-message"></div>
         </div>
 
         <div class="form-group">
-            <label for="apellido">Apellido</label>
-            <input type="text" id="apellido" name="apellido" placeholder="Ingresa tu apellido" required>
+            <label for="apellido">Last Name</label>
+            <input type="text" id="apellido" name="apellido" placeholder="Here your Last name, Doe" required>
             <div class="error-message"></div>
         </div>
 
         <div class="form-group">
-            <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" name="direccion" placeholder="Ingresa tu dirección" required>
+            <label for="direccion">Address</label>
+            <input type="text" id="direccion" name="direccion" placeholder="Where do you live?" required>
             <div class="error-message"></div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" placeholder="Ingresa tu teléfono" required>
+                <label for="telefono">Phone Number</label>
+                <input type="tel" id="telefono" name="Phone number" placeholder="Just numbers, it can be as: 0998765432"
+                    required>
                 <div class="error-message"></div>
             </div>
 
             <div class="form-group">
-                <label for="pais">País de residencia</label>
+                <label for="pais">Country</label>
                 <select id="pais" name="pais" required>
-                    <option value="">Selecciona tu país</option>
+                    <option value="">Select your country</option>
                 </select>
                 <div class="error-message"></div>
             </div>
         </div>
 
         <div class="form-group">
-            <label for="identificacion">Identificación (DNI, NIE, etc.)</label>
-            <input type="text" id="identificacion" name="identificacion" placeholder="Ingresa tu identificación"
-                required>
+            <label for="identificacion">Your ID (DNI, NIE, etc.)</label>
+            <input type="text" id="identificacion" name="identificacion"
+                placeholder="It can be as: 1234567890" required>
             <div class="error-message"></div>
         </div>
 
         <div class="form-group">
-            <label for="genero">Género</label>
+            <label for="genero">Gender</label>
             <select id="genero" name="genero" required>
-                <option value="">Selecciona tu género</option>
-                <option value="masculino">Masculino</option>
-                <option value="femenino">Femenino</option>
-                <option value="otro">Otro</option>
+                <option value="">Select your gender</option>
+                <option value="masculino">Masculine</option>
+                <option value="femenino">Feminine</option>
+                <option value="no-binario">Non-binary</option>
+                <option value="transmasculino">Transmasculine</option>
+                <option value="transfemenino">Transfeminine</option>
+                <option value="genderqueer">Genderqueer</option>
+                <option value="agender">Agender</option>
+                <option value="otro">Other</option>
             </select>
             <div class="error-message"></div>
         </div>
 
         <button type="submit">
-            Registrar
+            Register
         </button>
     </form>
 
@@ -290,13 +296,13 @@
         };
 
         const errorMessages = {
-            nombre: 'El nombre debe contener solo letras y tener entre 2 y 200 caracteres',
-            apellido: 'El apellido debe contener solo letras y tener entre 2 y 200 caracteres',
-            direccion: 'La dirección debe tener entre 5 y 100 caracteres',
-            telefono: 'El teléfono debe contener entre 7 y 15 números',
-            identificacion: 'La identificación debe tener entre 9 y 16 caracteres alfanuméricos',
-            pais: 'Selecciona un país',
-            genero: 'Selecciona un género'
+            nombre: 'The name must contain only letters and be between 2 and 200 characters long',
+            apellido: 'The last name must contain only letters and be between 2 and 200 characters long',
+            direccion: 'The address must be between 5 and 100 characters long',
+            telefono: 'The phone number must contain between 7 and 15 digits',
+            identificacion: 'The ID must be between 9 and 16 alphanumeric characters',
+            pais: 'You must select a country',
+            genero: 'Your must select a gender'
         };
 
         function validateField(input) {
@@ -305,7 +311,7 @@
             const errorElement = input.nextElementSibling;
 
             if (!value) {
-                showError(input, `El campo ${fieldName} es requerido`);
+                showError(input, `The field ${fieldName} is required`);
                 return false;
             }
 
@@ -349,7 +355,7 @@
             notification.textContent = message;
             notification.className = `notification ${type}`;
             setTimeout(() => notification.classList.add('show'), 100);
-            
+
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
@@ -358,7 +364,7 @@
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             let hasErrors = false;
-            
+
             inputs.forEach(input => {
                 if (!validateField(input)) {
                     hasErrors = true;
@@ -366,17 +372,17 @@
             });
 
             if (hasErrors) {
-                showNotification('Por favor, corrija los campos marcados en rojo antes de continuar', 'error');
+                showNotification('Please, correct the fields marked in red before continuing.', 'error');
                 return;
             }
 
             const button = form.querySelector('button');
-            button.textContent = 'Enviando...';
+            button.textContent = 'Sending :D ...';
             button.disabled = true;
-            
+
             setTimeout(() => {
-                showNotification('¡Registro completado con éxito!', 'success');
-                button.textContent = 'Registrar';
+                showNotification('¡Register Completed ;)!', 'success');
+                button.textContent = 'Register';
                 button.disabled = false;
                 form.reset();
                 inputs.forEach(input => {
@@ -405,9 +411,9 @@
                     select.appendChild(option);
                 });
             } catch (error) {
-                console.error('Error al obtener la lista de países', error);
+                console.error('Error retrieving the list of countrie.', error);
                 const select = document.getElementById('pais');
-                select.innerHTML = '<option value="">Error al cargar países</option>';
+                select.innerHTML = '<option value="">Error loading countries.</option>';
             }
         }
 
