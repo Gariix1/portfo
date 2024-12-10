@@ -241,7 +241,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="telefono">Phone Number</label>
-                <input type="tel" id="telefono" name="Phone number" placeholder="Just numbers, it can be as: 0998765432"
+                <input type="tel" id="telefono" name="telefono" placeholder="Just numbers, it can be as: 0998765432"
                     required>
                 <div class="error-message"></div>
             </div>
@@ -377,11 +377,11 @@
             }
 
             const button = form.querySelector('button');
-            button.textContent = 'Sending :D ...';
+            button.textContent = 'Sending :D';
             button.disabled = true;
 
             setTimeout(() => {
-                showNotification('¡Register Completed ;)!', 'success');
+                showNotification('¡Register Completed!', 'success');
                 button.textContent = 'Register';
                 button.disabled = false;
                 form.reset();
