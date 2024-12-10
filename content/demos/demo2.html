@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo iOS con Tailwind</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 h-screen font-sans">
+
+  <!-- Contenedor Principal -->
+  <div class="max-w-md mx-auto h-screen flex flex-col">
+
+    <!-- Encabezado de la app -->
+    <header class="bg-white p-6 text-center border-b border-gray-200">
+      <h1 class="text-2xl font-bold text-gray-900">Diseño Móvil</h1>
+      <p class="text-gray-500">Diseño limpio y minimalista</p>
+    </header>
+
+    <!-- Sección principal con scroll -->
+    <main class="flex-1 overflow-y-auto p-4 bg-gray-50">
+      <!-- Tarjeta 1 -->
+      <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-gray-800">Notificación</h2>
+        <p class="text-gray-600 mt-2">Esta es una tarjeta de ejemplo que puedes personalizar. El diseño sigue las pautas de iOS.</p>
+        <button class="mt-4 w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300">
+          Aceptar
+        </button>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-gray-800">Perfil de Usuario</h2>
+        <div class="flex items-center mt-4">
+          <img src="https://via.placeholder.com/50" alt="Avatar" class="w-12 h-12 rounded-full">
+          <div class="ml-4">
+            <p class="text-gray-900 font-semibold">Juan Pérez</p>
+            <p class="text-gray-500 text-sm">Diseñador UI/UX</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de opciones -->
+      <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+        <h2 class="text-lg font-bold text-gray-800 mb-2">Configuración</h2>
+        <ul class="divide-y divide-gray-200">
+          <li class="py-4 flex justify-between items-center">
+            <span class="text-gray-800">Notificaciones</span>
+            <button class="bg-gray-200 w-10 h-6 rounded-full relative">
+              <span class="block w-4 h-4 bg-blue-500 rounded-full absolute top-1 left-1 transition-transform transform translate-x-4"></span>
+            </button>
+          </li>
+          <li class="py-4 flex justify-between items-center">
+            <span class="text-gray-800">Modo Oscuro</span>
+            <button class="bg-gray-200 w-10 h-6 rounded-full relative">
+              <span class="block w-4 h-4 bg-gray-400 rounded-full absolute top-1 left-1"></span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+    </main>
+
+    <!-- Barra de navegación inferior -->
+    <nav class="bg-white border-t border-gray-200">
+      <div class="flex justify-between px-4 py-2">
+        <button class="flex flex-col items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V3m0 0L3 10m6-7l6 7" />
+          </svg>
+          <span class="text-xs text-gray-500">Inicio</span>
+        </button>
+        <button class="flex flex-col items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20l9-5-9-5-9 5 9 5z" />
+          </svg>
+          <span class="text-xs text-gray-500">Explorar</span>
+        </button>
+        <button class="flex flex-col items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.84 4.61A5.5 5.5 0 1115.5 9.5H21" />
+          </svg>
+          <span class="text-xs text-gray-500">Perfil</span>
+        </button>
+      </div>
+    </nav>
+
+  </div>
+
+</body>
+</html>

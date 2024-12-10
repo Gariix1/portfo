@@ -122,46 +122,47 @@
         }
 
 
-            /* Estilos para las palabras resaltadas */
-    .highlight-word {
-        background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1, #96e6a1);
-        background-size: 200% auto;
-        color: transparent;
-        -webkit-background-clip: text;
-        background-clip: text;
-        animation: shine 3s linear infinite;
-        font-weight: bold;
-        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        padding: 0 4px;
-    }
-
-    @keyframes shine {
-        to {
-            background-position: 200% center;
+        /* Estilos para las palabras resaltadas */
+        .highlight-word {
+            background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1, #96e6a1);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            padding: 0 4px;
         }
-    }
 
-    /* Efecto de brillo */
-    .highlight-word::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-        animation: shimmer 2s infinite;
-    }
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
 
-    @keyframes shimmer {
-        0% {
-            transform: translateX(-100%);
+        /* Efecto de brillo */
+        .highlight-word::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
         }
-        100% {
-            transform: translateX(100%);
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
-    }
-</style>
+    </style>
 </head>
 
 <body class="flex">
@@ -218,8 +219,10 @@
     <main id="mainContent" class="flex-grow p-6 ml-60 transition-all duration-300 ease-in-out">
         <h1 class="text-3xl font-bold text-green-600 mb-4">Contenido Principal</h1>
         <p class="text-gray-700">Este inicio interactivo tiene animaciones y funcionalidades, como una plantilla para un
-            sistema con una sidebar escalable, en el apartado de Utilidad hay mas opciones a revisar demos de proyectos este sitio aún se sigue construyendo pero es una base en forma de muestra del 
-            <span class="highlight-word relative inline-block">diseño</span> y 
+            sistema con una sidebar escalable sin usar plantillas, al estilo mas puro con personalización desde 0
+            especificamente para mostrar habilidades puras, en el apartado de Utilidad hay mas opciones a revisar demos
+            de proyectos. Este sitio aún se sigue construyendo pero es una base en forma de muestra del
+            <span class="highlight-word relative inline-block">diseño</span> y
             <span class="highlight-word relative inline-block">desarrollo</span> que se puede crear.
         </p>
     </main>
