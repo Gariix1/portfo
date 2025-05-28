@@ -27,6 +27,8 @@
                         'success-light': '#22c55e', 'success-dark': '#4ade80',
                         'info-light': '#0ea5e9', 'info-dark': '#38bdf8', 
                         'warning-light': '#f59e0b', 'warning-dark': '#fbbf24', 
+                        'html-bg-light': '#f1f5f9', 
+                        'html-bg-dark': '#111827',  
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.3s ease-out forwards', 'fade-out': 'fadeOut 0.3s ease-in forwards',
@@ -50,10 +52,10 @@
                         spinnerRotate: { 'to': { transform: 'rotate(360deg)' } },
                         toastEnterMobile: { '0%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' } },
                         toastLeaveMobile: { '0%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' } },
-                        toastEnterDesktop: { '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } }, // No translateX for desktop
-                        toastLeaveDesktop: { '0%': { opacity: '1', transform: 'translateY(0) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' } }, // No translateX for desktop
+                        toastEnterDesktop: { '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } }, 
+                        toastLeaveDesktop: { '0%': { opacity: '1', transform: 'translateY(0) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' } }, 
                     },
-                    boxShadow: { /* Igual que antes */
+                    boxShadow: { 
                         'fluent': '0 4px 16px rgba(0,0,0,0.07)', 'fluent-dark': '0 4px 16px rgba(0,0,0,0.15)',
                         'fluent-nav-mobile': '0 -4px 16px rgba(0,0,0,0.06)', 'fluent-nav-mobile-dark': '0 -4px 16px rgba(0,0,0,0.12)',
                         'fluent-modal': '0 8px 32px rgba(0,0,0,0.1)', 'fluent-modal-dark': '0 8px 32px rgba(0,0,0,0.2)',
@@ -63,7 +65,27 @@
         }
     </script>
     <style>
-        body { -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
+        html {
+            height: 100%;
+            background-color: #f1f5f9; /* Tailwind's slate-100 */
+            overscroll-behavior-y: contain; /* Prevenir "bounce" a nivel de HTML */
+        }
+        html.dark {
+            background-color: #111827; /* Tailwind's gray-900 (surface-dark) */
+        }
+        body { 
+            height: 100%; 
+            -webkit-tap-highlight-color: transparent; 
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior-y: contain; /* Reforzar en body también */
+        }
+        main#main-content-area {
+            overscroll-behavior-y: contain; 
+        }
+        #desktop-sidebar nav {
+            overscroll-behavior-y: contain; 
+        }
+
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #9ca3af40; border-radius: 3px; }
@@ -80,11 +102,14 @@
         .profile-picture-container:hover { transform: scale(1.05); }
         .dark .profile-picture-container { background-color: #4b5563; --border-color: #374151; color: var(--primary-color-dark, #8b5cf6); }
 
-        .search-input-container { /* Sticky search bar in Explore tab */
-            position: sticky; top: -1px; /* -1px to avoid flicker with border/shadow of header */
-            z-index: 15; /* Below main header (z-30), above tab content */
+        .search-input-container { 
+            position: sticky; top: -1px; 
+            z-index: 15; 
             padding-top: 0.75rem; padding-bottom: 0.75rem; 
-            /* Background will be set by JS to match tab content or be slightly opaque */
+            background-color: var(--sticky-search-bg); 
+            backdrop-filter: blur(8px); 
+            -webkit-backdrop-filter: blur(8px);
+            transform: translateZ(0px); 
         }
 
         .tab-content.active { animation: slide-fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
@@ -107,17 +132,26 @@
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); 
         }
         .toast-notification.mobile {
-            bottom: calc(3.5rem + 20px); /* Navbar height (approx 56px = 3.5rem) + 20px margin */
+            bottom: calc(3.5rem + 20px); 
             left: 50%; animation: toast-enter-mobile forwards, toast-leave-mobile forwards;
         }
         .toast-notification.desktop {
-            bottom: 24px; right: 24px; left: auto; /* transform: none; */ /* transform is handled by animation */
+            bottom: 24px; right: 24px; left: auto; 
             animation: toast-enter-desktop forwards, toast-leave-desktop forwards;
         }
         .toast-icon { margin-right: 10px; font-size: 1.2em; }
 
         .explore-card { transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; }
         .explore-card:hover { transform: translateY(-4px) scale(1.02); }
+
+        #mobile-navbar {
+            transform: translateX(-50%) translateZ(0px); 
+            will-change: transform; /* Hint for optimization */
+        }
+        #desktop-sidebar, #app-content-wrapper > header {
+            transform: translateZ(0px);
+            will-change: transform; /* Hint for optimization on sticky/fixed elements */
+        }
     </style>
 </head>
 
@@ -153,7 +187,8 @@
             </div>
 
             <div id="tab-explorar" class="tab-content hidden space-y-5">
-                <div class="search-input-container" id="explore-search-container"> <div class="relative">
+                <div class="search-input-container" id="explore-search-container"> 
+                    <div class="relative">
                         <input type="search" id="search-input" placeholder="Buscar en recomendaciones y más..." class="search-input w-full py-3 px-4 text-sm bg-slate-100 dark:bg-slate-700/80 rounded-xl border border-transparent focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent focus:outline-none transition-all shadow-sm hover:shadow-md">
                         <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-lg z-10 overflow-hidden hidden"></div>
                     </div>
@@ -176,7 +211,8 @@
             <div id="tab-perfil" class="tab-content hidden space-y-5">
                 <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-5 text-center">
                     <div class="profile-picture-container" id="profile-picture-display" title="Cambiar icono de perfil">
-                        <i class="fas fa-user"></i> </div>
+                        <i class="fas fa-user"></i> 
+                    </div>
                     
                     <div id="profile-name-display" class="mt-4">
                         <h2 class="text-2xl font-bold inline" id="profile-name-text">Alex Innova</h2>
@@ -201,7 +237,7 @@
             </div>
         </main>
 
-        <nav id="mobile-navbar" class="md:hidden bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-border-light dark:border-border-dark fixed bottom-3 left-1/2 transform -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-sm z-30 rounded-2xl shadow-fluent-nav-mobile dark:shadow-fluent-nav-mobile-dark">
+        <nav id="mobile-navbar" class="md:hidden bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-border-light dark:border-border-dark fixed bottom-3 left-1/2 w-[calc(100%-1.5rem)] max-w-sm z-30 rounded-2xl shadow-fluent-nav-mobile dark:shadow-fluent-nav-mobile-dark">
             <div class="flex justify-around px-1.5 py-1.5"> </div>
         </nav>
     </div>
@@ -292,8 +328,7 @@
             exploreRecommendationsGrid: document.getElementById('explore-recommendations-grid'),
             searchResultsContainer: document.getElementById('search-results-container'),
             toastContainer: document.getElementById('toast-container'),
-            exploreSearchContainer: document.getElementById('explore-search-container'), // For sticky search background
-            // Profile specific
+            exploreSearchContainer: document.getElementById('explore-search-container'), 
             profilePictureDisplay: document.getElementById('profile-picture-display'),
             profileNameText: document.getElementById('profile-name-text'),
             profileRoleText: document.getElementById('profile-role-text'),
@@ -360,16 +395,41 @@
 
                 toast.className = `toast-notification ${bgColor} ${isMobile ? 'mobile' : 'desktop'}`;
                 UI.setHTML(toast, iconHtml + `<span>${message}</span>`);
+                
+                const enterAnimation = isMobile ? 'animate-toast-enter-mobile' : 'animate-toast-enter-desktop';
+                const leaveAnimation = isMobile ? 'animate-toast-leave-mobile' : 'animate-toast-leave-desktop';
+                
+                UI.addClass(toast, enterAnimation);
                 DOM.toastContainer.appendChild(toast);
                 
-                // La animación de salida tiene un delay incorporado en CSS, por lo que solo necesitamos remover el elemento después de que todo termine.
-                // El tiempo total = duración de la animación de entrada + delay de la animación de salida + duración de la animación de salida
-                // Asumiendo: entrada 0.4s, delay 2.5s, salida 0.5s = 3.4s total
+                let animationState = 'entering'; // 'entering', 'visible', 'leaving'
+
+                const onAnimationEnd = (e) => {
+                    if (toast && e.target === toast) {
+                        if (e.animationName.includes('toastEnter')) {
+                            UI.removeClass(toast, enterAnimation);
+                            animationState = 'visible';
+                            // Set timeout to start leave animation
+                            setTimeout(() => {
+                                if (toast.parentNode && animationState === 'visible') { // Check if still visible
+                                    UI.addClass(toast, leaveAnimation);
+                                    animationState = 'leaving';
+                                }
+                            }, duration - 500); // Start leave animation 0.5s before total duration
+                        } else if (e.animationName.includes('toastLeave')) {
+                            if (toast.parentNode) toast.remove();
+                            toast.removeEventListener('animationend', onAnimationEnd);
+                        }
+                    }
+                };
+                toast.addEventListener('animationend', onAnimationEnd);
+
+                // Fallback to remove toast if animationend doesn't fire (e.g., if display becomes none)
                 setTimeout(() => {
-                    if (toast.parentNode) { // Verificar si el toast aún existe antes de intentar removerlo
+                    if (toast.parentNode) {
                         toast.remove();
                     }
-                }, duration + 500); // Duración visible + duración de la animación de salida
+                }, duration + 1000); // A bit longer than total animation time
             }
         };
 
@@ -423,7 +483,7 @@
                 UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
                 ExploreHandler.renderRecommendations(); 
                 ProfileHandler.render(); 
-                App.setStickySearchBackground(); // Actualizar fondo de búsqueda sticky
+                App.setStickySearchBackground(); 
             },
             init: () => { /* Igual que antes */
                 DOM.darkModeSwitch.addEventListener('click', () => DarkMode.toggle(!isDarkMode));
@@ -677,7 +737,6 @@
                         if (notif && !notif.read) {
                             NotificationHandler.markOneAsRead(notifId);
                         }
-                        // Aquí podrías añadir lógica para "abrir" la notificación si es necesario
                     })
                 );
             },
@@ -725,18 +784,18 @@
             handleInputOrFocus: (isFocusEvent = false) => {
                 const query = UI.getValue(DOM.searchInput).toLowerCase().trim();
                 if (isFocusEvent && query === '') {
-                    SearchHandler.renderSuggestions(SearchHandler.sampleSuggestions.slice(0, 4), true); // Mostrar algunas populares al enfocar
+                    SearchHandler.renderSuggestions(SearchHandler.sampleSuggestions.slice(0, 4), true); 
                     return;
                 }
-                if (query.length < 2 && !isFocusEvent) { // No ocultar si es focus y está vacío
+                if (query.length < 2 && !isFocusEvent) { 
                     UI.hide(DOM.searchSuggestionsContainer);
                     if (query.length === 0 && UI.isVisible(DOM.searchResultsContainer)) SearchHandler.showDefault();
                     return;
                 }
-                if (query.length >=2 ) { // Solo filtrar si hay suficiente texto
+                if (query.length >=2 ) { 
                     const filtered = SearchHandler.sampleSuggestions.filter(s => s.toLowerCase().includes(query));
                     SearchHandler.renderSuggestions(filtered);
-                } else if (!isFocusEvent) { // Si no es focus y no hay suficiente texto, ocultar
+                } else if (!isFocusEvent) { 
                      UI.hide(DOM.searchSuggestionsContainer);
                 }
             },
@@ -793,7 +852,7 @@
                 if (!DOM.profileNameText || !DOM.profileRoleText || !DOM.profileBioDisplay || !DOM.profilePictureDisplay) return;
                 UI.setText(DOM.profileNameText, userProfile.name);
                 UI.setText(DOM.profileRoleText, userProfile.role);
-                UI.setText(DOM.profileBioDisplay, userProfile.bio); 
+                UI.setHTML(DOM.profileBioDisplay, userProfile.bio); 
                 UI.setHTML(DOM.profilePictureDisplay, `<i class="${userProfile.icon}"></i>`);
                 
                 const primaryColor = isDarkMode ? tailwind.config.theme.extend.colors['primary-dark'] : tailwind.config.theme.extend.colors['primary-light'];
@@ -846,7 +905,7 @@
             },
             init: () => {
                 ProfileHandler.render();
-                if (DOM.profilePictureDisplay) { // Cambiado de changeProfilePictureBtn a profilePictureDisplay
+                if (DOM.profilePictureDisplay) { 
                     DOM.profilePictureDisplay.addEventListener('click', () => {
                         UI.createIconSelector(DOM.profileIconSelectorContainer, availableProfileIcons, userProfile.icon, ProfileHandler.selectProfileIcon, 'icon-selector-btn p-3 text-2xl');
                         ModalManager.open(DOM.modalProfilePicture);
@@ -861,20 +920,22 @@
             }
         };
         
+        // Variable global para la función de ajuste del fondo del buscador
+        let setStickySearchBackgroundGlobal = () => {};
+
         const init = () => {
-            // Set sticky search background based on initial theme
             const setSearchBg = () => {
                 if (DOM.exploreSearchContainer) {
-                    const bgColor = isDarkMode 
-                        ? tailwind.config.theme.extend.colors['surface-dark'] + 'F2' // ~95% opacity
+                    const stickyBg = isDarkMode 
+                        ? tailwind.config.theme.extend.colors['surface-dark'] + 'F2' 
                         : tailwind.config.theme.extend.colors['surface-light'] + 'F2';
-                    DOM.exploreSearchContainer.style.backgroundColor = bgColor;
+                    DOM.exploreSearchContainer.style.setProperty('--sticky-search-bg', stickyBg);
                 }
             };
-            App.setStickySearchBackground = setSearchBg; // Expose for DarkMode module
+            App.setStickySearchBackground = setSearchBg; 
 
             ModalManager.init();
-            DarkMode.init(); // This will call setSearchBg via its own logic
+            DarkMode.init(); 
             GenericToggles.init(); 
             Navigation.init(); 
             PostHandler.init();
@@ -883,12 +944,14 @@
             SearchHandler.init();
             ProfileHandler.init(); 
             
+            setSearchBg(); // Llamada inicial
+
             document.querySelectorAll('.placeholder-image, .avatar-image-lg').forEach(img => {
                 img.onerror = function() { this.src = `https://placehold.co/${img.classList.contains('avatar-image-lg') ? '112x112' : '600x250'}/e5e7eb/4b5563?text=Error&font=inter`; };
             });
         };
 
-        return { init, setStickySearchBackground: () => {} }; // Expose setStickySearchBackground initially as a no-op
+        return { init, setStickySearchBackground: () => setStickySearchBackgroundGlobal() };
     })();
 
     App.init();
