@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Interactive Demos</title>
+    <title>Portfolio Demos</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.8.4"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -180,7 +180,7 @@
                         class="block px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center"
                         hx-get="/content/index" hx-target="#mainContent">
                         <i class="fas fa-home icon mr-3"></i>
-                        <span class="sidebar-content">Home</span>
+                        <span class="sidebar-content">Inicio</span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -199,10 +199,10 @@
                                 hx-get="./content/service1.html" hx-target="#mainContent">Demos</a></li>
                         <li><a href="#"
                                 class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service2" hx-target="#mainContent">Soon...</a></li>
+                                hx-get="/content/service2" hx-target="#mainContent">Pronto...</a></li>
                         <li><a href="#"
                                 class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service3" hx-target="#mainContent">Soon...</a></li>
+                                hx-get="/content/service3" hx-target="#mainContent">Pronto...</a></li>
                     </ul>
                 </li>
             </ul>
@@ -217,15 +217,112 @@
 
     <!-- Contenido principal -->
     <main id="mainContent" class="flex-grow p-6 ml-60 transition-all duration-300 ease-in-out">
-        <h1 class="text-3xl font-bold text-green-600 mb-4">Principal Content</h1>
-        <p class="text-gray-700">This interactive homepage features animations and functionalities, such as a template
-            for a system with a scalable sidebar without using pre-built templates, following a pure style with
-            customization from scratch, specifically to showcase raw skills. In the Sidebar the <b>Portfo A</b> section,
-            the <b>Demos</b> option, there we can find cards with demos in development. By the way, this site is still
-            under construction, but it serves as a good base of the
-            <span class="highlight-word relative inline-block">design</span> and
-            <span class="highlight-word relative inline-block">development</span> that can be created.
-        </p>
+        <h1 class="text-3xl font-bold text-green-600 mb-4">Hola, Bienvenido.</h1>
+        <p class="text-gray-700">Esta página de inicio interactiva cuenta con animaciones y funcionalidades, como una
+            plantilla para un sistema con una barra lateral escalable sin usar plantillas preconstruidas, siguiendo un
+            estilo puro con personalización desde cero, específicamente para mostrar habilidades en bruto. En la barra
+            lateral, en la sección <b>Portfo A</b>, la opción <b>Demos</b>, allí podemos encontrar tarjetas con demos en
+            desarrollo. Por cierto, este sitio aún está en construcción, pero sirve como una buena base del
+            <span class="highlight-word relative inline-block">diseño</span> y
+            <span class="highlight-word relative inline-block">desarrollo</span> que se puede crear.
+        </p><br>
+        <p class="text-gray-700"> Adicionalmente, esta es una introduccion acerca de mi:</p>
+
+
+        <section class="p-6">
+            <div class="bg-white shadow-xl rounded-xl p-8 max-w-5xl mx-auto">
+                <div class="mb-6 border-b pb-4">
+                    <h1 class="text-4xl font-extrabold text-green-700">Gary Taboada</h1>
+                    <p class="text-lg text-gray-700 mt-1">Desarrollador de Software | Backend, Frontend & Sistemas ERP
+                    </p>
+                </div>
+                <blockquote class="mt-8 border-l-4 border-green-400 pl-4 italic text-gray-600">
+                    "Impulsado por la curiosidad, guiado por un propósito y comprometido con crear soluciones que
+                    importan."
+                    <br>
+                    <span class="text-sm">— Gary Taboada</span>
+                </blockquote> <br><hr><br>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-green-600 mb-2">Perfil Profesional</h2>
+                        <p class="text-gray-700">
+                            Desarrollador de software con experiencia en <strong>backend</strong>,
+                            <strong>frontend</strong> y <strong>sistemas ERP</strong>. Especializado en la creación de
+                            soluciones <strong>robustas</strong>, <strong>escalables</strong> y
+                            <strong>eficientes</strong>, utilizando tecnologías como <strong>Python (Flask,
+                                Django)</strong>, <strong>Java EE</strong>, <strong>PHP (Symfony)</strong> y
+                            <strong>Node.js</strong>. Fuerte experiencia en <strong>integración de sistemas</strong>,
+                            <strong>ETL pipelines</strong> y <strong>optimización de procesos</strong>.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-semibold text-green-600 mb-2">Contacto</h2>
+                        <ul class="text-gray-700 space-y-1">
+                            <li><strong>Email:</strong> <a href="mailto:fasza212@gmail.com"
+                                    class="text-blue-600 hover:underline">fasza212@gmail.com</a></li>
+                            <li><strong>Teléfono:</strong> <a href="tel:+593992678478"
+                                    class="text-blue-600 hover:underline">(+593) 99 267 8478</a></li>
+                            <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/gary-taboada-2b381320a"
+                                    target="_blank" class="text-blue-600 hover:underline">gary-taboada</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Tecnologías Destacadas</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-700">
+                        <div><strong>Lenguajes:</strong> Python, Java, C#, PHP, JavaScript, TypeScript</div>
+                        <div><strong>Frameworks:</strong> Flask, Django, Symfony, Node.js, PrimeNG</div>
+                        <div><strong>Bases de Datos:</strong> OracleDB, PostgreSQL, SQL Server, MySQL</div>
+                        <div><strong>Frontend:</strong> HTML5, CSS3, Tailwind CSS, SCSS</div>
+                        <div><strong>Herramientas:</strong> Postman, Figma, Visual Studio, NetBeans, IntelliJ</div>
+                        <div><strong>Diseño:</strong> Adobe XD, Photoshop, Illustrator, CapCut, Canva</div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Proyectos Relevantes</h2>
+                    <ul class="space-y-4 text-gray-700 list-disc pl-5">
+                        <li>
+                            <strong>Modernización de Sysprev – Tecservin Ltda.:</strong> Migración completa del sistema
+                            de seguros de PHP a Flask, rediseño de interfaz con Tailwind CSS e integración de servicios
+                            SOAP/XML sobre OracleDB y PostgreSQL.
+                        </li>
+                        <li>
+                            <strong>Módulo ERP – ALES Industries C.A.:</strong> Desarrollo sobre Dynamics AX 2012 usando
+                            MorphX/X++, integración de datos con .NET/CIL y aplicaciones web en Flask/Django conectadas
+                            a SQL Server.
+                        </li>
+                        <li>
+                            <strong>Pedidos para Airbnb – Amauta Tech:</strong> Desarrollo fullstack con Node.js,
+                            PrimeNG y SCSS; backend escalable y UI amigable orientada a usuarios finales.
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Habilidades Blandas</h2>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-700 list-disc pl-5">
+                        <li>Resolución de problemas y pensamiento crítico</li>
+                        <li>Trabajo en equipo multidisciplinario</li>
+                        <li>Adaptabilidad a nuevas tecnologías</li>
+                        <li>Gestión del tiempo y enfoque en calidad</li>
+                        <li>Comunicación técnica clara</li>
+                        <li>Aprendizaje autónomo e investigación</li>
+                    </ul>
+                </div>
+
+                <div class="mt-8">
+                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Idiomas</h2>
+                    <p class="text-gray-700">
+                        <strong>Español:</strong> Nativo &nbsp;|&nbsp; <strong>Inglés:</strong> C2 Proficiente
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
     </main>
 
     <script>
@@ -233,7 +330,6 @@
         const mainContent = document.getElementById('mainContent');
         const toggleButton = document.getElementById('toggleSidebar');
 
-        // Asegurar que el botón de toggle esté en la posición correcta inicialmente
         toggleButton.style.left = '208px'; // Posición inicial cuando está expandido
 
         function toggleSidebar() {
@@ -242,9 +338,6 @@
             sidebar.classList.toggle('sidebar-collapsed', isExpanded);
             toggleButton.style.left = isExpanded ? '16px' : '208px';
             toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
-
-            // Ya no necesitamos modificar mainContent.style.marginLeft aquí
-            // porque lo manejamos con CSS
         }
 
         toggleButton.addEventListener('click', toggleSidebar);
