@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interfaz Fluent V9</title>
+    <title>Demo Interfaz Fluent V10</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -38,9 +38,9 @@
                         'modal-leave': 'modalLeave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards',
                         'spinner-rotate': 'spinnerRotate 0.8s linear infinite',
                         'toast-enter-mobile': 'toastEnterMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
-                        'toast-leave-mobile': 'toastLeaveMobile 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards',
+                        'toast-leave-mobile': 'toastLeaveMobile 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards',
                         'toast-enter-desktop': 'toastEnterDesktop 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
-                        'toast-leave-desktop': 'toastLeaveDesktop 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards',
+                        'toast-leave-desktop': 'toastLeaveDesktop 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
@@ -67,17 +67,17 @@
     <style>
         html {
             height: 100%;
-            background-color: #f1f5f9; /* Tailwind's slate-100 */
-            overscroll-behavior-y: contain; /* Prevenir "bounce" a nivel de HTML */
+            background-color: #f1f5f9; 
+            overscroll-behavior-y: contain; 
         }
         html.dark {
-            background-color: #111827; /* Tailwind's gray-900 (surface-dark) */
+            background-color: #111827; 
         }
         body { 
             height: 100%; 
             -webkit-tap-highlight-color: transparent; 
             font-family: 'Inter', sans-serif;
-            overscroll-behavior-y: contain; /* Reforzar en body también */
+            overscroll-behavior-y: contain; 
         }
         main#main-content-area {
             overscroll-behavior-y: contain; 
@@ -132,12 +132,13 @@
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); 
         }
         .toast-notification.mobile {
-            bottom: calc(3.5rem + 20px); 
-            left: 50%; animation: toast-enter-mobile forwards, toast-leave-mobile forwards;
+            bottom: calc(3.5rem + 20px); /* Navbar height (approx 56px = 3.5rem) + 20px margin */
+            left: 50%; 
+            /* transform: translateX(-50%); /* Applied by animation if needed, but base is fine */
         }
         .toast-notification.desktop {
             bottom: 24px; right: 24px; left: auto; 
-            animation: toast-enter-desktop forwards, toast-leave-desktop forwards;
+            /* transform: none; /* Base position, animation handles entry/exit transforms */
         }
         .toast-icon { margin-right: 10px; font-size: 1.2em; }
 
@@ -146,11 +147,11 @@
 
         #mobile-navbar {
             transform: translateX(-50%) translateZ(0px); 
-            will-change: transform; /* Hint for optimization */
+            will-change: transform; 
         }
         #desktop-sidebar, #app-content-wrapper > header {
             transform: translateZ(0px);
-            will-change: transform; /* Hint for optimization on sticky/fixed elements */
+            will-change: transform; 
         }
     </style>
 </head>
@@ -171,7 +172,7 @@
         </header>
 
         <main id="main-content-area" class="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6" style="scroll-behavior: smooth;">
-            <div id="tab-inicio" class="tab-content space-y-5">
+            <div id="tab-inicio" class="tab-content hidden space-y-5"> 
                 <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
                     <h2 class="text-lg font-semibold mb-3">Acciones Rápidas</h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -230,7 +231,18 @@
                 <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
                     <h2 class="text-lg font-semibold mb-1">Configuración General</h2>
                     <ul class="divide-y divide-border-light dark:divide-border-dark">
-                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-alt h-4 w-4 text-primary-light dark:text-blue-400"></i></div><span class="text-sm">Seguridad</span></div><button class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-700" data-setting="accountSecurity" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
+                        <li class="py-3.5">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-alt h-4 w-4 text-primary-light dark:text-blue-400"></i></div>
+                                    <span class="text-sm">Seguridad de Cuenta (2FA)</span>
+                                </div>
+                                <button class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-700" data-setting="accountSecurity" data-active="false">
+                                    <div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div>
+                                </button>
+                            </div>
+                            <p id="account-security-status" class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-1.5 ml-11 hidden"></p>
+                        </li>
                         <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-moon h-4 w-4 text-primary-dark dark:text-purple-400"></i></div><span class="text-sm">Modo Oscuro</span></div><button id="darkModeSwitch" class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-700" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
                     </ul>
                 </div>
@@ -280,7 +292,7 @@
     <script>
     // APP MODULE
     const App = (() => {
-        // STATE (igual que antes, con userProfile)
+        // STATE 
         let currentTabId = null;
         let isDarkMode = false;
         let posts = [];
@@ -298,13 +310,13 @@
             bio: 'Apasionado por la tecnología, IA y el futuro digital. Siempre aprendiendo y explorando nuevas ideas.',
             icon: 'fas fa-user-astronaut'
         };
-        const exploreRecommendations = [ /* Data igual que antes */
+        const exploreRecommendations = [ 
              { id: 'rec1', title: 'Desarrollo Web Moderno', type: 'Playlist de Artículos', image: 'https://placehold.co/400x400/3b82f6/ffffff?text=WebDev&font=inter', color: 'bg-blue-500' },
             { id: 'rec2', title: 'Avances en IA', type: 'Colección', image: 'https://placehold.co/400x400/8b5cf6/ffffff?text=AI&font=inter', color: 'bg-violet-500' },
             { id: 'rec3', title: 'Diseño UX Inspirador', type: 'Recursos', image: 'https://placehold.co/400x400/ec4899/ffffff?text=UX&font=inter', color: 'bg-pink-500' },
         ];
 
-        const DOM = { /* Cache de elementos DOM, con nuevos elementos de perfil y modal de edición */
+        const DOM = { /* Cache de elementos DOM */
             html: document.documentElement,
             mainContentArea: document.getElementById('main-content-area'),
             headerSubtitle: document.getElementById('headerSubtitle'),
@@ -339,16 +351,17 @@
             modalEditProfile: document.getElementById('modal-edit-profile'),
             editProfileForm: document.getElementById('edit-profile-form'),
             saveProfileBtn: document.getElementById('save-profile-btn'),
+            accountSecurityStatus: document.getElementById('account-security-status'),
         };
 
-        const NAV_ITEMS = [ /* Igual que antes */
+        const NAV_ITEMS = [ 
             { id: 'inicio', icon: 'fas fa-home', text: 'Inicio', subtitle: 'Panel Principal' },
             { id: 'explorar', icon: 'fas fa-compass', text: 'Explorar', subtitle: 'Descubre Novedades' },
             { id: 'alertas', icon: 'fas fa-bell', text: 'Alertas', subtitle: 'Tus Notificaciones', isNotificationTab: true },
             { id: 'perfil', icon: 'fas fa-user-circle', text: 'Perfil', subtitle: 'Tu Espacio Personal' }
         ];
         
-        const UI = { /* Con corrección en showToast y createIconSelector para perfil */
+        const UI = { 
             toggleClass: (el, className, force) => el && el.classList.toggle(className, force),
             addClass: (el, ...classNames) => el && el.classList.add(...classNames),
             removeClass: (el, ...classNames) => el && el.classList.remove(...classNames),
@@ -359,7 +372,7 @@
             show: (el) => UI.removeClass(el, 'hidden'),
             hide: (el) => UI.addClass(el, 'hidden'),
             isVisible: (el) => el && !el.classList.contains('hidden'),
-            createIconSelector: (container, icons, currentSelectedIcon, onSelectCallback, itemClass = 'icon-selector-btn') => { /* Igual que antes */
+            createIconSelector: (container, icons, currentSelectedIcon, onSelectCallback, itemClass = 'icon-selector-btn') => { 
                 if (!container) return;
                 container.innerHTML = '';
                 icons.forEach(iconClass => {
@@ -379,7 +392,7 @@
                     container.appendChild(btn);
                 });
             },
-            showToast: (message, type = 'success', duration = 3000) => { /* Corregido para posicionamiento y animación */
+            showToast: (message, type = 'success', visibleDuration = 2000) => { 
                 const toast = document.createElement('div');
                 let iconHtml = '';
                 let bgColor = '';
@@ -398,38 +411,41 @@
                 
                 const enterAnimation = isMobile ? 'animate-toast-enter-mobile' : 'animate-toast-enter-desktop';
                 const leaveAnimation = isMobile ? 'animate-toast-leave-mobile' : 'animate-toast-leave-desktop';
+                const enterDuration = 400; 
+                const leaveDuration = 500; 
                 
                 UI.addClass(toast, enterAnimation);
                 DOM.toastContainer.appendChild(toast);
-                
-                let animationState = 'entering'; // 'entering', 'visible', 'leaving'
 
-                const onAnimationEnd = (e) => {
-                    if (toast && e.target === toast) {
-                        if (e.animationName.includes('toastEnter')) {
-                            UI.removeClass(toast, enterAnimation);
-                            animationState = 'visible';
-                            // Set timeout to start leave animation
-                            setTimeout(() => {
-                                if (toast.parentNode && animationState === 'visible') { // Check if still visible
-                                    UI.addClass(toast, leaveAnimation);
-                                    animationState = 'leaving';
-                                }
-                            }, duration - 500); // Start leave animation 0.5s before total duration
-                        } else if (e.animationName.includes('toastLeave')) {
-                            if (toast.parentNode) toast.remove();
-                            toast.removeEventListener('animationend', onAnimationEnd);
-                        }
-                    }
-                };
-                toast.addEventListener('animationend', onAnimationEnd);
+                let enterTimeoutId, leaveTimeoutId, removeTimeoutId;
 
-                // Fallback to remove toast if animationend doesn't fire (e.g., if display becomes none)
-                setTimeout(() => {
+                const cleanupAndRemove = () => {
+                    clearTimeout(enterTimeoutId);
+                    clearTimeout(leaveTimeoutId);
+                    clearTimeout(removeTimeoutId);
                     if (toast.parentNode) {
                         toast.remove();
                     }
-                }, duration + 1000); // A bit longer than total animation time
+                    toast.removeEventListener('animationend', handleAnimationEnd);
+                };
+                
+                const handleAnimationEnd = (e) => {
+                    if (e.animationName.includes('toastEnter')) {
+                        UI.removeClass(toast, enterAnimation);
+                        // Set timeout to start leave animation
+                        leaveTimeoutId = setTimeout(() => {
+                            if (toast.parentNode) { 
+                                UI.addClass(toast, leaveAnimation);
+                            }
+                        }, visibleDuration);
+                    } else if (e.animationName.includes('toastLeave')) {
+                        cleanupAndRemove();
+                    }
+                };
+                toast.addEventListener('animationend', handleAnimationEnd);
+                
+                // Fallback to remove toast if animationend doesn't fire
+                removeTimeoutId = setTimeout(cleanupAndRemove, enterDuration + visibleDuration + leaveDuration + 200); // Total time + buffer
             }
         };
 
@@ -480,7 +496,14 @@
                 GenericToggles.updateAllVisuals();
                 Navigation.updateActiveStyles(currentTabId);
                 NotificationHandler.updateBadges();
-                UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
+                // Re-render icon selectors if their modals are open
+                if (UI.isVisible(DOM.newPostModal) && DOM.postIconSelector) {
+                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, PostHandler.onPostIconSelect);
+                }
+                if (UI.isVisible(DOM.modalProfilePicture) && DOM.profileIconSelectorContainer) {
+                     UI.createIconSelector(DOM.profileIconSelectorContainer, availableProfileIcons, userProfile.icon, ProfileHandler.onProfileIconSelectCallback, 'icon-selector-btn p-3 text-2xl');
+                }
+                
                 ExploreHandler.renderRecommendations(); 
                 ProfileHandler.render(); 
                 App.setStickySearchBackground(); 
@@ -492,7 +515,7 @@
             }
         };
         
-        const GenericToggles = { /* Igual que antes */
+        const GenericToggles = { 
             updateVisual: (button, isActive) => {
                 const dot = button.querySelector('.toggle-dot');
                 const activeBg = isDarkMode ? 'bg-toggle-active-dark' : 'bg-toggle-active-light';
@@ -509,11 +532,24 @@
                     UI.addClass(button, isDarkMode ? inactiveBgDark : inactiveBgLight);
                 }
                 button.dataset.active = isActive.toString();
+
+                if (button.dataset.setting === 'accountSecurity' && DOM.accountSecurityStatus) {
+                    if (isActive) {
+                        UI.setText(DOM.accountSecurityStatus, '2FA Activado. Tu cuenta está más protegida.');
+                        UI.removeClass(DOM.accountSecurityStatus, 'text-danger-light', 'dark:text-danger-dark', 'hidden');
+                        UI.addClass(DOM.accountSecurityStatus, 'text-success-light', 'dark:text-success-dark');
+                    } else {
+                        UI.setText(DOM.accountSecurityStatus, '2FA Desactivado. Considera activarlo.');
+                        UI.removeClass(DOM.accountSecurityStatus, 'text-success-light', 'dark:text-success-dark', 'hidden');
+                        UI.addClass(DOM.accountSecurityStatus, 'text-danger-light', 'dark:text-danger-dark');
+                    }
+                }
             },
             updateAllVisuals: () => DOM.genericToggles.forEach(btn => GenericToggles.updateVisual(btn, btn.dataset.active === "true")),
-            init: () => { /* Igual que antes */
+            init: () => { 
                 DOM.genericToggles.forEach(button => {
-                    GenericToggles.updateVisual(button, button.dataset.active === "true");
+                    // Initialize based on data-active, then add listener
+                    GenericToggles.updateVisual(button, button.dataset.active === "true"); 
                     button.addEventListener('click', () => GenericToggles.updateVisual(button, !(button.dataset.active === "true")));
                 });
             }
@@ -678,7 +714,7 @@
                     PostHandler.renderFeed();
                     DOM.newPostForm.reset();
                     selectedPostIcon = availablePostIcons[0]; 
-                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
+                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, PostHandler.onPostIconSelect);
                     ModalManager.close(DOM.newPostModal);
                     UI.showToast('¡Post publicado con éxito!', 'success'); 
                     
@@ -694,10 +730,14 @@
                     UI.show(btnText); UI.hide(spinner); DOM.publishPostBtn.disabled = false;
                 }, 1000);
             },
-            init: () => { /* Igual que antes */
+            onPostIconSelect: (newIcon) => { 
+                selectedPostIcon = newIcon;
+                UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, PostHandler.onPostIconSelect);
+            },
+            init: () => { 
                 if (DOM.createNewPostBtn) DOM.createNewPostBtn.addEventListener('click', () => {
                     selectedPostIcon = availablePostIcons[0]; 
-                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
+                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, PostHandler.onPostIconSelect);
                     ModalManager.open(DOM.newPostModal);
                 });
                 if (DOM.newPostForm) DOM.newPostForm.addEventListener('submit', PostHandler.create);
@@ -897,7 +937,7 @@
                     UI.show(btnText); UI.hide(spinner); DOM.saveProfileBtn.disabled = false;
                 }, 1000);
             },
-            selectProfileIcon: (iconClass) => {
+            onProfileIconSelectCallback: (iconClass) => { 
                 userProfile.icon = iconClass;
                 ProfileHandler.render();
                 ModalManager.close(DOM.modalProfilePicture);
@@ -907,7 +947,7 @@
                 ProfileHandler.render();
                 if (DOM.profilePictureDisplay) { 
                     DOM.profilePictureDisplay.addEventListener('click', () => {
-                        UI.createIconSelector(DOM.profileIconSelectorContainer, availableProfileIcons, userProfile.icon, ProfileHandler.selectProfileIcon, 'icon-selector-btn p-3 text-2xl');
+                        UI.createIconSelector(DOM.profileIconSelectorContainer, availableProfileIcons, userProfile.icon, ProfileHandler.onProfileIconSelectCallback, 'icon-selector-btn p-3 text-2xl');
                         ModalManager.open(DOM.modalProfilePicture);
                     });
                 }
