@@ -1,21 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Validación Optimizado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>Formulario de Validación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* CSS mínimo necesario, principalmente para keyframes y clases dinámicas */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        /* Animación de fondo */
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(-45deg, #f3a79093, #c9ffa580, #71c7e67e, #a6e6d7a6);
             background-size: 200% 200%;
             animation: gradient 15s ease infinite;
             background-attachment: fixed;
@@ -24,8 +25,8 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            margin: 0;
             flex-direction: column;
+            font-family: Arial, sans-serif;
         }
 
         @keyframes gradient {
@@ -42,181 +43,7 @@
             }
         }
 
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #43b838;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.521);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
-            background: #002e58;
-        }
-
-        .back-button:focus {
-            transform: translateY(-0.1px);
-            box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.621);
-            background: #ff5454;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .notification.success {
-            background: #38a169;
-        }
-
-        .notification.error {
-            background: #e53e3e;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .main-content {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        form {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 700px;
-        }
-
-        h2 {
-            margin-bottom: 30px;
-            text-align: center;
-            color: #2d3748;
-            font-size: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #4a5568;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            font-size: 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #fff;
-        }
-
-        input:focus,
-        select:focus {
-            outline: none;
-            border-color: #4299e1;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-        }
-
-        input.error,
-        select.error {
-            border-color: #e53e3e;
-            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-        }
-
-        input.success,
-        select.success {
-            border-color: #38a169;
-        }
-
-        .error-message {
-            font-size: 12px;
-            color: #e53e3e;
-            position: absolute;
-            bottom: -20px;
-            left: 0;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-
-        .error-message.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #0e3a00;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
-        }
-
-        button:hover {
-            color: rgb(43, 43, 43);
-            background: #c6ff28;
-            transform: translateY(-1px);
-            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
-        }
-
-        button:active {
-            color: rgb(43, 43, 43);
-            transform: translateY(0);
-            background: #00ff0d;
-            box-shadow: 8px 5px 5px rgba(0, 0, 0, 0.329);
-        }
-
+        /* Animación de sacudida para errores */
         @keyframes shake {
 
             10%,
@@ -241,344 +68,154 @@
             }
         }
 
-        .table-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
-            width: 100%;
-            overflow-x: auto;
+        /* Clases específicas para JS que Tailwind no reemplaza directamente sin JIT */
+        .input-error {
+            border-color: #ef4444;
+            /* red-500 */
+            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        .input-success {
+            border-color: #22c55e;
+            /* green-500 */
         }
 
-        table th,
-        table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        .error-message {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
         }
 
-        table th {
-            background-color: #f4f4f4;
+        .error-message.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* Media Queries para responsividad */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-
-            form,
-            .table-container {
-                max-width: 90%;
-            }
-
-            body {
-                padding: 15px;
-            }
-
-            .notification {
-                top: 10px;
-                right: 10px;
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
-            .back-button {
-                top: 10px;
-                left: 10px;
-                width: 40px;
-                height: 40px;
-            }
+        .notification {
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
         }
 
-        @media (max-width: 480px) {
-            form {
-                padding: 20px;
-            }
+        .notification.show {
+            transform: translateX(0);
+        }
 
-            h2 {
-                font-size: 20px;
-                margin-bottom: 20px;
-            }
+        /* Tooltip CSS (se puede hacer con Tailwind JIT, pero lo mantenemos para claridad) */
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: max-content;
+            max-width: 220px;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            text-align: center;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.3;
+            z-index: 11;
+            pointer-events: none;
+        }
 
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.75) transparent transparent transparent;
+        }
 
-            label {
-                font-size: 13px;
-            }
-
-            input,
-            select,
-            button {
-                padding: 10px;
-                font-size: 14px;
-            }
-
-            .table-container {
-                padding: 20px;
-            }
-
-            table th,
-            table td {
-                padding: 8px;
-                font-size: 13px;
-            }
-
-            #usersTableContainer {
-                /* Asegurarse de que el ID del contenedor de la tabla sea el correcto */
-                padding: 15px;
-                max-width: 95%;
-            }
-
-
-            /* Estilos para el icono de ayuda */
-            .help-icon {
-                position: absolute;
-                /* Para posicionarlo relativo al form-group */
-                right: 10px;
-                /* Ajusta la posición si es necesario */
-                top: 50%;
-                /* Centra verticalmente con el input/label */
-                transform: translateY(-50%);
-                /* Ajuste fino */
-                background-color: #007bff;
-                /* Color de fondo */
-                color: white;
-                border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 12px;
-                font-weight: bold;
-                cursor: pointer;
-                z-index: 10;
-                /* Asegura que esté por encima de otros elementos */
-            }
-
-            .form-group {
-                margin-bottom: 25px;
-                position: relative;
-                /* ¡Importante! Para que .help-icon se posicione correctamente */
-            }
-
-            /* Estilos para el tooltip que aparece */
-            .tooltip-text {
-                visibility: hidden;
-                /* Oculto por defecto */
-                width: 220px;
-                /* Ancho del tooltip */
-                background-color: #555;
-                color: #fff;
-                text-align: center;
-                border-radius: 6px;
-                padding: 8px 10px;
-                position: absolute;
-                z-index: 11;
-                bottom: 125%;
-                /* Posiciona encima del icono */
-                left: 50%;
-                margin-left: -110px;
-                /* Centra el tooltip */
-                opacity: 0;
-                transition: opacity 0.3s;
-                font-size: 13px;
-            }
-
-            .tooltip-text::after {
-                content: "";
-                position: absolute;
-                top: 100%;
-                /* Flecha apuntando hacia abajo */
-                left: 50%;
-                margin-left: -5px;
-                border-width: 5px;
-                border-style: solid;
-                border-color: #555 transparent transparent transparent;
-            }
-
-            /* Mostrar tooltip al pasar el mouse por el icono de ayuda */
-            .help-icon:hover+.tooltip-text,
-            .tooltip-text.show {
-                /* Clase para mostrarlo con JS */
-                visibility: visible;
-                opacity: 1;
-            }
-
-            /* --- Estilos para el Modal de Bienvenida (Tutorial Inicial) --- */
-            .tutorial-modal {
-                display: none;
-                /* Oculto por defecto */
-                position: fixed;
-                /* Posición fija en la pantalla */
-                z-index: 1000;
-                /* Por encima de todo */
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-                /* Habilita el scroll si el contenido es largo */
-                background-color: rgba(0, 0, 0, 0.4);
-                /* Fondo semi-transparente */
-                justify-content: center;
-                align-items: center;
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: auto;
-                /* Centrar el contenido */
-                padding: 30px;
-                border-radius: 12px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-                max-width: 600px;
-                width: 90%;
-                text-align: center;
-                position: relative;
-                animation: fadeIn 0.5s;
-                /* Animación de aparición */
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-20px);
-                }
-
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .close-button {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-                position: absolute;
-                top: 10px;
-                right: 20px;
-                cursor: pointer;
-            }
-
-            .close-button:hover,
-            .close-button:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .modal-content h3 {
-                color: #2d3748;
-                margin-bottom: 15px;
-                font-size: 22px;
-            }
-
-            .modal-content p {
-                color: #4a5568;
-                line-height: 1.6;
-                margin-bottom: 20px;
-            }
-
-            .modal-content button {
-                background-color: #4CAF50;
-                /* Un color más amigable para el botón del tutorial */
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                font-size: 16px;
-                transition: background-color 0.3s ease;
-            }
-
-            .modal-content button:hover {
-                background-color: #45a049;
-            }
-
-            /* Asegurar que el form-group tenga position: relative para los tooltips */
-            .form-group {
-                position: relative;
-            }
+        .help-icon:hover+.tooltip-text,
+        .tooltip-text.show {
+            visibility: visible;
+            opacity: 1;
         }
     </style>
 </head>
 
-<body>
-    <a href="../../index.html" class="back-button">
+<body class="bg-gradient-to-br from-orange-300 via-green-200 to-blue-300">
+    <a href="../../index.html"
+        class="back-button fixed top-5 left-5 bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all duration-300 hover:translate-y-[-2px] hover:shadow-xl hover:bg-blue-800 focus:translate-y-[-0.1px] focus:shadow-md focus:bg-red-500 z-50">
         <i class="fas fa-arrow-left"></i>
     </a>
 
-    <div id="notification" class="notification"></div>
+    <div id="notification"
+        class="notification fixed top-5 right-5 p-4 rounded-lg text-white font-medium shadow-md z-50">
+    </div>
 
-    <div class="main-content">
-        <form id="registrationForm">
-            <h2>Registro</h2>
+    <div class="main-content flex flex-col lg:flex-row gap-10 items-start justify-center w-full max-w-6xl">
+        <form id="registrationForm" class="bg-white p-8 rounded-xl shadow-xl w-full max-w-lg">
+            <h2 class="mb-8 text-center text-2xl font-semibold text-gray-800">Registro</h2>
 
-            <div class="form-group">
-                <label for="name">Nombre</label>
-                <input type="text" id="name" name="name" placeholder="Aquí tu nombre, Juan" required>
-                <div class="error-message"></div>
-                <span class="help-icon"
+            <div class="form-group mb-6 relative">
+                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Nombre</label>
+                <input type="text" id="name" name="name" placeholder="Aquí tu nombre, Juan" required
+                    class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
+                <span
+                    class="help-icon absolute top-1/2 right-3 transform -translate-y-1/2 w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold cursor-pointer z-10 transition-colors duration-200"
                     data-help="Aquí debes ingresar tu nombre completo. Solo se permiten letras y espacios.">?</span>
             </div>
 
-            <div class="form-group">
-                <label for="Lastname">Apellido</label>
-                <input type="text" id="Lastname" name="Lastname" placeholder="Aquí tu apellido, Pérez" required>
-                <div class="error-message"></div>
-                <span class="help-icon"
+            <div class="form-group mb-6 relative">
+                <label for="Lastname" class="block text-sm font-semibold text-gray-700 mb-2">Apellido</label>
+                <input type="text" id="Lastname" name="Lastname" placeholder="Aquí tu apellido, Pérez" required
+                    class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
+                <span
+                    class="help-icon absolute top-1/2 right-3 transform -translate-y-1/2 w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold cursor-pointer z-10 transition-colors duration-200"
                     data-help="Introduce tu apellido. También solo se permiten letras y espacios.">?</span>
             </div>
 
-            <div class="form-group">
-                <label for="Address">Dirección</label>
-                <input type="text" id="Address" name="Address" placeholder="¿Dónde vives?" required>
-                <div class="error-message"></div>
+            <div class="form-group mb-6 relative">
+                <label for="Address" class="block text-sm font-semibold text-gray-700 mb-2">Dirección</label>
+                <input type="text" id="Address" name="Address" placeholder="¿Dónde vives?" required
+                    class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="phone">Número de teléfono</label>
+            <div class="form-row grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                <div class="form-group relative">
+                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Número de teléfono</label>
                     <input type="tel" id="phone" name="phone" placeholder="Solo números, por ejemplo: 0998765432"
-                        required>
-                    <div class="error-message"></div>
+                        required
+                        class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                    <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
                 </div>
 
-                <div class="form-group">
-                    <label for="country">País</label>
-                    <select id="country" name="country" required>
+                <div class="form-group relative">
+                    <label for="country" class="block text-sm font-semibold text-gray-700 mb-2">País</label>
+                    <select id="country" name="country" required
+                        class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none">
                         <option value="">Selecciona tu país</option>
                     </select>
-                    <div class="error-message"></div>
+                    <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="email">Ingresa un número (1 al 10) para llenar el formulario</label>
-                <input type="text" id="email" name="email" placeholder="Por ejemplo: 1" required>
-                <div class="error-message"></div>
-                <span class="help-icon"
-                    data-help="¡Esta es la parte interesante! Introduce un número del 1 al 10 y verás cómo el formulario se llena automáticamente con datos de ejemplo de nuestra API.">?</span>
+            <div class="form-group mb-6 relative">
+                <label for="userId" class="block text-sm font-semibold text-gray-700 mb-2">Ingresa un número (1 al 10)
+                    para llenar el formulario</label>
+                <input type="text" id="userId" name="userId" placeholder="Por ejemplo: 1" required
+                    class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300">
+                <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
+                <span
+                    class="help-icon absolute top-1/2 right-3 transform -translate-y-1/2 w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold cursor-pointer z-10 transition-colors duration-200"
+                    data-help="¡Esta es la parte interesante! Introduce un número del 1 al 10 y verás cómo el formulario se llena automáticamente con datos de ejemplo de nuestra API. (Ojo, se aplica cuando des clic en otro lado o al escreibir en el siguiente campo)">?</span>
             </div>
 
-            <div class="form-group">
-                <label for="genero">Género</label>
-                <select id="genero" name="genero" required>
+            <div class="form-group mb-8 relative">
+                <label for="genero" class="block text-sm font-semibold text-gray-700 mb-2">Género</label>
+                <select id="genero" name="genero" required
+                    class="w-full p-3 text-sm border-2 border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 bg-white appearance-none">
                     <option value="">Selecciona tu género</option>
                     <option value="masculino">Masculino</option>
                     <option value="femenino">Femenino</option>
@@ -589,84 +226,146 @@
                     <option value="agender">Agénero</option>
                     <option value="otro">Otro</option>
                 </select>
-                <div class="error-message"></div>
+                <div class="error-message absolute bottom-[-20px] left-0 text-xs text-red-500"></div>
             </div>
 
-            <button type="submit">
+            <button type="submit"
+                class="w-full p-3 bg-gray-900 text-white text-base font-semibold border-none rounded-lg cursor-pointer transition-all duration-300 relative overflow-hidden shadow-lg hover:bg-lime-400 hover:text-gray-800 hover:translate-y-[-1px] active:bg-green-500 active:translate-y-[0px] active:shadow-md">
                 Registrar
             </button>
         </form>
 
-        <div id="usersTableContainer" class="table-container">
-            <h3 style="text-align:center; font-size: 20px; margin-bottom: 10px; color:#2d3748">Usuarios de ejemplo
-                (JSONPlaceholder)</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background-color: #f0f0f0;">
-                        <th style="padding: 10px; border: 1px solid #ccc;">ID</th>
-                        <th style="padding: 10px; border: 1px solid #ccc;">Nombre</th>
-                        <th style="padding: 10px; border: 1px solid #ccc;">Email</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTableBody"></tbody>
-            </table>
+        <div id="usersTableContainer" class="table-container bg-white p-8 rounded-xl shadow-xl w-full max-w-lg">
+            <h3 class="text-center text-xl font-semibold mb-4 text-gray-800">Usuarios de ejemplo (JSONPlaceholder)</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-3 text-left border border-gray-300">ID</th>
+                            <th class="p-3 text-left border border-gray-300">Nombre</th>
+                            <th class="p-3 text-left border border-gray-300">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
+    <div id="tutorialModal"
+        class="tutorial-modal hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-[1000]">
+        <div
+            class="modal-content bg-white p-8 rounded-xl shadow-lg w-11/12 max-w-xl text-center relative animate-fade-in">
+            <span
+                class="close-button absolute top-2 right-4 text-gray-400 text-3xl font-bold cursor-pointer hover:text-black">&times;</span>
+            <h3 class="text-gray-800 text-2xl font-semibold mb-4">¡Bienvenido al Formulario Interactivo!</h3>
+            <p class="text-gray-700 mb-6 leading-relaxed">
+                Este formulario es un ejemplo interactivo con validación en tiempo real y una integración con una API
+                externa.
+                <br><br>
+                Puedes rellenar los campos manualmente o, para probar la magia,
+                <strong class="text-blue-600">introduce un número del 1 al 10 en el campo "Ingresa un
+                    número..."</strong>
+                y verás cómo los datos se llenan automáticamente desde JSONPlaceholder.
+                <br><br>
+                ¡También puedes hacer clic en cualquier fila de la tabla de la derecha para precargar los datos de ese
+                usuario!
+            </p>
+            <button id="startTutorial"
+                class="bg-green-600 text-white py-3 px-6 rounded-md text-lg font-semibold cursor-pointer transition-colors duration-300 hover:bg-green-700">
+                ¡Entendido!
+            </button>
+        </div>
+    </div>
 
     <script>
         const form = document.getElementById('registrationForm');
         const inputs = form.querySelectorAll('input, select');
+        const notification = document.getElementById('notification');
+        const userIdInput = document.getElementById('userId'); // Renombrado de 'email' para claridad
+        const usersTableBody = document.getElementById('usersTableBody');
+        const tutorialModal = document.getElementById('tutorialModal');
+        const closeTutorialButton = document.querySelector('.tutorial-modal .close-button');
+        const startTutorialButton = document.getElementById('startTutorial');
 
+
+        // Patrones de validación actualizados y más claros
         const patterns = {
             name: /^[a-zA-ZÀ-ÿ\s]{2,200}$/,
             Lastname: /^[a-zA-ZÀ-ÿ\s]{2,200}$/,
             Address: /^[a-zA-Z0-9À-ÿ\s\#\.\,]{5,100}$/,
             phone: /^[0-9]{7,15}$/,
-            // El patrón para email se mantiene como un email válido, pero la API lo usará como ID.
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            userId: /^(?:[1-9]|10)$/, // Valida un número entre 1 y 10
         };
 
         const errorMessages = {
-            name: 'El nombre debe contener solo letras y tener entre 2 y 200 caracteres',
-            Lastname: 'El apellido debe contener solo letras y tener entre 2 y 200 caracteres',
-            Address: 'La dirección debe tener entre 5 y 100 caracteres',
-            phone: 'El número de teléfono debe contener entre 7 y 15 dígitos',
-            // Mensaje de error actualizado para el campo de email
-            email: 'Por favor, introduce un ID válido (número del 1 al 10).',
-            country: 'Debes seleccionar un país',
-            genero: 'Debes seleccionar un género'
+            name: 'El nombre debe contener solo letras y tener entre 2 y 200 caracteres.',
+            Lastname: 'El apellido debe contener solo letras y tener entre 2 y 200 caracteres.',
+            Address: 'La dirección debe tener entre 5 y 100 caracteres.',
+            phone: 'El número de teléfono debe contener entre 7 y 15 dígitos.',
+            userId: 'Por favor, introduce un ID válido (número del 1 al 10).',
+            country: 'Debes seleccionar un país.',
+            genero: 'Debes seleccionar un género.'
         };
 
+        /**
+         * Muestra un mensaje de error para un campo de entrada.
+         * @param {HTMLElement} input - El elemento de entrada.
+         * @param {string} message - El mensaje de error a mostrar.
+         */
+        function showError(input, message) {
+            input.classList.remove('input-success');
+            input.classList.add('input-error');
+            const errorElement = input.parentElement.querySelector('.error-message'); // Busca el mensaje de error dentro del form-group
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add('visible');
+            }
+        }
+
+        /**
+         * Muestra el estado de éxito para un campo de entrada.
+         * @param {HTMLElement} input - El elemento de entrada.
+         */
+        function showSuccess(input) {
+            input.classList.remove('input-error');
+            input.classList.add('input-success');
+            const errorElement = input.parentElement.querySelector('.error-message');
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.classList.remove('visible');
+            }
+        }
+
+        /**
+         * Limpia el estado de validación de todos los campos.
+         */
+        function clearValidationStates() {
+            inputs.forEach(input => {
+                input.classList.remove('input-success', 'input-error');
+                const errorElement = input.parentElement.querySelector('.error-message');
+                if (errorElement) {
+                    errorElement.textContent = '';
+                    errorElement.classList.remove('visible');
+                }
+            });
+        }
+
+        /**
+         * Valida un campo de entrada específico.
+         * @param {HTMLElement} input - El elemento de entrada a validar.
+         * @returns {boolean} True si el campo es válido, false en caso contrario.
+         */
         function validateField(input) {
             const fieldName = input.name;
             const value = input.value.trim();
-            const errorElement = input.nextElementSibling;
-
-            // Validación específica para el campo 'email' que ahora se usa como ID
-            if (fieldName === 'email') {
-                const idNum = parseInt(value, 10);
-                if (isNaN(idNum) || idNum < 1 || idNum > 10) {
-                    showError(input, errorMessages.email);
-                    return false;
-                } else {
-                    showSuccess(input);
-                    return true;
-                }
-            }
-
 
             if (!value) {
-                showError(input, `El campo ${fieldName} es necesario`);
+                showError(input, `El campo ${fieldName} es necesario.`);
                 return false;
             }
 
-            if (patterns[fieldName]) {
-                if (!patterns[fieldName].test(value)) {
-                    showError(input, errorMessages[fieldName]);
-                    return false;
-                }
-            } else if (input.tagName === 'SELECT' && !value) {
+            if (patterns[fieldName] && !patterns[fieldName].test(value)) {
                 showError(input, errorMessages[fieldName]);
                 return false;
             }
@@ -675,37 +374,27 @@
             return true;
         }
 
-        function showError(input, message) {
-            input.classList.remove('success');
-            input.classList.add('error');
-            const errorElement = input.nextElementSibling;
-            errorElement.textContent = message;
-            errorElement.classList.add('visible');
-        }
-
-        function showSuccess(input) {
-            input.classList.remove('error');
-            input.classList.add('success');
-            const errorElement = input.nextElementSibling;
-            errorElement.textContent = '';
-            errorElement.classList.remove('visible');
-        }
-
-        inputs.forEach(input => {
-            input.addEventListener('input', () => validateField(input));
-            input.addEventListener('blur', () => validateField(input));
-        });
-
+        /**
+         * Muestra una notificación temporal en la esquina superior derecha.
+         * @param {string} message - El mensaje a mostrar.
+         * @param {'success'|'error'} type - El tipo de notificación (determina el color).
+         */
         function showNotification(message, type) {
-            const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.className = `notification ${type}`;
+            notification.className = `notification fixed top-5 right-5 p-4 rounded-lg text-white font-medium shadow-md z-50`;
+            notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
             setTimeout(() => notification.classList.add('show'), 100);
 
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
+
+        // --- Eventos del formulario ---
+        inputs.forEach(input => {
+            input.addEventListener('input', () => validateField(input));
+            input.addEventListener('blur', () => validateField(input));
+        });
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -722,36 +411,30 @@
                 return;
             }
 
-            const button = form.querySelector('button');
-            button.textContent = 'Enviando :D';
-            button.disabled = true;
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.textContent = 'Enviando :D';
+            submitButton.disabled = true;
 
             setTimeout(() => {
                 showNotification('¡Registro Completado!', 'success');
-                button.textContent = 'Registrar';
-                button.disabled = false;
+                submitButton.textContent = 'Registrar';
+                submitButton.disabled = false;
                 form.reset();
-                inputs.forEach(input => {
-                    input.classList.remove('success');
-                    input.classList.remove('error'); // Limpiar también los errores
-                    const errorElement = input.nextElementSibling;
-                    if (errorElement) {
-                        errorElement.textContent = '';
-                        errorElement.classList.remove('visible');
-                    }
-                });
+                clearValidationStates(); // Limpia los estados de validación
             }, 1500);
         });
 
+        // --- Funcionalidad de Paises (RestCountries API) ---
         async function populateCountries() {
             try {
                 const response = await fetch('https://restcountries.com/v3.1/all');
+                if (!response.ok) throw new Error('Network response was not ok.');
                 const countries = await response.json();
                 const select = document.getElementById('country');
 
                 const sortedCountries = countries
                     .map(country => ({
-                        name: country.translations.spa?.common || country.name.common,
+                        name: country.translations?.spa?.common || country.name.common,
                         code: country.cca2
                     }))
                     .sort((a, b) => a.name.localeCompare(b.name));
@@ -763,21 +446,19 @@
                     select.appendChild(option);
                 });
             } catch (error) {
-                console.error('Error retrieving the list of countries.', error);
-                const select = document.getElementById('country');
-                select.innerHTML = '<option value="">Error loading countries.</option>';
+                console.error('Error al cargar la lista de países:', error);
+                document.getElementById('country').innerHTML = '<option value="">Error al cargar países.</option>';
+                showNotification('Error al cargar la lista de países.', 'error');
             }
         }
 
-        document.addEventListener('DOMContentLoaded', populateCountries);
-
-        // MODIFICACIÓN CLAVE: Función para buscar y llenar usuario por ID
+        // --- Funcionalidad de Llenado Automático de Usuarios (JSONPlaceholder API) ---
         async function fetchAndFillUserById(id) {
             try {
                 const response = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
                 if (!response.ok) {
                     if (response.status === 404) {
-                        // El mensaje de notificación ya fue cambiado
+                        showError(userIdInput, errorMessages.userId); // Marcar el campo ID con error
                         showNotification('Usuario no encontrado. Intenta con un ID del 1 al 10.', 'error');
                     } else {
                         showNotification('Error al cargar datos del usuario.', 'error');
@@ -788,98 +469,91 @@
                 const user = await response.json();
 
                 // Llenar los campos del formulario
-                document.getElementById('name').value = user.name.split(' ')[0] || ''; // Solo el primer nombre
-                document.getElementById('Lastname').value = user.name.split(' ').slice(1).join(' ') || user.username; // El resto del nombre como apellido o username
+                document.getElementById('name').value = user.name.split(' ')[0] || '';
+                document.getElementById('Lastname').value = user.name.split(' ').slice(1).join(' ') || user.username;
                 document.getElementById('Address').value = `${user.address.street}, ${user.address.suite}, ${user.address.city}`;
-                document.getElementById('phone').value = user.phone.split(' ')[0].replace(/[^0-9]/g, '').slice(0, 10); // Solo la primera parte numérica
-                document.getElementById('email').value = user.id; // Asignar el ID de la API al campo 'email'
-                // Para el género, JSONPlaceholder no tiene género. Puedes poner un valor por defecto o dejarlo sin llenar.
-                document.getElementById('genero').value = 'otro'; // Puedes cambiarlo a 'masculino' o 'femenino' si lo deseas
+                document.getElementById('phone').value = user.phone.split(' ')[0].replace(/[^0-9]/g, '').slice(0, 10);
+                userIdInput.value = user.id; // Asegurar que el ID se ponga en el campo userId
+                document.getElementById('genero').value = 'otro'; // Valor por defecto ya que la API no tiene género
 
-                // Intentar seleccionar el país (JSONPlaceholder no tiene un campo de país claro)
-                // Se puede intentar mapear la ciudad de JSONPlaceholder a un país, pero es complejo y no es confiable.
-                // Por ahora, lo dejaremos sin auto-seleccionar el país basado en la API.
-                // Puedes agregar lógica para inferir el país si tienes una base de datos de ciudades a países.
-
-                // Validar los campos después de llenarlos
+                // Volver a validar los campos después de llenarlos
                 inputs.forEach(input => validateField(input));
+                showNotification(`Datos del usuario ID ${user.id} cargados exitosamente.`, 'success');
 
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                console.error('Error al cargar datos del usuario:', error);
                 showNotification('Hubo un problema al conectar con el servidor de usuarios.', 'error');
             }
         }
 
-        document.getElementById('email').addEventListener('blur', function () {
+        // Evento para el campo userId (anteriormente 'email')
+        userIdInput.addEventListener('blur', function () {
             const id = this.value.trim();
-            // Asegúrate de que la validación para el campo 'email' como ID numérico sea la correcta
-            // y que el mensaje de error se ajuste a "número del 1 al 10".
             const idNum = parseInt(id, 10);
             if (!isNaN(idNum) && idNum >= 1 && idNum <= 10) {
-                fetchAndFillUserById(id);
+                fetchAndFillUserById(idNum);
             } else {
-                showError(this, errorMessages.email); // Mostrar error si el formato no es válido
+                showError(this, errorMessages.userId); // Mostrar error si el formato no es válido
             }
         });
 
-        // Script para mostrar una tabla de usuarios de JSONPlaceholder
-        const usersTableContainer = document.getElementById('usersTableContainer');
 
-        async function loadUserTable(count = 10) { // JSONPlaceholder tiene 10 usuarios
+        // --- Funcionalidad de la Tabla de Usuarios de Ejemplo ---
+        async function loadUserTable(count = 10) {
             try {
                 const res = await fetch(`https://jsonplaceholder.typicode.com/users?_limit=${count}`);
+                if (!res.ok) throw new Error('Network response was not ok.');
                 const data = await res.json();
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = '';
+                usersTableBody.innerHTML = ''; // Limpiar tabla antes de llenar
 
                 data.forEach((user) => {
                     const row = document.createElement('tr');
-                    row.style.cursor = 'pointer'; // Para indicar que es clicable
+                    row.classList.add('cursor-pointer', 'hover:bg-gray-50', 'transition-colors', 'duration-200'); // Clases de Tailwind
                     row.innerHTML = `
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.id}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.name}</td>
-                        <td style="padding: 8px; border: 1px solid #ccc;">${user.email}</td>
+                        <td class="p-3 border border-gray-300">${user.id}</td>
+                        <td class="p-3 border border-gray-300">${user.name}</td>
+                        <td class="p-3 border border-gray-300">${user.email}</td>
                     `;
                     // Añadir un evento de click a la fila para llenar el formulario
                     row.addEventListener('click', () => {
                         fillFromTable(user);
-                        document.getElementById('email').value = user.id; // Asegurar que el ID se ponga en el campo 'email'
-                        validateField(document.getElementById('email')); // Validar el campo de ID
                     });
-                    tbody.appendChild(row);
+                    usersTableBody.appendChild(row);
                 });
             } catch (e) {
-                console.error('Error cargando usuarios de la API', e);
-                const tbody = document.getElementById('usersTableBody');
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Error al cargar usuarios de ejemplo.</td></tr>';
+                console.error('Error cargando usuarios de la API:', e);
+                usersTableBody.innerHTML = '<tr><td colspan="3" class="p-3 text-center text-red-500">Error al cargar usuarios de ejemplo.</td></tr>';
+                showNotification('Error al cargar la tabla de usuarios de ejemplo.', 'error');
             }
         }
 
-        // Función para llenar el formulario desde los datos de la tabla (JSONPlaceholder)
+        /**
+         * Llena el formulario con los datos de un usuario de la tabla.
+         * @param {object} user - Objeto usuario de la API.
+         */
         function fillFromTable(user) {
             document.getElementById('name').value = user.name.split(' ')[0] || '';
             document.getElementById('Lastname').value = user.name.split(' ').slice(1).join(' ') || user.username;
             document.getElementById('Address').value = `${user.address.street}, ${user.address.suite}, ${user.address.city}`;
             document.getElementById('phone').value = user.phone.split(' ')[0].replace(/[^0-9]/g, '').slice(0, 10);
-            document.getElementById('email').value = user.id; // Asignar el ID al campo 'email'
-            document.getElementById('genero').value = 'otro'; // Puedes ajustar esto si la API tiene datos de género
+            userIdInput.value = user.id; // Asignar el ID al campo userId
+            document.getElementById('genero').value = 'otro'; // Valor por defecto
 
-            // Vuelve a validar todos los campos después de llenarlos
+            // Volver a validar todos los campos después de llenarlos
             inputs.forEach(input => validateField(input));
+            showNotification(`Datos del usuario ${user.name} cargados al formulario.`, 'success');
         }
 
-        document.addEventListener('DOMContentLoaded', () => loadUserTable());
-
-        // ** NUEVO: Lógica para Tooltips **
+        // --- Lógica para Tooltips ---
         const helpIcons = document.querySelectorAll('.help-icon');
 
         helpIcons.forEach(icon => {
             const tooltipText = document.createElement('span');
             tooltipText.classList.add('tooltip-text');
-            tooltipText.textContent = icon.dataset.help; // Obtiene el texto del atributo data-help
-            icon.parentNode.insertBefore(tooltipText, icon.nextSibling); // Inserta el tooltip después del icono
+            tooltipText.textContent = icon.dataset.help; // Obtener el texto del tooltip del atributo data-help
 
-            // Eventos para mostrar/ocultar el tooltip
+            icon.parentNode.insertBefore(tooltipText, icon.nextSibling); // Insertar el tooltip después del icono
+
             icon.addEventListener('mouseenter', () => {
                 tooltipText.classList.add('show');
             });
@@ -887,58 +561,39 @@
             icon.addEventListener('mouseleave', () => {
                 tooltipText.classList.remove('show');
             });
-
-            // Opcional: Ocultar tooltip al hacer clic en cualquier lugar (para dispositivos táctiles)
-            document.addEventListener('click', (event) => {
-                if (!icon.contains(event.target) && !tooltipText.contains(event.target)) {
-                    tooltipText.classList.remove('show');
-                }
-            });
         });
 
-        // ** NUEVO: Lógica para el Modal de Bienvenida/Tutorial **
-        const tutorialModal = document.createElement('div');
-        tutorialModal.classList.add('tutorial-modal');
-        tutorialModal.innerHTML = `
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h3>¡Bienvenido al Formulario Interactivo!</h3>
-        <p>Este es un formulario de ejemplo que demuestra validación en tiempo real y cómo interactuar con APIs externas.</p>
-        <p><strong>Consejos:</strong></p>
-        <ul>
-            <li>Rellena los campos para ver la validación en acción.</li>
-            <li>Prueba a introducir un número **del 1 al 10** en el campo de "Identificación" (donde normalmente iría el email) y pulsa ENTER o haz clic fuera del campo. ¡El formulario se llenará automáticamente con datos de ejemplo!</li>
-            <li>Haz clic en las filas de la tabla de "Usuarios de ejemplo" para pre-llenar el formulario con esos datos.</li>
-            <li>Pasa el ratón sobre el icono <span style="display:inline-flex; width:18px; height:18px; border-radius:50%; background-color:#007bff; color:white; font-size:10px; font-weight:bold; justify-content:center; align-items:center;">?</span> al lado de cada campo para obtener ayuda.</li>
-        </ul>
-        <button id="startTutorialButton">¡Empezar!</button>
-    </div>
-`;
-        document.body.appendChild(tutorialModal);
-
-        const closeModalButton = tutorialModal.querySelector('.close-button');
-        const startTutorialButton = tutorialModal.querySelector('#startTutorialButton');
-
+        // --- Lógica del Modal de Bienvenida (Tutorial) ---
         function showTutorialModal() {
-            tutorialModal.style.display = 'flex'; // Usar flex para centrar
+            if (!localStorage.getItem('tutorialShown')) {
+                tutorialModal.classList.remove('hidden');
+                tutorialModal.classList.add('flex'); // Muestra el modal usando flex
+            }
         }
 
         function hideTutorialModal() {
-            tutorialModal.style.display = 'none';
+            tutorialModal.classList.add('hidden');
+            tutorialModal.classList.remove('flex');
+            localStorage.setItem('tutorialShown', 'true'); // Marca que el tutorial ya se mostró
         }
 
-        closeModalButton.addEventListener('click', hideTutorialModal);
+        closeTutorialButton.addEventListener('click', hideTutorialModal);
         startTutorialButton.addEventListener('click', hideTutorialModal);
-        tutorialModal.addEventListener('click', (event) => {
-            if (event.target === tutorialModal) { // Cierra si se hace clic fuera del contenido
+        // Cierra el modal si se hace click fuera del contenido (opcional)
+        tutorialModal.addEventListener('click', (e) => {
+            if (e.target === tutorialModal) {
                 hideTutorialModal();
             }
         });
 
-        // Mostrar el modal cuando la página se carga
-        document.addEventListener('DOMContentLoaded', showTutorialModal);
-    </script>
 
+        // --- Inicialización al cargar la página ---
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCountries(); // Cargar la lista de países
+            loadUserTable(); // Cargar la tabla de usuarios de ejemplo
+            showTutorialModal(); // Mostrar el modal de bienvenida si no se ha visto antes
+        });
+    </script>
 </body>
 
 </html>
