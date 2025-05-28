@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interfaz Fluent V6</title>
+    <title>Demo Interfaz Fluent V8</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
                     colors: {
                         'primary-light': '#3b82f6', 'primary-dark': '#8b5cf6',
                         'surface-light': '#ffffff', 'surface-dark': '#111827',
-                        'surface-elevated-light': '#f9fafbff', 'surface-elevated-dark': '#1f2937ee',
+                        'surface-elevated-light': '#f9fafbff', 'surface-elevated-dark': '#1f2937F0', 
                         'text-light-primary': '#0f172a', 'text-light-secondary': '#64748b',
                         'text-dark-primary': '#f8fafc', 'text-dark-secondary': '#94a3b8',
                         'border-light': '#00000012', 'border-dark': '#ffffff12',
@@ -25,6 +25,8 @@
                         'nav-item-active-light': '#0000000f', 'nav-item-active-dark': '#ffffff0f',
                         'danger-light': '#ef4444', 'danger-dark': '#f87171',
                         'success-light': '#22c55e', 'success-dark': '#4ade80',
+                        'info-light': '#0ea5e9', 'info-dark': '#38bdf8', 
+                        'warning-light': '#f59e0b', 'warning-dark': '#fbbf24', 
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.3s ease-out forwards', 'fade-out': 'fadeOut 0.3s ease-in forwards',
@@ -33,8 +35,10 @@
                         'modal-enter': 'modalEnter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
                         'modal-leave': 'modalLeave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards',
                         'spinner-rotate': 'spinnerRotate 0.8s linear infinite',
-                        'toast-enter': 'toastEnter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
-                        'toast-leave': 'toastLeave 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards', // 2.5s delay before starting to leave
+                        'toast-enter-mobile': 'toastEnterMobile 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'toast-leave-mobile': 'toastLeaveMobile 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards',
+                        'toast-enter-desktop': 'toastEnterDesktop 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'toast-leave-desktop': 'toastLeaveDesktop 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
@@ -44,8 +48,10 @@
                         modalEnter: { '0%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
                         modalLeave: { '0%': { opacity: '1', transform: 'translateY(0) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' } },
                         spinnerRotate: { 'to': { transform: 'rotate(360deg)' } },
-                        toastEnter: { '0%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' } },
-                        toastLeave: { '0%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' } },
+                        toastEnterMobile: { '0%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' } },
+                        toastLeaveMobile: { '0%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' } },
+                        toastEnterDesktop: { '0%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
+                        toastLeaveDesktop: { '0%': { opacity: '1', transform: 'translateY(0) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) scale(0.95)' } },
                     },
                     boxShadow: {
                         'fluent': '0 4px 16px rgba(0,0,0,0.07)', 'fluent-dark': '0 4px 16px rgba(0,0,0,0.15)',
@@ -63,27 +69,56 @@
         ::-webkit-scrollbar-thumb { background: #9ca3af40; border-radius: 3px; }
         .dark ::-webkit-scrollbar-thumb { background: #f9fafb30; }
         
-        .placeholder-image { width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; background-color: #e5e7eb; }
-        .dark .placeholder-image { background-color: #374151cc; }
-        .avatar-image-lg { width: 112px; height: 112px; object-fit: cover; border-radius: 9999px; margin: 0 auto 1rem; background-color: #e5e7eb; border: 3px solid var(--border-color, white); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .dark .avatar-image-lg { background-color: #4b5563; --border-color: #374151; }
-        
-        .search-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 0.75rem center; background-size: 1.25rem; padding-left: 2.75rem; }
-        .dark .search-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23cbd5e1'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E"); }
-        
+        .profile-picture-container {
+            width: 112px; height: 112px; border-radius: 9999px; margin: 0 auto 1rem;
+            background-color: #e5e7eb; border: 3px solid var(--border-color, white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px; color: var(--primary-color, #3b82f6);
+            position: relative; cursor: pointer; /* Added cursor pointer */
+            transition: transform 0.2s ease-out;
+        }
+        .profile-picture-container:hover { transform: scale(1.05); }
+        .dark .profile-picture-container { background-color: #4b5563; --border-color: #374151; color: var(--primary-color-dark, #8b5cf6); }
+
+        .search-input-container { /* For sticky search bar */
+            position: sticky; top: 0; z-index: 20; /* Ensure it's above tab content but below main header */
+            padding-top: 0.75rem; padding-bottom: 0.75rem; /* Equivalent to py-3 */
+            background-color: var(--sticky-search-bg-light);
+        }
+        .dark .search-input-container { background-color: var(--sticky-search-bg-dark); }
+
         .tab-content.active { animation: slide-fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         .nav-icon.animated { animation: icon-bounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
-        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 40; animation: fadeIn 0.3s ease-out; }
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 40; animation: fadeIn 0.3s ease-out; display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .dark .modal-overlay { background-color: rgba(0,0,0,0.5); }
         .modal-overlay.hidden { animation: fadeOut 0.3s ease-in forwards; pointer-events: none; }
-        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; animation: modal-enter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .modal-content { z-index: 50; width: 100%; max-width: 500px; max-height: calc(100vh - 2rem); /* Adjusted for padding on overlay */ overflow-y: auto; animation: modal-enter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         .modal-overlay.hidden .modal-content { animation: modal-leave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards; }
         .notification-badge { position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 0.65rem; line-height: 18px; text-align: center; font-weight: bold; border: 2px solid var(--surface-color); transform: scale(0); transition: transform 0.2s ease-out; }
         .notification-badge.visible { transform: scale(1); }
         .icon-selector-btn { width: 36px; height: 36px; border: 2px solid transparent; transition: all 0.2s; }
         .icon-selector-btn.selected { border-color: var(--primary-color); background-color: var(--primary-color-alpha); }
         .spinner { width: 1em; height: 1em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spinner-rotate 0.8s linear infinite; }
-        .toast-notification { position: fixed; bottom: 80px; left: 50%; /* transform: translateX(-50%) is applied by animation */ z-index: 100; padding: 12px 20px; border-radius: 8px; color: white; font-size: 0.875rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: toast-enter forwards, toast-leave forwards; }
+        
+        .toast-notification {
+            position: fixed; z-index: 100; padding: 10px 16px; border-radius: 12px; /* More rounded */
+            color: white; font-size: 0.875rem; line-height: 1.25rem; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12); /* Softer shadow */
+            display: flex; align-items: center;
+            /* Mobile default: bottom center, above navbar */
+            bottom: calc(3.5rem + 24px); /* Navbar height (approx 56px = 3.5rem) + 24px margin */
+            left: 50%; animation: toast-enter-mobile forwards, toast-leave-mobile forwards;
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); /* Subtle blur */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .toast-notification {
+                bottom: 24px; right: 24px; left: auto; transform: none; 
+                animation: toast-enter-desktop forwards, toast-leave-desktop forwards;
+            }
+        }
+        .toast-icon { margin-right: 10px; font-size: 1.2em; }
+
         .explore-card { transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; }
         .explore-card:hover { transform: translateY(-4px) scale(1.02); }
     </style>
@@ -91,12 +126,12 @@
 
 <body class="font-inter text-text-light-primary dark:text-text-dark-primary bg-gradient-to-br from-slate-100 to-gray-100 dark:from-surface-dark dark:to-gray-900 md:flex antialiased">
 
-    <aside id="desktop-sidebar" class="hidden md:flex flex-col w-20 lg:w-64 min-h-screen bg-surface-light/70 dark:bg-surface-dark/80 backdrop-blur-xl border-r border-border-light dark:border-border-dark shadow-fluent dark:shadow-fluent-dark z-40 transition-all duration-300 ease-out">
-        <div class="h-16 lg:p-4 flex items-center justify-center lg:justify-start border-b border-border-light dark:border-border-dark">
+    <aside id="desktop-sidebar" class="hidden md:flex flex-col w-20 lg:w-64 h-screen bg-surface-light/70 dark:bg-surface-dark/80 backdrop-blur-xl border-r border-border-light dark:border-border-dark shadow-fluent dark:shadow-fluent-dark z-40 transition-all duration-300 ease-out">
+        <div class="h-16 lg:p-4 flex items-center justify-center lg:justify-start border-b border-border-light dark:border-border-dark flex-shrink-0">
             <i class="fas fa-rocket text-2xl text-primary-light dark:text-primary-dark"></i>
             <h1 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary ml-3 hidden lg:block">FluentApp</h1>
         </div>
-        <nav class="flex-1 p-2 lg:p-3 space-y-1.5 lg:space-y-2"> </nav>
+        <nav class="flex-1 p-2 lg:p-3 space-y-1.5 lg:space-y-2 overflow-y-auto"> </nav>
     </aside>
 
     <div id="app-content-wrapper" class="flex-1 flex flex-col min-h-screen overflow-x-hidden relative">
@@ -121,30 +156,43 @@
             </div>
 
             <div id="tab-explorar" class="tab-content hidden space-y-5">
-                <div class="relative">
-                    <input type="search" id="search-input" placeholder="Buscar en recomendaciones y más..." class="search-input w-full py-3 px-4 text-sm bg-slate-100 dark:bg-slate-700/80 rounded-xl border border-transparent focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent focus:outline-none transition-all shadow-sm hover:shadow-md">
-                    <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-lg z-10 overflow-hidden hidden"></div>
+                <div class="search-input-container"> <div class="relative">
+                        <input type="search" id="search-input" placeholder="Buscar en recomendaciones y más..." class="search-input w-full py-3 px-4 text-sm bg-slate-100 dark:bg-slate-700/80 rounded-xl border border-transparent focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent focus:outline-none transition-all shadow-sm hover:shadow-md">
+                        <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-lg z-10 overflow-hidden hidden"></div>
+                    </div>
                 </div>
                 <div id="explore-default-content">
-                    <h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary mb-3">Recomendaciones para ti</h2>
-                    <div id="explore-recommendations-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                        </div>
+                    <h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary mb-3 mt-3">Recomendaciones para ti</h2>
+                    <div id="explore-recommendations-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
                 </div>
                 <div id="search-results-container" class="hidden space-y-4"></div>
             </div>
             
-            <div id="tab-alertas" class="tab-content hidden space-y-0 p-0 md:p-0"> <div class="flex justify-between items-center p-4 border-b border-border-light dark:border-border-dark sticky top-0 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-sm md:rounded-t-xl z-10">
+            <div id="tab-alertas" class="tab-content hidden space-y-0 p-0 md:p-0">
+                 <div class="flex justify-between items-center p-4 border-b border-border-light dark:border-border-dark sticky top-0 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-sm md:rounded-t-xl z-10">
                     <h2 class="text-xl font-semibold">Notificaciones</h2>
                     <button id="mark-all-read-btn" class="text-sm text-primary-light dark:text-primary-dark hover:underline">Marcar todas como leídas</button>
                 </div>
-                <div id="notifications-list" class="p-4 space-y-3">
-                    </div>
+                <div id="notifications-list" class="p-4 space-y-3"></div>
             </div>
 
             <div id="tab-perfil" class="tab-content hidden space-y-5">
                 <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-5 text-center">
-                    <img src="https://placehold.co/112x112/8b5cf6/ffffff?text=AI&font=inter" alt="Perfil" class="avatar-image-lg" onerror="this.src='https://placehold.co/112x112/e5e7eb/4b5563?text=Error&font=inter'">
-                    <h2 class="text-2xl font-bold">Alex Innova</h2>
+                    <div class="profile-picture-container" id="profile-picture-display" title="Cambiar icono de perfil">
+                        <i class="fas fa-user"></i> </div>
+                    
+                    <div id="profile-name-display" class="mt-4">
+                        <h2 class="text-2xl font-bold inline" id="profile-name-text">Alex Innova</h2>
+                    </div>
+                    <div id="profile-role-display" class="text-sm font-medium text-primary-light dark:text-primary-dark">
+                        <span id="profile-role-text">Explorador Digital</span>
+                    </div>
+                    <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mt-3 max-w-md mx-auto" id="profile-bio-display">
+                        Apasionado por la tecnología, IA y el futuro digital. Siempre aprendiendo y explorando nuevas ideas.
+                    </p>
+                     <button id="edit-profile-main-btn" class="mt-6 w-full sm:w-auto bg-gradient-to-r from-primary-light to-blue-500 dark:from-primary-dark dark:to-violet-500 text-white font-semibold py-2.5 px-6 rounded-lg hover:opacity-90 transform transition-all duration-300 hover:shadow-lg active:scale-95">
+                        Editar Perfil
+                    </button>
                 </div>
                 <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
                     <h2 class="text-lg font-semibold mb-1">Configuración General</h2>
@@ -163,36 +211,33 @@
 
     <div id="modal-new-post" class="modal-overlay hidden">
         <div class="modal-content bg-surface-elevated-light dark:bg-surface-elevated-dark text-text-light-primary dark:text-text-dark-primary rounded-xl shadow-fluent-modal dark:shadow-fluent-modal-dark p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-semibold">Crear Nuevo Post</h3>
-                <button class="close-modal-btn text-text-light-secondary dark:text-text-dark-secondary hover:text-danger-light dark:hover:text-danger-dark transition-colors"><i class="fas fa-times text-xl"></i></button>
-            </div>
+            <div class="flex justify-between items-center mb-4"> <h3 class="text-xl font-semibold">Crear Nuevo Post</h3> <button class="close-modal-btn text-text-light-secondary dark:text-text-dark-secondary hover:text-danger-light dark:hover:text-danger-dark transition-colors"><i class="fas fa-times text-xl"></i></button> </div>
             <form id="new-post-form" class="space-y-4">
-                <div>
-                    <label for="post-title" class="block text-sm font-medium mb-1">Título</label>
-                    <input type="text" id="post-title" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Título increíble">
-                </div>
-                <div>
-                    <label for="post-icon" class="block text-sm font-medium mb-1">Icono del Post</label>
-                    <div id="post-icon-selector" class="flex flex-wrap gap-2"></div>
-                </div>
-                <div>
-                    <label for="post-content" class="block text-sm font-medium mb-1">Contenido</label>
-                    <textarea id="post-content" rows="4" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Escribe algo asombroso..."></textarea>
-                </div>
-                <div>
-                    <label for="post-category" class="block text-sm font-medium mb-1">Categoría</label>
-                    <select id="post-category" class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none">
-                        <option value="tecnologia">Tecnología</option> <option value="desarrollo">Desarrollo</option> <option value="ia">IA</option> <option value="diseno">Diseño</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" class="close-modal-btn px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancelar</button>
-                    <button type="submit" id="publish-post-btn" class="px-6 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center min-w-[100px]">
-                        <span class="btn-text">Publicar</span>
-                        <span class="spinner hidden ml-2"></span>
-                    </button>
-                </div>
+                <div> <label for="post-title" class="block text-sm font-medium mb-1">Título</label> <input type="text" id="post-title" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Título increíble"> </div>
+                <div> <label class="block text-sm font-medium mb-1">Icono del Post</label> <div id="post-icon-selector" class="flex flex-wrap gap-2"></div> </div>
+                <div> <label for="post-content" class="block text-sm font-medium mb-1">Contenido</label> <textarea id="post-content" rows="4" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Escribe algo asombroso..."></textarea> </div>
+                <div> <label for="post-category" class="block text-sm font-medium mb-1">Categoría</label> <select id="post-category" class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none"> <option value="tecnologia">Tecnología</option> <option value="desarrollo">Desarrollo</option> <option value="ia">IA</option> <option value="diseno">Diseño</option> </select> </div>
+                <div class="flex justify-end space-x-3 pt-2"> <button type="button" class="close-modal-btn px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancelar</button> <button type="submit" id="publish-post-btn" class="px-6 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center min-w-[100px]"> <span class="btn-text">Publicar</span> <span class="spinner hidden ml-2"></span> </button> </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-profile-picture" class="modal-overlay hidden">
+        <div class="modal-content bg-surface-elevated-light dark:bg-surface-elevated-dark text-text-light-primary dark:text-text-dark-primary rounded-xl shadow-fluent-modal dark:shadow-fluent-modal-dark p-6">
+            <div class="flex justify-between items-center mb-4"> <h3 class="text-xl font-semibold">Seleccionar Icono de Perfil</h3> <button class="close-modal-btn text-text-light-secondary dark:text-text-dark-secondary hover:text-danger-light dark:hover:text-danger-dark transition-colors"><i class="fas fa-times text-xl"></i></button> </div>
+            <div id="profile-icon-selector" class="grid grid-cols-4 sm:grid-cols-6 gap-3 max-h-[50vh] overflow-y-auto p-1"></div>
+            <div class="flex justify-end mt-4"> <button type="button" class="close-modal-btn px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cerrar</button> </div>
+        </div>
+    </div>
+
+    <div id="modal-edit-profile" class="modal-overlay hidden">
+        <div class="modal-content bg-surface-elevated-light dark:bg-surface-elevated-dark text-text-light-primary dark:text-text-dark-primary rounded-xl shadow-fluent-modal dark:shadow-fluent-modal-dark p-6">
+            <div class="flex justify-between items-center mb-6"> <h3 class="text-xl font-semibold">Editar Perfil</h3> <button class="close-modal-btn text-text-light-secondary dark:text-text-dark-secondary hover:text-danger-light dark:hover:text-danger-dark transition-colors"><i class="fas fa-times text-xl"></i></button> </div>
+            <form id="edit-profile-form" class="space-y-4">
+                <div> <label for="profile-edit-name" class="block text-sm font-medium mb-1">Nombre</label> <input type="text" id="profile-edit-name" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none"> </div>
+                <div> <label for="profile-edit-role" class="block text-sm font-medium mb-1">Cargo/Título</label> <input type="text" id="profile-edit-role" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none"> </div>
+                <div> <label for="profile-edit-bio" class="block text-sm font-medium mb-1">Biografía</label> <textarea id="profile-edit-bio" rows="3" class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none"></textarea> </div>
+                <div class="flex justify-end space-x-3 pt-3"> <button type="button" class="close-modal-btn px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancelar</button> <button type="submit" id="save-profile-btn" class="px-6 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center min-w-[110px]"> <span class="btn-text">Guardar Cambios</span> <span class="spinner hidden ml-2"></span> </button> </div>
             </form>
         </div>
     </div>
@@ -202,30 +247,32 @@
     <script>
     // APP MODULE
     const App = (() => {
-        // STATE
+        // STATE (igual que antes, con userProfile)
         let currentTabId = null;
         let isDarkMode = false;
         let posts = [];
-        let notifications = [
-            { id: 1, icon: 'fas fa-newspaper', title: 'Nuevo artículo: El Futuro de la IA Cuántica', time: 'hace 5 min', read: false, description: 'Una mirada profunda...' },
-            { id: 2, icon: 'fas fa-comments', title: 'Comentario en tu post', time: 'hace 2 horas', read: false, description: '@usuarioX comentó...' },
-            { id: 3, icon: 'fas fa-code-branch', title: 'Actualización del sistema', time: 'ayer', read: true, description: 'FluentApp v6.0 lanzada.' },
+        let notifications = [ 
+            { id: Date.now() + 1, icon: 'fas fa-newspaper', title: 'El Futuro de la IA Cuántica', time: 'hace 5 min', read: false, description: 'Una mirada profunda...' },
+            { id: Date.now() + 2, icon: 'fas fa-comments', title: 'Comentario en tu post', time: 'hace 2 horas', read: false, description: '@usuarioX comentó...' },
+            { id: Date.now() + 3, icon: 'fas fa-code-branch', title: 'Actualización del sistema', time: 'ayer', read: true, description: 'FluentApp v8.0 lanzada.' },
         ];
         const availablePostIcons = ['fas fa-lightbulb', 'fas fa-code', 'fas fa-brain', 'fas fa-rocket', 'fas fa-cogs', 'fas fa-chart-line', 'fas fa-atom', 'fas fa-microchip'];
         let selectedPostIcon = availablePostIcons[0];
-
-        const exploreRecommendations = [
-            { id: 'rec1', title: 'Desarrollo Web Moderno', type: 'Playlist de Artículos', image: 'https://placehold.co/400x400/3b82f6/ffffff?text=WebDev&font=inter', color: 'bg-blue-500' },
+        const availableProfileIcons = ['fas fa-user', 'fas fa-user-astronaut', 'fas fa-user-ninja', 'fas fa-user-secret', 'fas fa-user-tie', 'fas fa-cat', 'fas fa-dog', 'fas fa-dragon', 'fas fa-ghost', 'fas fa-robot', 'fas fa-hippo', 'fas fa-otter', 'fas fa-brain', 'fas fa-meteor', 'fas fa-satellite-dish'];
+        let userProfile = {
+            name: 'Alex Innova',
+            role: 'Explorador Digital',
+            bio: 'Apasionado por la tecnología, IA y el futuro digital. Siempre aprendiendo y explorando nuevas ideas.',
+            icon: 'fas fa-user-astronaut'
+        };
+        const exploreRecommendations = [ /* Data igual que antes */
+             { id: 'rec1', title: 'Desarrollo Web Moderno', type: 'Playlist de Artículos', image: 'https://placehold.co/400x400/3b82f6/ffffff?text=WebDev&font=inter', color: 'bg-blue-500' },
             { id: 'rec2', title: 'Avances en IA', type: 'Colección', image: 'https://placehold.co/400x400/8b5cf6/ffffff?text=AI&font=inter', color: 'bg-violet-500' },
             { id: 'rec3', title: 'Diseño UX Inspirador', type: 'Recursos', image: 'https://placehold.co/400x400/ec4899/ffffff?text=UX&font=inter', color: 'bg-pink-500' },
-            { id: 'rec4', title: 'Tech Talks Semanales', type: 'Podcast', image: 'https://placehold.co/400x400/10b981/ffffff?text=Talks&font=inter', color: 'bg-emerald-500' },
-            { id: 'rec5', title: 'Innovación Disruptiva', type: 'Playlist', image: 'https://placehold.co/400x400/f59e0b/ffffff?text=Innovate&font=inter', color: 'bg-amber-500' },
-            { id: 'rec6', title: 'Fundamentos de Programación', type: 'Curso', image: 'https://placehold.co/400x400/6366f1/ffffff?text=Code&font=inter', color: 'bg-indigo-500' },
         ];
 
 
-        // DOM ELEMENTS CACHE
-        const DOM = {
+        const DOM = { /* Cache de elementos DOM, con nuevos elementos de perfil y modal de edición */
             html: document.documentElement,
             mainContentArea: document.getElementById('main-content-area'),
             headerSubtitle: document.getElementById('headerSubtitle'),
@@ -249,16 +296,28 @@
             exploreRecommendationsGrid: document.getElementById('explore-recommendations-grid'),
             searchResultsContainer: document.getElementById('search-results-container'),
             toastContainer: document.getElementById('toast-container'),
+            // Profile specific
+            profilePictureDisplay: document.getElementById('profile-picture-display'),
+            // changeProfilePictureBtn: document.getElementById('change-profile-picture-btn'), // Eliminado
+            profileNameText: document.getElementById('profile-name-text'),
+            profileRoleText: document.getElementById('profile-role-text'),
+            profileBioDisplay: document.getElementById('profile-bio-display'), // Contenedor del texto de la bio
+            modalProfilePicture: document.getElementById('modal-profile-picture'),
+            profileIconSelectorContainer: document.getElementById('profile-icon-selector'),
+            editProfileMainBtn: document.getElementById('edit-profile-main-btn'),
+            modalEditProfile: document.getElementById('modal-edit-profile'),
+            editProfileForm: document.getElementById('edit-profile-form'),
+            saveProfileBtn: document.getElementById('save-profile-btn'),
         };
 
-        const NAV_ITEMS = [
+        const NAV_ITEMS = [ /* Igual que antes */
             { id: 'inicio', icon: 'fas fa-home', text: 'Inicio', subtitle: 'Panel Principal' },
             { id: 'explorar', icon: 'fas fa-compass', text: 'Explorar', subtitle: 'Descubre Novedades' },
             { id: 'alertas', icon: 'fas fa-bell', text: 'Alertas', subtitle: 'Tus Notificaciones', isNotificationTab: true },
             { id: 'perfil', icon: 'fas fa-user-circle', text: 'Perfil', subtitle: 'Tu Espacio Personal' }
         ];
         
-        const UI = {
+        const UI = { /* Con corrección en showToast y createIconSelector para perfil */
             toggleClass: (el, className, force) => el && el.classList.toggle(className, force),
             addClass: (el, ...classNames) => el && el.classList.add(...classNames),
             removeClass: (el, ...classNames) => el && el.classList.remove(...classNames),
@@ -269,81 +328,100 @@
             show: (el) => UI.removeClass(el, 'hidden'),
             hide: (el) => UI.addClass(el, 'hidden'),
             isVisible: (el) => el && !el.classList.contains('hidden'),
-            createIconSelector: () => {
-                if (!DOM.postIconSelector) return;
-                DOM.postIconSelector.innerHTML = '';
-                availablePostIcons.forEach(iconClass => {
+            createIconSelector: (container, icons, currentSelectedIcon, onSelectCallback, itemClass = 'icon-selector-btn') => { /* Igual que antes */
+                if (!container) return;
+                container.innerHTML = '';
+                icons.forEach(iconClass => {
                     const btn = document.createElement('button');
                     btn.type = 'button';
-                    btn.className = `icon-selector-btn flex items-center justify-center rounded-md p-2 bg-slate-100 dark:bg-slate-700 hover:opacity-80`;
+                    btn.className = `${itemClass} flex items-center justify-center rounded-md p-2 bg-slate-100 dark:bg-slate-700 hover:opacity-80`;
                     btn.innerHTML = `<i class="${iconClass} text-lg ${isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary'}"></i>`;
-                    if (iconClass === selectedPostIcon) {
+                    if (iconClass === currentSelectedIcon) {
                         UI.addClass(btn, 'selected');
                         const primaryColor = isDarkMode ? tailwind.config.theme.extend.colors['primary-dark'] : tailwind.config.theme.extend.colors['primary-light'];
                         btn.style.setProperty('--primary-color', primaryColor);
-                        btn.style.setProperty('--primary-color-alpha', primaryColor + '33'); // Opacity 20% (hex 33)
+                        btn.style.setProperty('--primary-color-alpha', primaryColor + '33'); 
                         btn.querySelector('i').classList.remove(isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary');
                         btn.querySelector('i').classList.add(isDarkMode ? 'text-primary-dark' : 'text-primary-light');
                     }
-                    btn.addEventListener('click', () => {
-                        selectedPostIcon = iconClass;
-                        UI.createIconSelector(); 
-                    });
-                    DOM.postIconSelector.appendChild(btn);
+                    btn.addEventListener('click', () => onSelectCallback(iconClass));
+                    container.appendChild(btn);
                 });
             },
-            showToast: (message, type = 'success') => {
+            showToast: (message, type = 'success', duration = 3000) => { /* Corregido para posicionamiento */
                 const toast = document.createElement('div');
-                toast.className = `toast-notification ${type === 'success' ? 'bg-success-light dark:bg-success-dark' : 'bg-danger-light dark:bg-danger-dark'}`;
-                UI.setText(toast, message);
+                let iconHtml = '';
+                let bgColor = '';
+                const isMobile = window.innerWidth < 768;
+
+                switch(type) {
+                    case 'success': iconHtml = '<i class="fas fa-check-circle toast-icon"></i>'; bgColor = 'bg-success-light dark:bg-success-dark'; break;
+                    case 'error': iconHtml = '<i class="fas fa-times-circle toast-icon"></i>'; bgColor = 'bg-danger-light dark:bg-danger-dark'; break;
+                    case 'info': iconHtml = '<i class="fas fa-info-circle toast-icon"></i>'; bgColor = 'bg-info-light dark:bg-info-dark'; break;
+                    case 'warning': iconHtml = '<i class="fas fa-exclamation-triangle toast-icon"></i>'; bgColor = 'bg-warning-light dark:bg-warning-dark'; break;
+                    default: bgColor = 'bg-gray-700 dark:bg-gray-600';
+                }
+
+                toast.className = `toast-notification ${bgColor}`;
+                UI.setHTML(toast, iconHtml + `<span>${message}</span>`);
+                // Aplicar animación de entrada correcta
+                UI.addClass(toast, isMobile ? 'animate-toast-enter-mobile' : 'animate-toast-enter-desktop');
                 DOM.toastContainer.appendChild(toast);
-                toast.addEventListener('animationend', (e) => {
-                    // Solo remover si la animación que terminó es 'toast-leave'
-                    if (e.animationName === 'toastLeave') {
-                        toast.remove();
-                    }
-                });
+                
+                setTimeout(() => {
+                    UI.removeClass(toast, isMobile ? 'animate-toast-enter-mobile' : 'animate-toast-enter-desktop');
+                    UI.addClass(toast, isMobile ? 'animate-toast-leave-mobile' : 'animate-toast-leave-desktop');
+                    
+                    toast.addEventListener('animationend', (e) => {
+                        if (e.animationName.includes('toastLeave')) {
+                            toast.remove();
+                        }
+                    }, { once: true });
+
+                }, duration - 500); // Duración de la animación de salida es 0.5s
             }
         };
 
-        const ModalManager = {
+        const ModalManager = { /* Igual que antes */
             open: (modalElement) => {
                 if (!modalElement) return;
                 UI.removeClass(modalElement, 'hidden');
                 void modalElement.offsetWidth; 
-                UI.removeClass(modalElement, 'modal-overlay.hidden'); // Para la animación de salida si se interrumpe
+                UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-leave'); 
                 UI.addClass(modalElement.querySelector('.modal-content'),'animate-modal-enter');
-                UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-leave');
                 DOM.html.style.overflow = 'hidden';
             },
             close: (modalElement) => {
-                if (!modalElement || UI.isVisible(modalElement.querySelector('.animate-modal-leave'))) return;
-                UI.addClass(modalElement.querySelector('.modal-content'),'animate-modal-leave');
-                UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-enter');
+                if (!modalElement || !UI.isVisible(modalElement) || UI.isVisible(modalElement.querySelector('.animate-modal-leave'))) return;
+                
+                const modalContent = modalElement.querySelector('.modal-content');
+                UI.removeClass(modalContent,'animate-modal-enter'); 
+                UI.addClass(modalContent,'animate-modal-leave');
+                UI.addClass(modalElement, 'modal-overlay.hidden'); 
 
                 setTimeout(() => {
-                    UI.addClass(modalElement, 'hidden');
+                    UI.addClass(modalElement, 'hidden'); 
+                    UI.removeClass(modalContent,'animate-modal-leave'); 
                     if (!document.querySelector('.modal-overlay:not(.hidden)')) {
                         DOM.html.style.overflow = '';
                     }
-                }, 250); // Sincronizado con la duración de modal-leave
+                }, 250); 
             },
-            init: () => {
+            init: () => { /* Igual que antes */
                 document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', () => ModalManager.close(btn.closest('.modal-overlay'))));
                 document.querySelectorAll('.modal-overlay').forEach(overlay => overlay.addEventListener('click', (e) => { if (e.target === overlay) ModalManager.close(overlay); }));
                 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const openModalEl = document.querySelector('.modal-overlay:not(.hidden)'); if (openModalEl) ModalManager.close(openModalEl); } });
             }
         };
 
-        const DarkMode = {
+        const DarkMode = { /* Llama a ProfileHandler.render */
             toggle: (isDarkActive) => {
-                isDarkMode = isDarkActive; // Actualizar estado global
+                isDarkMode = isDarkActive; 
                 UI.toggleClass(DOM.html, 'dark', isDarkMode);
-                // Actualizar switch de modo oscuro
                 const dmSwitch = DOM.darkModeSwitch;
                 UI.toggleClass(dmSwitch, 'bg-primary-dark', isDarkMode);
-                UI.toggleClass(dmSwitch, 'bg-gray-300', !isDarkMode); // Tailwind bg-gray-300 es para light mode inactivo
-                UI.toggleClass(dmSwitch, 'dark:bg-gray-700', !isDarkMode); // Tailwind dark:bg-gray-700 es para dark mode inactivo
+                UI.toggleClass(dmSwitch, 'bg-gray-300', !isDarkMode); 
+                UI.toggleClass(dmSwitch, 'dark:bg-gray-700', !isDarkMode && isDarkMode); 
                 dmSwitch.querySelector('.toggle-dot').style.transform = isDarkMode ? 'translateX(20px)' : 'translateX(0)';
                 dmSwitch.dataset.active = isDarkMode.toString();
                 
@@ -351,17 +429,18 @@
                 GenericToggles.updateAllVisuals();
                 Navigation.updateActiveStyles(currentTabId);
                 NotificationHandler.updateBadges();
-                UI.createIconSelector();
-                ExploreHandler.renderRecommendations(); // Re-render explore cards for potential color changes
+                UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
+                ExploreHandler.renderRecommendations(); 
+                ProfileHandler.render(); 
             },
-            init: () => {
+            init: () => { /* Igual que antes */
                 DOM.darkModeSwitch.addEventListener('click', () => DarkMode.toggle(!isDarkMode));
                 const savedMode = localStorage.getItem('darkMode');
                 DarkMode.toggle(savedMode === 'enabled');
             }
         };
         
-        const GenericToggles = {
+        const GenericToggles = { /* Igual que antes */
             updateVisual: (button, isActive) => {
                 const dot = button.querySelector('.toggle-dot');
                 const activeBg = isDarkMode ? 'bg-toggle-active-dark' : 'bg-toggle-active-light';
@@ -380,7 +459,7 @@
                 button.dataset.active = isActive.toString();
             },
             updateAllVisuals: () => DOM.genericToggles.forEach(btn => GenericToggles.updateVisual(btn, btn.dataset.active === "true")),
-            init: () => {
+            init: () => { /* Igual que antes */
                 DOM.genericToggles.forEach(button => {
                     GenericToggles.updateVisual(button, button.dataset.active === "true");
                     button.addEventListener('click', () => GenericToggles.updateVisual(button, !(button.dataset.active === "true")));
@@ -388,8 +467,8 @@
             }
         };
 
-        const Navigation = {
-            renderItems: () => {
+        const Navigation = { /* Igual que antes */
+            renderItems: () => { /* Igual que antes */
                 UI.setHTML(DOM.mobileNavContainer, '');
                 UI.setHTML(DOM.desktopNavContainer, '');
                 const unreadNotifs = NotificationHandler.getUnreadCount();
@@ -426,9 +505,9 @@
                     DOM.desktopNavContainer.appendChild(createButton(createButtonHTML(item.icon, item.text, 'desktop'), 'desktop'));
                 });
                 Navigation.attachListeners();
-                Navigation.updateActiveStyles(currentTabId || NAV_ITEMS[0].id); // Ensure styles are applied after re-render
+                Navigation.updateActiveStyles(currentTabId || NAV_ITEMS[0].id); 
             },
-            attachListeners: () => { /* Same as before */ 
+            attachListeners: () => { /* Igual que antes */ 
                 document.querySelectorAll('[data-tab]').forEach(button => {
                     button.addEventListener('click', () => {
                         Navigation.setActiveTab(button.dataset.tab);
@@ -440,7 +519,7 @@
                     });
                 });
             },
-            setActiveTab: (tabId) => { /* Same as before, ensure currentTabId is updated */
+            setActiveTab: (tabId) => { /* Igual que antes */
                 if (currentTabId === tabId && UI.isVisible(document.getElementById(`tab-${tabId}`))) return;
 
                 if (currentTabId) UI.hide(document.getElementById(`tab-${currentTabId}`));
@@ -453,9 +532,9 @@
                     void activeContent.offsetWidth; 
                     UI.addClass(activeContent, 'active');
                 }
-                currentTabId = tabId; // Update global state
+                currentTabId = tabId; 
 
-                Navigation.updateActiveStyles(tabId);
+                Navigation.updateActiveStyles(tabId); 
                 const activeItemData = NAV_ITEMS.find(item => item.id === tabId);
                 if (DOM.headerSubtitle && activeItemData) UI.setText(DOM.headerSubtitle, activeItemData.subtitle);
                 
@@ -467,58 +546,56 @@
                 if (tabId === 'explorar' && UI.isVisible(DOM.searchResultsContainer)) { /* No hacer nada si ya hay resultados */ } 
                 else if (tabId === 'explorar') { ExploreHandler.renderRecommendations(); SearchHandler.showDefault(); }
             },
-            updateActiveStyles: (activeTabId) => { /* Same as before, ensure it uses isDarkMode global state */
-                if (!activeTabId) return; // Guard clause if currentTabId is null initially
+            updateActiveStyles: (activeTabId) => { /* Igual que antes */
+                if (!activeTabId) return; 
                 document.querySelectorAll('[data-tab]').forEach(btn => {
                     const icon = btn.querySelector('.nav-icon');
-                    const textSpan = btn.querySelector('span:not(.notification-badge)'); // Get the text span
+                    const textSpan = btn.querySelector('span:not(.notification-badge)');
                     const isActive = btn.dataset.tab === activeTabId;
-
-                    // Base non-active colors
-                    const baseIconColor = isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary';
-                    const baseTextColor = isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary';
-                    
-                    // Active colors
-                    const activeIconColor = isDarkMode ? 'text-primary-dark' : 'text-primary-light';
-                    const activeTextColor = isDarkMode ? 'text-primary-dark' : 'text-primary-light';
-
-                    // Reset classes first
-                    UI.removeClass(btn, 'bg-nav-item-active-light', 'dark:bg-nav-item-active-dark');
-                    UI.removeClass(icon, 'text-primary-light', 'dark:text-primary-dark', 'text-text-light-secondary', 'dark:text-text-dark-secondary');
+            
+                    const baseIconColorLight = 'text-text-light-secondary';
+                    const baseIconColorDark = 'dark:text-text-dark-secondary';
+                    const baseTextColorLight = 'text-text-light-secondary';
+                    const baseTextColorDark = 'dark:text-text-dark-secondary';
+                    const activeColorLight = 'text-primary-light';
+                    const activeColorDark = 'dark:text-primary-dark';
+                    const activeBgLight = 'bg-nav-item-active-light';
+                    const activeBgDark = 'dark:bg-nav-item-active-dark';
+            
+                    UI.removeClass(btn, activeBgLight, activeBgDark);
+                    UI.removeClass(icon, activeColorLight, activeColorDark, baseIconColorLight, baseIconColorDark);
                     if (textSpan) {
-                        UI.removeClass(textSpan, 'text-primary-light', 'dark:text-primary-dark', 'text-text-light-secondary', 'dark:text-text-dark-secondary', 'font-semibold');
+                        UI.removeClass(textSpan, activeColorLight, activeColorDark, baseTextColorLight, baseTextColorDark, 'font-semibold');
                     }
-
-                    // Apply active or inactive classes
+            
                     if (isActive) {
-                        UI.addClass(btn, isDarkMode ? 'dark:bg-nav-item-active-dark' : 'bg-nav-item-active-light');
-                        UI.addClass(icon, activeIconColor);
+                        UI.addClass(btn, isDarkMode ? activeBgDark : activeBgLight);
+                        UI.addClass(icon, isDarkMode ? activeColorDark : activeColorLight);
                         if (textSpan) {
-                            UI.addClass(textSpan, activeTextColor, 'font-semibold');
+                            UI.addClass(textSpan, isDarkMode ? activeColorDark : activeColorLight, 'font-semibold');
                         }
                     } else {
-                        UI.addClass(icon, baseIconColor);
+                        UI.addClass(icon, isDarkMode ? baseIconColorDark : baseIconColorLight);
                         if (textSpan) {
-                            UI.addClass(textSpan, baseTextColor);
+                            UI.addClass(textSpan, isDarkMode ? baseTextColorDark : baseTextColorLight);
                         }
                     }
                 });
-                // Update badge background color variables
                 const mobileNavBg = getComputedStyle(DOM.mobileNavContainer.parentElement).backgroundColor;
                 document.querySelectorAll('#mobile-navbar .notification-badge').forEach(b => b.style.setProperty('--surface-color', mobileNavBg));
                 
                 const desktopNavBg = getComputedStyle(DOM.desktopNavContainer.parentElement).backgroundColor;
                 document.querySelectorAll('#desktop-sidebar .notification-badge').forEach(b => b.style.setProperty('--surface-color', desktopNavBg));
             },
-            init: () => { /* Same as before */
-                Navigation.renderItems(); // Render first
+            init: () => { /* Igual que antes */
+                Navigation.renderItems(); 
                 const savedTab = localStorage.getItem('activeTab') || NAV_ITEMS[0].id;
-                Navigation.setActiveTab(savedTab); // Then set active tab
+                Navigation.setActiveTab(savedTab); 
             }
         };
 
-        const PostHandler = { /* Mostly same, ensure UI.showToast is used */
-            renderFeed: () => {
+        const PostHandler = { /* Igual que antes */
+            renderFeed: () => { /* Igual que antes */
                 const feedHtml = posts.map(post => `
                     <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 animate-fade-in">
                         <div class="flex items-center mb-2">
@@ -532,7 +609,7 @@
                 UI.setHTML(DOM.postsFeedContainer, `<h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary px-1">Feed Reciente</h2>` + (feedHtml || ''));
                 UI.toggleClass(DOM.emptyFeedMessage, 'hidden', posts.length > 0);
             },
-            create: (e) => { /* Same spinner and toast logic */ 
+            create: (e) => { /* Igual que antes */ 
                 e.preventDefault();
                 const title = UI.getValue(DOM.newPostForm.elements['post-title']);
                 const content = UI.getValue(DOM.newPostForm.elements['post-content']);
@@ -544,21 +621,31 @@
                 UI.hide(btnText); UI.show(spinner); DOM.publishPostBtn.disabled = true;
 
                 setTimeout(() => { 
-                    posts.unshift({ id: Date.now(), title, content, category, icon: selectedPostIcon });
+                    const newPost = { id: Date.now(), title, content, category, icon: selectedPostIcon, time: new Date() };
+                    posts.unshift(newPost);
                     PostHandler.renderFeed();
                     DOM.newPostForm.reset();
                     selectedPostIcon = availablePostIcons[0]; 
-                    UI.createIconSelector(); 
+                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
                     ModalManager.close(DOM.newPostModal);
-                    UI.showToast('¡Post publicado con éxito!');
+                    UI.showToast('¡Post publicado con éxito!', 'success'); 
+                    
+                    NotificationHandler.addNotification({
+                        id: Date.now() + 50, 
+                        icon: 'fas fa-file-alt',
+                        title: `Nuevo post: ${newPost.title.substring(0,30)}${newPost.title.length > 30 ? '...' : ''}`,
+                        time: 'ahora mismo',
+                        read: false,
+                        description: `Categoría: ${newPost.category}`
+                    });
                     
                     UI.show(btnText); UI.hide(spinner); DOM.publishPostBtn.disabled = false;
                 }, 1000);
             },
-            init: () => { /* Same as before */
+            init: () => { /* Igual que antes */
                 if (DOM.createNewPostBtn) DOM.createNewPostBtn.addEventListener('click', () => {
                     selectedPostIcon = availablePostIcons[0]; 
-                    UI.createIconSelector();
+                    UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, (newIcon) => { selectedPostIcon = newIcon; UI.createIconSelector(DOM.postIconSelector, availablePostIcons, selectedPostIcon, ()=>{}); });
                     ModalManager.open(DOM.newPostModal);
                 });
                 if (DOM.newPostForm) DOM.newPostForm.addEventListener('submit', PostHandler.create);
@@ -566,9 +653,17 @@
             }
         };
 
-        const NotificationHandler = { /* Mostly same, ensure UI module is used */
+        const NotificationHandler = { /* Igual que antes */
             getUnreadCount: () => notifications.filter(n => !n.read).length,
-            render: () => {
+            addNotification: (newNotif) => {
+                notifications.unshift(newNotif); 
+                if (currentTabId === 'alertas') { 
+                    NotificationHandler.render();
+                } else { 
+                    NotificationHandler.updateBadges();
+                }
+            },
+            render: () => { /* Igual que antes */
                 if (!DOM.notificationsList) return;
                 UI.setHTML(DOM.notificationsList, notifications.map(n => `
                     <div class="p-3.5 rounded-lg flex items-start space-x-3 transition-all duration-200 ${n.read ? 'opacity-60 hover:opacity-80' : 'bg-primary-light/10 dark:bg-primary-dark/10 hover:bg-primary-light/20 dark:hover:bg-primary-dark/20'}">
@@ -587,29 +682,28 @@
                     btn.addEventListener('click', (e) => NotificationHandler.markOneAsRead(parseInt(e.currentTarget.dataset.id)))
                 );
             },
-            updateBadges: () => Navigation.renderItems(), // This will re-render nav items with correct badge counts
-            markOneAsRead: (id) => { /* Same */ 
+            updateBadges: () => Navigation.renderItems(),
+            markOneAsRead: (id) => { /* Igual que antes */ 
                 const notif = notifications.find(n => n.id === id);
                 if (notif) notif.read = true;
-                NotificationHandler.render(); // Re-render list in the tab
+                NotificationHandler.render(); 
             },
-            markAllRead: () => { /* Same */
+            markAllRead: () => { /* Igual que antes */
                 notifications.forEach(n => n.read = true);
-                NotificationHandler.render(); // Re-render list in the tab
+                NotificationHandler.render(); 
             },
-            init: () => { /* Same */
+            init: () => { /* Igual que antes */
                 if (DOM.markAllReadBtn) DOM.markAllReadBtn.addEventListener('click', NotificationHandler.markAllRead);
-                // NotificationHandler.updateBadges(); // Called by Navigation.init
             }
         };
         
-        const ExploreHandler = {
+        const ExploreHandler = { /* Igual que antes */
             renderRecommendations: () => {
                 if (!DOM.exploreRecommendationsGrid) return;
                 DOM.exploreRecommendationsGrid.innerHTML = exploreRecommendations.map(rec => `
                     <div class="explore-card bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-fluent dark:shadow-fluent-dark overflow-hidden cursor-pointer group">
                         <div class="aspect-square ${rec.color} flex items-center justify-center">
-                           <img src="${rec.image}" alt="${rec.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                           <img src="${rec.image}" alt="${rec.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-photo-video text-4xl text-white/50\\'></i>'">
                         </div>
                         <div class="p-3">
                             <h3 class="font-semibold text-sm truncate group-hover:text-primary-light dark:group-hover:text-primary-dark">${rec.title}</h3>
@@ -623,13 +717,13 @@
             }
         };
 
-        const SearchHandler = { /* Mostly same, ensure UI module is used */
+        const SearchHandler = { /* Igual que antes */
             sampleSuggestions: ['Tailwind CSS', 'IA Proyectos', 'Diseño Fluent', 'JavaScript Novedades', 'Web Performance', 'Microfrontends'],
-            sampleResults: [ /* Same */
+            sampleResults: [ 
                 { title: 'Guía Tailwind CSS', description: 'Domina Tailwind CSS...', category: 'WebDev', image: 'https://placehold.co/300x150/3b82f6/ffffff?text=Tailwind&font=inter' },
                 { title: 'Chatbot con IA', description: 'Crea tu chatbot...', category: 'IA', image: 'https://placehold.co/300x150/8b5cf6/ffffff?text=IA+Chatbot&font=inter' },
             ],
-            handleInput: () => { /* Same */
+            handleInput: () => { /* Igual que antes */
                 const query = UI.getValue(DOM.searchInput).toLowerCase().trim();
                 if (query.length < 2) {
                     UI.hide(DOM.searchSuggestionsContainer);
@@ -639,13 +733,13 @@
                 const filtered = SearchHandler.sampleSuggestions.filter(s => s.toLowerCase().includes(query));
                 SearchHandler.renderSuggestions(filtered);
             },
-            renderSuggestions: (suggestions) => { /* Same */
+            renderSuggestions: (suggestions) => { /* Igual que antes */
                 UI.setHTML(DOM.searchSuggestionsContainer, suggestions.slice(0, 5).map(s => 
                     `<div class="p-3 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm transition-colors" data-suggestion="${s}">${s}</div>`
                 ).join(''));
                 UI.toggleClass(DOM.searchSuggestionsContainer, 'hidden', suggestions.length === 0);
             },
-            perform: (query) => { /* Same */
+            perform: (query) => { /* Igual que antes */
                 UI.hide(DOM.searchSuggestionsContainer);
                 UI.hide(DOM.exploreDefaultContent);
                 UI.show(DOM.searchResultsContainer);
@@ -656,20 +750,20 @@
                     </div>
                     ${SearchHandler.sampleResults.map(r => `
                         <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent p-4 flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-4">
-                            <img src="${r.image}" alt="${r.title}" class="w-full sm:w-32 h-auto sm:h-24 object-cover rounded-lg shrink-0">
+                            <img src="${r.image}" alt="${r.title}" class="w-full sm:w-32 h-auto sm:h-24 object-cover rounded-lg shrink-0" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-image text-4xl text-slate-300\\'></i>'">
                             <div class="flex-1"><h3 class="font-semibold text-md mb-1">${r.title}</h3><p class="text-xs text-text-light-secondary dark:text-text-dark-secondary mb-1.5">${r.category}</p><p class="text-sm">${r.description}</p></div>
                         </div>
                     `).join('')}
                 `);
                 document.getElementById('clear-search-btn').addEventListener('click', SearchHandler.showDefault);
             },
-            showDefault: () => { /* Same */
+            showDefault: () => { /* Igual que antes */
                 UI.setValue(DOM.searchInput, '');
                 UI.hide(DOM.searchResultsContainer); UI.setHTML(DOM.searchResultsContainer, '');
                 UI.show(DOM.exploreDefaultContent);
-                ExploreHandler.renderRecommendations(); // Ensure recommendations are visible
+                ExploreHandler.renderRecommendations(); 
             },
-            init: () => { /* Same */
+            init: () => { /* Igual que antes */
                 if (!DOM.searchInput) return;
                 DOM.searchInput.addEventListener('input', SearchHandler.handleInput);
                 DOM.searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && UI.getValue(DOM.searchInput).trim()) SearchHandler.perform(UI.getValue(DOM.searchInput).trim()); });
@@ -684,16 +778,99 @@
                 });
             }
         };
+
+        const ProfileHandler = {
+            render: () => {
+                if (!DOM.profileNameText || !DOM.profileRoleText || !DOM.profileBioDisplay || !DOM.profilePictureDisplay) return;
+                UI.setText(DOM.profileNameText, userProfile.name);
+                UI.setText(DOM.profileRoleText, userProfile.role);
+                UI.setText(DOM.profileBioDisplay, userProfile.bio); // Actualizar el p de la bio
+                UI.setHTML(DOM.profilePictureDisplay, `<i class="${userProfile.icon}"></i>`);
+                
+                const primaryColor = isDarkMode ? tailwind.config.theme.extend.colors['primary-dark'] : tailwind.config.theme.extend.colors['primary-light'];
+                const primaryColorDark = tailwind.config.theme.extend.colors['primary-dark'];
+                
+                DOM.profilePictureDisplay.style.setProperty('--primary-color', primaryColor);
+                DOM.profilePictureDisplay.style.setProperty('--primary-color-dark', primaryColorDark);
+            },
+            openEditModal: () => {
+                if (!DOM.editProfileForm) return;
+                UI.setValue(DOM.editProfileForm.elements['profile-edit-name'], userProfile.name);
+                UI.setValue(DOM.editProfileForm.elements['profile-edit-role'], userProfile.role);
+                UI.setValue(DOM.editProfileForm.elements['profile-edit-bio'], userProfile.bio);
+                ModalManager.open(DOM.modalEditProfile);
+            },
+            saveChanges: (e) => {
+                e.preventDefault();
+                if (!DOM.editProfileForm) return;
+
+                const newName = UI.getValue(DOM.editProfileForm.elements['profile-edit-name']);
+                const newRole = UI.getValue(DOM.editProfileForm.elements['profile-edit-role']);
+                const newBio = UI.getValue(DOM.editProfileForm.elements['profile-edit-bio']);
+
+                const btnText = DOM.saveProfileBtn.querySelector('.btn-text');
+                const spinner = DOM.saveProfileBtn.querySelector('.spinner');
+                UI.hide(btnText); UI.show(spinner); DOM.saveProfileBtn.disabled = true;
+
+                setTimeout(() => { // Simulate API call
+                    userProfile.name = newName;
+                    userProfile.role = newRole;
+                    userProfile.bio = newBio;
+                    
+                    ProfileHandler.render();
+                    ModalManager.close(DOM.modalEditProfile);
+                    UI.showToast('Perfil actualizado con éxito!', 'success');
+                    NotificationHandler.addNotification({
+                        id: Date.now() + 100, icon: 'fas fa-user-check',
+                        title: 'Perfil Actualizado', time: 'ahora mismo', read: false,
+                        description: 'Tu información de perfil ha sido guardada.'
+                    });
+
+                    UI.show(btnText); UI.hide(spinner); DOM.saveProfileBtn.disabled = false;
+                }, 1000);
+            },
+            selectProfileIcon: (iconClass) => {
+                userProfile.icon = iconClass;
+                ProfileHandler.render();
+                ModalManager.close(DOM.modalProfilePicture);
+                UI.showToast('Icono de perfil actualizado!', 'info');
+            },
+            init: () => {
+                ProfileHandler.render();
+                if (DOM.profilePictureDisplay) {
+                    DOM.profilePictureDisplay.addEventListener('click', () => {
+                        UI.createIconSelector(DOM.profileIconSelectorContainer, availableProfileIcons, userProfile.icon, ProfileHandler.selectProfileIcon, 'icon-selector-btn p-3 text-2xl');
+                        ModalManager.open(DOM.modalProfilePicture);
+                    });
+                }
+                if (DOM.editProfileMainBtn) {
+                    DOM.editProfileMainBtn.addEventListener('click', ProfileHandler.openEditModal);
+                }
+                if (DOM.editProfileForm) {
+                    DOM.editProfileForm.addEventListener('submit', ProfileHandler.saveChanges);
+                }
+            }
+        };
         
         const init = () => {
+            // Ajustar fondo del sticky search bar basado en modo oscuro inicial
+            const searchInputContainer = document.querySelector('.search-input-container');
+            if (searchInputContainer) {
+                const lightBg = getComputedStyle(DOM.html).getPropertyValue('--surface-light-search-bg') || tailwind.config.theme.extend.colors['surface-light'] + 'E6'; // E6 for ~90% opacity
+                const darkBg = getComputedStyle(DOM.html).getPropertyValue('--surface-dark-search-bg') || tailwind.config.theme.extend.colors['surface-dark'] + 'E6';
+                searchInputContainer.style.setProperty('--sticky-search-bg-light', lightBg);
+                searchInputContainer.style.setProperty('--sticky-search-bg-dark', darkBg);
+            }
+
             ModalManager.init();
-            DarkMode.init(); // This will also call GenericToggles.updateAllVisuals and Navigation.updateActiveStyles
-            GenericToggles.init(); // Initialize their listeners
+            DarkMode.init(); 
+            GenericToggles.init(); 
             Navigation.init(); 
             PostHandler.init();
-            NotificationHandler.init(); // Call after Navigation.init
+            NotificationHandler.init(); 
             ExploreHandler.init();
             SearchHandler.init();
+            ProfileHandler.init(); 
             
             document.querySelectorAll('.placeholder-image, .avatar-image-lg').forEach(img => {
                 img.onerror = function() { this.src = `https://placehold.co/${img.classList.contains('avatar-image-lg') ? '112x112' : '600x250'}/e5e7eb/4b5563?text=Error&font=inter`; };
