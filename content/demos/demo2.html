@@ -4,414 +4,706 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Interfaz Fluent V3</title>
+    <title>Demo Interfaz Fluent V6</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'primary-light': '#3b82f6', // blue-500 (un azul más vibrante para Fluent)
-                        'primary-dark': '#8b5cf6',  // violet-500 (un violeta para Fluent en dark)
-                        'surface-light': '#ffffff',
-                        'surface-dark': '#1f2937', // gray-800
-                        'surface-dark-secondary': '#111827', // gray-900 (más oscuro para fondos principales en dark)
-                        'text-light-primary': '#0f172a', // slate-900
-                        'text-light-secondary': '#64748b', // slate-500
-                        'text-dark-primary': '#f8fafc', // slate-50
-                        'text-dark-secondary': '#94a3b8', // slate-400
-                        'border-light': '#0000000d', // black alpha 5%
-                        'border-dark': '#ffffff0d',  // white alpha 5%
-                        'toggle-active-light': '#3b82f6',
-                        'toggle-active-dark': '#8b5cf6',
-                        'nav-item-hover-light': '#0000000a', // black alpha 4%
-                        'nav-item-hover-dark': '#ffffff0a',  // white alpha 4%
-                        'nav-item-active-light': '#0000000f', // black alpha 6%
-                        'nav-item-active-dark': '#ffffff0f',  // white alpha 6%
-
+                        'primary-light': '#3b82f6', 'primary-dark': '#8b5cf6',
+                        'surface-light': '#ffffff', 'surface-dark': '#111827',
+                        'surface-elevated-light': '#f9fafbff', 'surface-elevated-dark': '#1f2937ee',
+                        'text-light-primary': '#0f172a', 'text-light-secondary': '#64748b',
+                        'text-dark-primary': '#f8fafc', 'text-dark-secondary': '#94a3b8',
+                        'border-light': '#00000012', 'border-dark': '#ffffff12',
+                        'toggle-active-light': '#3b82f6', 'toggle-active-dark': '#8b5cf6',
+                        'nav-item-hover-light': '#0000000a', 'nav-item-hover-dark': '#ffffff0a',
+                        'nav-item-active-light': '#0000000f', 'nav-item-active-dark': '#ffffff0f',
+                        'danger-light': '#ef4444', 'danger-dark': '#f87171',
+                        'success-light': '#22c55e', 'success-dark': '#4ade80',
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.5s ease-out forwards', // Original, puede reutilizarse
-                        'pulse-subtle': 'pulseSubtle 2s infinite ease-in-out',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards', 'fade-out': 'fadeOut 0.3s ease-in forwards',
                         'slide-fade-in-up': 'slideFadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
                         'icon-bounce': 'iconBounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards',
+                        'modal-enter': 'modalEnter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'modal-leave': 'modalLeave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards',
+                        'spinner-rotate': 'spinnerRotate 0.8s linear infinite',
+                        'toast-enter': 'toastEnter 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'toast-leave': 'toastLeave 0.5s cubic-bezier(0.55, 0.09, 0.68, 0.53) 2.5s forwards', // 2.5s delay before starting to leave
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                        pulseSubtle: { '0%, 100%': { transform: 'scale(1)', opacity: '1' }, '50%': { transform: 'scale(1.02)', opacity: '0.9' } },
-                        slideFadeInUp: {
-                            '0%': { opacity: '0.5', transform: 'translateY(20px) scale(0.98)' },
-                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
-                        },
-                        iconBounce: {
-                            '0%': { transform: 'scale(1)' },
-                            '50%': { transform: 'scale(1.4)' },
-                            '100%': { transform: 'scale(1)' },
-                        }
+                        fadeOut: { '0%': { opacity: '1' }, '100%': { opacity: '0' } },
+                        slideFadeInUp: { '0%': { opacity: '0.5', transform: 'translateY(20px) scale(0.98)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
+                        iconBounce: { '0%': { transform: 'scale(1)' }, '50%': { transform: 'scale(1.3)' }, '100%': { transform: 'scale(1)' } },
+                        modalEnter: { '0%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) scale(1)' } },
+                        modalLeave: { '0%': { opacity: '1', transform: 'translateY(0) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' } },
+                        spinnerRotate: { 'to': { transform: 'rotate(360deg)' } },
+                        toastEnter: { '0%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' }, '100%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' } },
+                        toastLeave: { '0%': { opacity: '1', transform: 'translateY(0) translateX(-50%) scale(1)' }, '100%': { opacity: '0', transform: 'translateY(20px) translateX(-50%) scale(0.95)' } },
                     },
                     boxShadow: {
-                        'fluent': '0 4px 12px rgba(0,0,0,0.08)',
-                        'fluent-dark': '0 4px 12px rgba(0,0,0,0.15)',
-                        'fluent-nav-mobile': '0 -4px 12px rgba(0,0,0,0.05)',
-                        'fluent-nav-mobile-dark': '0 -4px 12px rgba(0,0,0,0.1)',
+                        'fluent': '0 4px 16px rgba(0,0,0,0.07)', 'fluent-dark': '0 4px 16px rgba(0,0,0,0.15)',
+                        'fluent-nav-mobile': '0 -4px 16px rgba(0,0,0,0.06)', 'fluent-nav-mobile-dark': '0 -4px 16px rgba(0,0,0,0.12)',
+                        'fluent-modal': '0 8px 32px rgba(0,0,0,0.1)', 'fluent-modal-dark': '0 8px 32px rgba(0,0,0,0.2)',
                     }
                 }
             }
         }
     </script>
     <style>
-        body { 
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'Inter', sans-serif; /* Usando Inter para un look más moderno */
-        }
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
+        body { -webkit-tap-highlight-color: transparent; font-family: 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #9ca3af40; border-radius: 3px; }
         .dark ::-webkit-scrollbar-thumb { background: #f9fafb30; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af60; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #f9fafb50; }
-
-        .placeholder-image {
-            width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; /* rounded-lg */
-            margin-bottom: 1rem; background-color: #e5e7eb; /* gray-200 */
-        }
-        .dark .placeholder-image { background-color: #374151cc; /* gray-700 con opacidad */ }
-
-        .avatar-image-lg {
-            width: 112px; height: 112px; object-fit: cover; border-radius: 9999px;
-            margin: 0 auto 1rem; background-color: #e5e7eb;
-            border: 3px solid var(--border-color, white); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
+        
+        .placeholder-image { width: 100%; height: 120px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; background-color: #e5e7eb; }
+        .dark .placeholder-image { background-color: #374151cc; }
+        .avatar-image-lg { width: 112px; height: 112px; object-fit: cover; border-radius: 9999px; margin: 0 auto 1rem; background-color: #e5e7eb; border: 3px solid var(--border-color, white); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .dark .avatar-image-lg { background-color: #4b5563; --border-color: #374151; }
         
-        .search-input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: 0.75rem center; background-size: 1.25rem; padding-left: 2.75rem;
-        }
-        .dark .search-input {
-             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23cbd5e1'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E");
-        }
+        .search-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 0.75rem center; background-size: 1.25rem; padding-left: 2.75rem; }
+        .dark .search-input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23cbd5e1'%3E%3Cpath fill-rule='evenodd' d='M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z' clip-rule='evenodd' /%3E%3C/svg%3E"); }
+        
         .tab-content.active { animation: slide-fade-in-up 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
         .nav-icon.animated { animation: icon-bounce 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards; }
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(0,0,0,0.3); backdrop-filter: blur(4px); z-index: 40; animation: fadeIn 0.3s ease-out; }
+        .dark .modal-overlay { background-color: rgba(0,0,0,0.5); }
+        .modal-overlay.hidden { animation: fadeOut 0.3s ease-in forwards; pointer-events: none; }
+        .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; animation: modal-enter 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .modal-overlay.hidden .modal-content { animation: modal-leave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards; }
+        .notification-badge { position: absolute; top: -4px; right: -4px; width: 18px; height: 18px; border-radius: 50%; background-color: #ef4444; color: white; font-size: 0.65rem; line-height: 18px; text-align: center; font-weight: bold; border: 2px solid var(--surface-color); transform: scale(0); transition: transform 0.2s ease-out; }
+        .notification-badge.visible { transform: scale(1); }
+        .icon-selector-btn { width: 36px; height: 36px; border: 2px solid transparent; transition: all 0.2s; }
+        .icon-selector-btn.selected { border-color: var(--primary-color); background-color: var(--primary-color-alpha); }
+        .spinner { width: 1em; height: 1em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spinner-rotate 0.8s linear infinite; }
+        .toast-notification { position: fixed; bottom: 80px; left: 50%; /* transform: translateX(-50%) is applied by animation */ z-index: 100; padding: 12px 20px; border-radius: 8px; color: white; font-size: 0.875rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: toast-enter forwards, toast-leave forwards; }
+        .explore-card { transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; }
+        .explore-card:hover { transform: translateY(-4px) scale(1.02); }
     </style>
 </head>
 
-<body class="font-inter text-text-light-primary dark:text-text-dark-primary bg-gradient-to-br from-slate-100 to-gray-100 dark:from-surface-dark-secondary dark:to-gray-900 md:flex antialiased">
+<body class="font-inter text-text-light-primary dark:text-text-dark-primary bg-gradient-to-br from-slate-100 to-gray-100 dark:from-surface-dark dark:to-gray-900 md:flex antialiased">
 
-    <aside id="desktop-sidebar" class="hidden md:flex flex-col w-20 lg:w-64 min-h-screen bg-surface-light/70 dark:bg-surface-dark/70 backdrop-blur-xl border-r border-border-light dark:border-border-dark shadow-fluent dark:shadow-fluent-dark z-40 transition-all duration-300 ease-out">
+    <aside id="desktop-sidebar" class="hidden md:flex flex-col w-20 lg:w-64 min-h-screen bg-surface-light/70 dark:bg-surface-dark/80 backdrop-blur-xl border-r border-border-light dark:border-border-dark shadow-fluent dark:shadow-fluent-dark z-40 transition-all duration-300 ease-out">
         <div class="h-16 lg:p-4 flex items-center justify-center lg:justify-start border-b border-border-light dark:border-border-dark">
             <i class="fas fa-rocket text-2xl text-primary-light dark:text-primary-dark"></i>
             <h1 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary ml-3 hidden lg:block">FluentApp</h1>
         </div>
-        <nav class="flex-1 p-2 lg:p-3 space-y-1.5 lg:space-y-2">
-            </nav>
-        <div class="p-2 lg:p-4 border-t border-border-light dark:border-border-dark">
-             <button class="w-full flex items-center justify-center lg:justify-start p-2.5 rounded-lg text-text-light-secondary dark:text-text-dark-secondary hover:bg-nav-item-hover-light dark:hover:bg-nav-item-hover-dark transition-colors">
-                <i class="fas fa-cog"></i>
-                <span class="ml-3 text-sm hidden lg:block">Ajustes</span>
-            </button>
-        </div>
+        <nav class="flex-1 p-2 lg:p-3 space-y-1.5 lg:space-y-2"> </nav>
     </aside>
 
     <div id="app-content-wrapper" class="flex-1 flex flex-col min-h-screen overflow-x-hidden relative">
-        <header class="bg-surface-light/70 dark:bg-surface-dark/70 backdrop-blur-xl p-4 text-center border-b border-border-light dark:border-border-dark sticky top-0 z-30 shadow-fluent dark:shadow-fluent-dark md:shadow-none md:dark:shadow-none">
-            <h1 class="text-lg md:text-xl font-semibold text-text-light-primary dark:text-text-dark-primary" id="headerSubtitle">
-                Bienvenido
-            </h1>
+        <header class="bg-surface-light/70 dark:bg-surface-dark/80 backdrop-blur-xl p-4 text-center border-b border-border-light dark:border-border-dark sticky top-0 z-30 shadow-fluent dark:shadow-fluent-dark md:shadow-none md:dark:shadow-none">
+            <h1 class="text-lg md:text-xl font-semibold text-text-light-primary dark:text-text-dark-primary" id="headerSubtitle">Bienvenido</h1>
         </header>
 
         <main id="main-content-area" class="flex-1 overflow-y-auto p-4 md:p-6 pb-24 md:pb-6" style="scroll-behavior: smooth;">
             <div id="tab-inicio" class="tab-content space-y-5">
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
-                    <img src="https://placehold.co/600x250/3b82f6/ffffff?text=Novedades&font=inter" alt="Novedades" class="placeholder-image" onerror="this.src='https://placehold.co/600x250/e5e7eb/4b5563?text=Error+Img&font=inter'">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-light to-blue-400 dark:from-primary-dark dark:to-violet-400 flex items-center justify-center text-white flex-shrink-0"> <i class="fas fa-bell"></i> </div>
-                        <div>
-                            <h2 class="text-lg font-semibold">Notificaciones</h2>
-                            <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Mantente al día.</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mt-3">Alertas importantes, actualizaciones y mensajes.</p>
-                    <button class="mt-4 w-full bg-gradient-to-r from-primary-light to-blue-500 dark:from-primary-dark dark:to-violet-500 text-white font-semibold py-2.5 px-4 rounded-lg hover:opacity-90 transform transition-all duration-300 hover:shadow-lg active:scale-95"> Ver Todas </button>
-                </div>
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
+                <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
                     <h2 class="text-lg font-semibold mb-3">Acciones Rápidas</h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <button class="flex flex-col items-center justify-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors">
+                        <button id="create-new-post-btn" class="flex flex-col items-center justify-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors">
                             <i class="fas fa-plus-circle text-2xl text-primary-light dark:text-primary-dark mb-1"></i><span class="text-xs text-center">Nuevo Post</span>
                         </button>
-                        <button class="flex flex-col items-center justify-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors">
-                            <i class="fas fa-calendar-alt text-2xl text-green-500 dark:text-green-400 mb-1"></i><span class="text-xs text-center">Eventos</span>
-                        </button>
-                        <button class="flex flex-col items-center justify-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors">
-                            <i class="fas fa-envelope text-2xl text-amber-500 dark:text-amber-400 mb-1"></i><span class="text-xs text-center">Mensajes</span>
-                        </button>
                     </div>
+                </div>
+                <div id="posts-feed-container" class="space-y-5">
+                    <h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary px-1">Feed Reciente</h2>
+                    <p id="empty-feed-message" class="text-center text-text-light-secondary dark:text-text-dark-secondary py-8">¡Aún no hay posts! Crea uno para empezar.</p>
                 </div>
             </div>
 
             <div id="tab-explorar" class="tab-content hidden space-y-5">
                 <div class="relative">
-                    <input type="search" placeholder="Buscar artículos, usuarios..." class="search-input w-full py-3 px-4 text-sm bg-slate-100 dark:bg-slate-700/80 rounded-xl border border-transparent focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent focus:outline-none transition-all shadow-sm hover:shadow-md">
+                    <input type="search" id="search-input" placeholder="Buscar en recomendaciones y más..." class="search-input w-full py-3 px-4 text-sm bg-slate-100 dark:bg-slate-700/80 rounded-xl border border-transparent focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark focus:border-transparent focus:outline-none transition-all shadow-sm hover:shadow-md">
+                    <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-lg z-10 overflow-hidden hidden"></div>
                 </div>
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
-                    <h2 class="text-md font-semibold mb-3">Búsquedas Populares</h2>
-                    <div class="flex flex-wrap gap-2">
-                        <button class="text-xs bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 hover:bg-blue-200/70 dark:hover:bg-blue-800/70 py-1.5 px-3 rounded-full transition-colors">#IA</button>
-                        <button class="text-xs bg-green-100 dark:bg-green-900/60 text-green-700 dark:text-green-300 hover:bg-green-200/70 dark:hover:bg-green-800/70 py-1.5 px-3 rounded-full transition-colors">#WebDev</button>
-                        <button class="text-xs bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 hover:bg-purple-200/70 dark:hover:bg-purple-800/70 py-1.5 px-3 rounded-full transition-colors">#UX</button>
+                <div id="explore-default-content">
+                    <h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary mb-3">Recomendaciones para ti</h2>
+                    <div id="explore-recommendations-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        </div>
+                </div>
+                <div id="search-results-container" class="hidden space-y-4"></div>
+            </div>
+            
+            <div id="tab-alertas" class="tab-content hidden space-y-0 p-0 md:p-0"> <div class="flex justify-between items-center p-4 border-b border-border-light dark:border-border-dark sticky top-0 bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-sm md:rounded-t-xl z-10">
+                    <h2 class="text-xl font-semibold">Notificaciones</h2>
+                    <button id="mark-all-read-btn" class="text-sm text-primary-light dark:text-primary-dark hover:underline">Marcar todas como leídas</button>
+                </div>
+                <div id="notifications-list" class="p-4 space-y-3">
                     </div>
-                </div>
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
-                    <h2 class="text-md font-semibold mb-4">Explorar Categorías</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
-                        <div class="flex flex-col items-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors cursor-pointer"> <i class="fas fa-laptop-code text-3xl text-primary-light dark:text-blue-400 mb-2"></i><span class="text-sm text-center">Tecnología</span></div>
-                        <div class="flex flex-col items-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors cursor-pointer"> <i class="fas fa-palette text-3xl text-pink-500 dark:text-pink-400 mb-2"></i><span class="text-sm text-center">Arte</span></div>
-                        <div class="flex flex-col items-center p-3 bg-slate-50 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-700/70 rounded-lg transition-colors cursor-pointer"> <i class="fas fa-flask text-3xl text-green-500 dark:text-green-400 mb-2"></i><span class="text-sm text-center">Ciencia</span></div>
-                    </div>
-                </div>
             </div>
 
             <div id="tab-perfil" class="tab-content hidden space-y-5">
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-5 text-center">
+                <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-5 text-center">
                     <img src="https://placehold.co/112x112/8b5cf6/ffffff?text=AI&font=inter" alt="Perfil" class="avatar-image-lg" onerror="this.src='https://placehold.co/112x112/e5e7eb/4b5563?text=Error&font=inter'">
                     <h2 class="text-2xl font-bold">Alex Innova</h2>
-                    <p class="text-sm text-primary-light dark:text-primary-dark font-medium">@alexinnova</p>
-                    <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mt-2 max-w-md mx-auto">Apasionado por la tecnología, IA y el futuro digital.</p>
-                    <div class="mt-4 flex justify-center space-x-2">
-                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-300 rounded-full text-xs font-medium">Creativo</span>
-                        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300 rounded-full text-xs font-medium">Tech Lead</span>
-                    </div>
-                    <button class="mt-6 w-full sm:w-auto bg-gradient-to-r from-primary-light to-blue-500 dark:from-primary-dark dark:to-violet-500 text-white font-semibold py-2.5 px-6 rounded-lg hover:opacity-90 transform transition-all duration-300 hover:shadow-lg active:scale-95"> Editar Perfil </button>
                 </div>
-                <div class="bg-surface-light dark:bg-surface-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
+                <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 md:p-5">
                     <h2 class="text-lg font-semibold mb-1">Configuración General</h2>
-                     <ul class="divide-y divide-border-light dark:divide-border-dark">
-                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-alt h-4 w-4 text-primary-light dark:text-blue-400"></i></div><span class="text-sm">Seguridad</span></div><button class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-600" data-setting="accountSecurity" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
-                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-moon h-4 w-4 text-primary-dark dark:text-purple-400"></i></div><span class="text-sm">Modo Oscuro</span></div><button id="darkModeSwitch" class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-600" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
-                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-language h-4 w-4 text-green-500 dark:text-green-400"></i></div><span class="text-sm">Idioma</span></div><span class="text-sm text-text-light-secondary dark:text-text-dark-secondary">Español <i class="fas fa-chevron-right text-xs ml-1"></i></span></li>
+                    <ul class="divide-y divide-border-light dark:divide-border-dark">
+                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-shield-alt h-4 w-4 text-primary-light dark:text-blue-400"></i></div><span class="text-sm">Seguridad</span></div><button class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-700" data-setting="accountSecurity" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
+                        <li class="py-3.5 flex justify-between items-center"><div class="flex items-center space-x-3"><div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/50 flex items-center justify-center flex-shrink-0"><i class="fas fa-moon h-4 w-4 text-primary-dark dark:text-purple-400"></i></div><span class="text-sm">Modo Oscuro</span></div><button id="darkModeSwitch" class="toggle-switch w-12 h-7 flex items-center rounded-full p-1 bg-gray-300 dark:bg-gray-700" data-active="false"><div class="toggle-dot w-5 h-5 rounded-full bg-white shadow-md transform transition-transform duration-300"></div></button></li>
                     </ul>
                 </div>
             </div>
         </main>
 
         <nav id="mobile-navbar" class="md:hidden bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-xl border-t border-border-light dark:border-border-dark fixed bottom-3 left-1/2 transform -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-sm z-30 rounded-2xl shadow-fluent-nav-mobile dark:shadow-fluent-nav-mobile-dark">
-            <div class="flex justify-around px-1.5 py-1.5">
-                </div>
+            <div class="flex justify-around px-1.5 py-1.5"> </div>
         </nav>
     </div>
 
+    <div id="modal-new-post" class="modal-overlay hidden">
+        <div class="modal-content bg-surface-elevated-light dark:bg-surface-elevated-dark text-text-light-primary dark:text-text-dark-primary rounded-xl shadow-fluent-modal dark:shadow-fluent-modal-dark p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Crear Nuevo Post</h3>
+                <button class="close-modal-btn text-text-light-secondary dark:text-text-dark-secondary hover:text-danger-light dark:hover:text-danger-dark transition-colors"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="new-post-form" class="space-y-4">
+                <div>
+                    <label for="post-title" class="block text-sm font-medium mb-1">Título</label>
+                    <input type="text" id="post-title" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Título increíble">
+                </div>
+                <div>
+                    <label for="post-icon" class="block text-sm font-medium mb-1">Icono del Post</label>
+                    <div id="post-icon-selector" class="flex flex-wrap gap-2"></div>
+                </div>
+                <div>
+                    <label for="post-content" class="block text-sm font-medium mb-1">Contenido</label>
+                    <textarea id="post-content" rows="4" required class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none" placeholder="Escribe algo asombroso..."></textarea>
+                </div>
+                <div>
+                    <label for="post-category" class="block text-sm font-medium mb-1">Categoría</label>
+                    <select id="post-category" class="w-full p-2.5 border border-border-light dark:border-border-dark rounded-lg bg-slate-50 dark:bg-slate-700/50 focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark outline-none">
+                        <option value="tecnologia">Tecnología</option> <option value="desarrollo">Desarrollo</option> <option value="ia">IA</option> <option value="diseno">Diseño</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" class="close-modal-btn px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Cancelar</button>
+                    <button type="submit" id="publish-post-btn" class="px-6 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center min-w-[100px]">
+                        <span class="btn-text">Publicar</span>
+                        <span class="spinner hidden ml-2"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const mainContentArea = document.getElementById('main-content-area');
-        const headerSubtitle = document.getElementById('headerSubtitle');
-        
-        const mobileNavElement = document.getElementById('mobile-navbar').querySelector('div');
-        const desktopNavElement = document.getElementById('desktop-sidebar').querySelector('nav');
+    // APP MODULE
+    const App = (() => {
+        // STATE
+        let currentTabId = null;
+        let isDarkMode = false;
+        let posts = [];
+        let notifications = [
+            { id: 1, icon: 'fas fa-newspaper', title: 'Nuevo artículo: El Futuro de la IA Cuántica', time: 'hace 5 min', read: false, description: 'Una mirada profunda...' },
+            { id: 2, icon: 'fas fa-comments', title: 'Comentario en tu post', time: 'hace 2 horas', read: false, description: '@usuarioX comentó...' },
+            { id: 3, icon: 'fas fa-code-branch', title: 'Actualización del sistema', time: 'ayer', read: true, description: 'FluentApp v6.0 lanzada.' },
+        ];
+        const availablePostIcons = ['fas fa-lightbulb', 'fas fa-code', 'fas fa-brain', 'fas fa-rocket', 'fas fa-cogs', 'fas fa-chart-line', 'fas fa-atom', 'fas fa-microchip'];
+        let selectedPostIcon = availablePostIcons[0];
 
-        const tabContents = document.querySelectorAll('.tab-content');
-        const darkModeSwitch = document.getElementById('darkModeSwitch');
-        const genericToggleSwitches = document.querySelectorAll('.toggle-switch:not(#darkModeSwitch)');
-        const htmlElement = document.documentElement;
-
-        const navItemsData = [
-            { id: 'inicio', icon: 'fas fa-home', text: 'Inicio', subtitle: 'Bienvenido a tu espacio digital.' },
-            { id: 'explorar', icon: 'fas fa-compass', text: 'Explorar', subtitle: 'Descubre contenido nuevo.' }, // Cambiado icono de search a compass
-            { id: 'perfil', icon: 'fas fa-user-circle', text: 'Perfil', subtitle: 'Gestiona tu información.' } // Cambiado icono de user a user-circle
+        const exploreRecommendations = [
+            { id: 'rec1', title: 'Desarrollo Web Moderno', type: 'Playlist de Artículos', image: 'https://placehold.co/400x400/3b82f6/ffffff?text=WebDev&font=inter', color: 'bg-blue-500' },
+            { id: 'rec2', title: 'Avances en IA', type: 'Colección', image: 'https://placehold.co/400x400/8b5cf6/ffffff?text=AI&font=inter', color: 'bg-violet-500' },
+            { id: 'rec3', title: 'Diseño UX Inspirador', type: 'Recursos', image: 'https://placehold.co/400x400/ec4899/ffffff?text=UX&font=inter', color: 'bg-pink-500' },
+            { id: 'rec4', title: 'Tech Talks Semanales', type: 'Podcast', image: 'https://placehold.co/400x400/10b981/ffffff?text=Talks&font=inter', color: 'bg-emerald-500' },
+            { id: 'rec5', title: 'Innovación Disruptiva', type: 'Playlist', image: 'https://placehold.co/400x400/f59e0b/ffffff?text=Innovate&font=inter', color: 'bg-amber-500' },
+            { id: 'rec6', title: 'Fundamentos de Programación', type: 'Curso', image: 'https://placehold.co/400x400/6366f1/ffffff?text=Code&font=inter', color: 'bg-indigo-500' },
         ];
 
-        // --- Renderizar Items de Navegación ---
-        function renderNavItems() {
-            mobileNavElement.innerHTML = '';
-            desktopNavElement.innerHTML = '';
 
-            navItemsData.forEach(item => {
-                // Mobile Nav Item
-                const mobileButton = document.createElement('button');
-                mobileButton.className = "flex flex-col items-center group p-2.5 rounded-xl w-1/3 transition-all duration-200 ease-out";
-                mobileButton.dataset.tab = item.id;
-                mobileButton.innerHTML = `
-                    <i class="${item.icon} h-5 w-5 nav-icon transition-all duration-200 ease-out"></i>
-                    <span class="text-xs mt-1 transition-all duration-200 ease-out">${item.text}</span>`;
-                mobileNavElement.appendChild(mobileButton);
+        // DOM ELEMENTS CACHE
+        const DOM = {
+            html: document.documentElement,
+            mainContentArea: document.getElementById('main-content-area'),
+            headerSubtitle: document.getElementById('headerSubtitle'),
+            mobileNavContainer: document.getElementById('mobile-navbar').querySelector('div'),
+            desktopNavContainer: document.getElementById('desktop-sidebar').querySelector('nav'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            darkModeSwitch: document.getElementById('darkModeSwitch'),
+            genericToggles: document.querySelectorAll('.toggle-switch:not(#darkModeSwitch)'),
+            newPostModal: document.getElementById('modal-new-post'),
+            createNewPostBtn: document.getElementById('create-new-post-btn'),
+            newPostForm: document.getElementById('new-post-form'),
+            publishPostBtn: document.getElementById('publish-post-btn'),
+            postIconSelector: document.getElementById('post-icon-selector'),
+            notificationsList: document.getElementById('notifications-list'),
+            markAllReadBtn: document.getElementById('mark-all-read-btn'),
+            postsFeedContainer: document.getElementById('posts-feed-container'),
+            emptyFeedMessage: document.getElementById('empty-feed-message'),
+            searchInput: document.getElementById('search-input'),
+            searchSuggestionsContainer: document.getElementById('search-suggestions'),
+            exploreDefaultContent: document.getElementById('explore-default-content'),
+            exploreRecommendationsGrid: document.getElementById('explore-recommendations-grid'),
+            searchResultsContainer: document.getElementById('search-results-container'),
+            toastContainer: document.getElementById('toast-container'),
+        };
 
-                // Desktop Nav Item
-                const desktopButton = document.createElement('button');
-                desktopButton.className = "w-full flex items-center p-2.5 lg:p-3 rounded-lg hover:bg-nav-item-hover-light dark:hover:bg-nav-item-hover-dark transition-colors duration-150";
-                desktopButton.dataset.tab = item.id;
-                desktopButton.innerHTML = `
-                    <i class="${item.icon} text-lg lg:text-xl w-6 text-center nav-icon"></i>
-                    <span class="ml-3 text-sm hidden lg:block">${item.text}</span>`;
-                desktopNavElement.appendChild(desktopButton);
-            });
-            
-            // Re-adjuntar listeners a los nuevos botones
-            attachNavButtonListeners();
-        }
+        const NAV_ITEMS = [
+            { id: 'inicio', icon: 'fas fa-home', text: 'Inicio', subtitle: 'Panel Principal' },
+            { id: 'explorar', icon: 'fas fa-compass', text: 'Explorar', subtitle: 'Descubre Novedades' },
+            { id: 'alertas', icon: 'fas fa-bell', text: 'Alertas', subtitle: 'Tus Notificaciones', isNotificationTab: true },
+            { id: 'perfil', icon: 'fas fa-user-circle', text: 'Perfil', subtitle: 'Tu Espacio Personal' }
+        ];
         
-        function attachNavButtonListeners() {
-            const allNavButtons = document.querySelectorAll('[data-tab]');
-            allNavButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    setActiveTab(button.dataset.tab);
-                    // Bounce animation for mobile icon
-                    if (button.closest('#mobile-navbar')) {
-                        const icon = button.querySelector('.nav-icon');
-                        icon.classList.add('animated');
-                        icon.onanimationend = () => icon.classList.remove('animated');
+        const UI = {
+            toggleClass: (el, className, force) => el && el.classList.toggle(className, force),
+            addClass: (el, ...classNames) => el && el.classList.add(...classNames),
+            removeClass: (el, ...classNames) => el && el.classList.remove(...classNames),
+            setText: (el, text) => { if (el) el.textContent = text; },
+            setHTML: (el, html) => { if (el) el.innerHTML = html; },
+            getValue: (el) => el ? el.value : '',
+            setValue: (el, value) => { if (el) el.value = value; },
+            show: (el) => UI.removeClass(el, 'hidden'),
+            hide: (el) => UI.addClass(el, 'hidden'),
+            isVisible: (el) => el && !el.classList.contains('hidden'),
+            createIconSelector: () => {
+                if (!DOM.postIconSelector) return;
+                DOM.postIconSelector.innerHTML = '';
+                availablePostIcons.forEach(iconClass => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `icon-selector-btn flex items-center justify-center rounded-md p-2 bg-slate-100 dark:bg-slate-700 hover:opacity-80`;
+                    btn.innerHTML = `<i class="${iconClass} text-lg ${isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary'}"></i>`;
+                    if (iconClass === selectedPostIcon) {
+                        UI.addClass(btn, 'selected');
+                        const primaryColor = isDarkMode ? tailwind.config.theme.extend.colors['primary-dark'] : tailwind.config.theme.extend.colors['primary-light'];
+                        btn.style.setProperty('--primary-color', primaryColor);
+                        btn.style.setProperty('--primary-color-alpha', primaryColor + '33'); // Opacity 20% (hex 33)
+                        btn.querySelector('i').classList.remove(isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary');
+                        btn.querySelector('i').classList.add(isDarkMode ? 'text-primary-dark' : 'text-primary-light');
+                    }
+                    btn.addEventListener('click', () => {
+                        selectedPostIcon = iconClass;
+                        UI.createIconSelector(); 
+                    });
+                    DOM.postIconSelector.appendChild(btn);
+                });
+            },
+            showToast: (message, type = 'success') => {
+                const toast = document.createElement('div');
+                toast.className = `toast-notification ${type === 'success' ? 'bg-success-light dark:bg-success-dark' : 'bg-danger-light dark:bg-danger-dark'}`;
+                UI.setText(toast, message);
+                DOM.toastContainer.appendChild(toast);
+                toast.addEventListener('animationend', (e) => {
+                    // Solo remover si la animación que terminó es 'toast-leave'
+                    if (e.animationName === 'toastLeave') {
+                        toast.remove();
                     }
                 });
-            });
-        }
-
-
-        // --- Gestión del Modo Oscuro ---
-        function applyDarkMode(isDark) {
-            if (isDark) {
-                htmlElement.classList.add('dark');
-                darkModeSwitch.classList.remove('bg-gray-300');
-                darkModeSwitch.classList.add('bg-primary-dark');
-                darkModeSwitch.querySelector('.toggle-dot').style.transform = 'translateX(20px)';
-                darkModeSwitch.dataset.active = "true";
-            } else {
-                htmlElement.classList.remove('dark');
-                darkModeSwitch.classList.remove('bg-primary-dark');
-                darkModeSwitch.classList.add('bg-gray-300');
-                darkModeSwitch.querySelector('.toggle-dot').style.transform = 'translateX(0)';
-                darkModeSwitch.dataset.active = "false";
             }
-            updateGenericTogglesState(isDark);
-            updateActiveNavStyles(localStorage.getItem('activeTab') || navItemsData[0].id); // Actualizar nav con colores correctos
-        }
+        };
 
-        darkModeSwitch.addEventListener('click', () => {
-            const isDark = !htmlElement.classList.contains('dark');
-            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-            applyDarkMode(isDark);
-        });
+        const ModalManager = {
+            open: (modalElement) => {
+                if (!modalElement) return;
+                UI.removeClass(modalElement, 'hidden');
+                void modalElement.offsetWidth; 
+                UI.removeClass(modalElement, 'modal-overlay.hidden'); // Para la animación de salida si se interrumpe
+                UI.addClass(modalElement.querySelector('.modal-content'),'animate-modal-enter');
+                UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-leave');
+                DOM.html.style.overflow = 'hidden';
+            },
+            close: (modalElement) => {
+                if (!modalElement || UI.isVisible(modalElement.querySelector('.animate-modal-leave'))) return;
+                UI.addClass(modalElement.querySelector('.modal-content'),'animate-modal-leave');
+                UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-enter');
 
-        // --- Gestión de Toggles Genéricos ---
-        function updateGenericToggleVisual(button, isActive, isDarkMode) {
-            const dot = button.querySelector('.toggle-dot');
-            const activeBg = isDarkMode ? 'bg-toggle-active-dark' : 'bg-toggle-active-light';
-            const inactiveBgLight = 'bg-gray-300';
-            const inactiveBgDark = 'dark:bg-gray-600';
-
-            if (isActive) {
-                dot.style.transform = 'translateX(20px)';
-                button.classList.remove(inactiveBgLight, 'dark:bg-gray-600'); // Quitar ambas clases inactivas
-                button.classList.add(activeBg);
-            } else {
-                dot.style.transform = 'translateX(0)';
-                button.classList.remove('bg-toggle-active-light', 'bg-toggle-active-dark'); // Quitar ambas clases activas
-                button.classList.add(inactiveBgLight);
-                if (isDarkMode) button.classList.add('dark:bg-gray-600'); // Solo añadir dark:bg-gray-600 si es modo oscuro
-            }
-            button.dataset.active = isActive ? "true" : "false";
-        }
-        
-        function updateGenericTogglesState(isDarkMode) {
-            genericToggleSwitches.forEach(button => {
-                const isActive = button.dataset.active === "true";
-                updateGenericToggleVisual(button, isActive, isDarkMode);
-            });
-        }
-
-        genericToggleSwitches.forEach(button => {
-            const initialActive = button.dataset.active === "true";
-            updateGenericToggleVisual(button, initialActive, htmlElement.classList.contains('dark'));
-            button.addEventListener('click', () => {
-                const newActiveState = !(button.dataset.active === "true");
-                updateGenericToggleVisual(button, newActiveState, htmlElement.classList.contains('dark'));
-            });
-        });
-
-        // --- Navegación por Pestañas ---
-        let currentTab = null;
-        function setActiveTab(tabName) {
-            const isDarkMode = htmlElement.classList.contains('dark');
-            
-            if (currentTab) {
-                const currentContent = document.getElementById(`tab-${currentTab}`);
-                if (currentContent) currentContent.classList.add('hidden'); // Ocultar inmediatamente la anterior
-            }
-            
-            tabContents.forEach(content => content.classList.add('hidden')); // Asegurar que todas estén ocultas
-            
-            const activeContent = document.getElementById(`tab-${tabName}`);
-            if (activeContent) {
-                activeContent.classList.remove('hidden');
-                activeContent.classList.add('active'); // Para la animación de entrada
-                activeContent.onanimationend = () => activeContent.classList.remove('active');
-            }
-            currentTab = tabName;
-
-            updateActiveNavStyles(tabName);
-            
-            const activeItemData = navItemsData.find(item => item.id === tabName);
-            if (headerSubtitle && activeItemData) {
-                headerSubtitle.textContent = activeItemData.subtitle;
-            }
-            localStorage.setItem('activeTab', tabName);
-            if (mainContentArea) mainContentArea.scrollTop = 0;
-        }
-
-        function updateActiveNavStyles(activeTabName) {
-            const isDarkMode = htmlElement.classList.contains('dark');
-            const allNavButtons = document.querySelectorAll('[data-tab]');
-
-            allNavButtons.forEach(btn => {
-                const icon = btn.querySelector('.nav-icon');
-                const text = btn.querySelector('span'); // Puede ser null en desktop si está colapsado
-                const isActive = btn.dataset.tab === activeTabName;
-
-                // Resetear clases
-                btn.classList.remove('bg-nav-item-active-light', 'dark:bg-nav-item-active-dark', 'text-primary-light', 'dark:text-primary-dark');
-                icon.classList.remove('text-primary-light', 'dark:text-primary-dark');
-                if (text) text.classList.remove('text-primary-light', 'dark:text-primary-dark', 'font-semibold');
-                
-                // Aplicar clases de texto base
-                icon.classList.add('text-text-light-secondary', 'dark:text-text-dark-secondary');
-                 if (text) text.classList.add('text-text-light-secondary', 'dark:text-text-dark-secondary');
-
-
-                if (isActive) {
-                    btn.classList.add(isDarkMode ? 'dark:bg-nav-item-active-dark' : 'bg-nav-item-active-light');
-                    icon.classList.remove('text-text-light-secondary', 'dark:text-text-dark-secondary');
-                    icon.classList.add(isDarkMode ? 'text-primary-dark' : 'text-primary-light');
-                    if (text) {
-                        text.classList.remove('text-text-light-secondary', 'dark:text-text-dark-secondary');
-                        text.classList.add(isDarkMode ? 'text-primary-dark' : 'text-primary-light', 'font-semibold');
+                setTimeout(() => {
+                    UI.addClass(modalElement, 'hidden');
+                    if (!document.querySelector('.modal-overlay:not(.hidden)')) {
+                        DOM.html.style.overflow = '';
                     }
-                }
-            });
-        }
+                }, 250); // Sincronizado con la duración de modal-leave
+            },
+            init: () => {
+                document.querySelectorAll('.close-modal-btn').forEach(btn => btn.addEventListener('click', () => ModalManager.close(btn.closest('.modal-overlay'))));
+                document.querySelectorAll('.modal-overlay').forEach(overlay => overlay.addEventListener('click', (e) => { if (e.target === overlay) ModalManager.close(overlay); }));
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { const openModalEl = document.querySelector('.modal-overlay:not(.hidden)'); if (openModalEl) ModalManager.close(openModalEl); } });
+            }
+        };
 
-
-        // --- Inicialización ---
-        renderNavItems(); // Crear los botones de navegación
-
-        const savedDarkMode = localStorage.getItem('darkMode');
-        applyDarkMode(savedDarkMode === 'enabled');
-
-        const savedTab = localStorage.getItem('activeTab') || navItemsData[0].id;
-        setActiveTab(savedTab);
+        const DarkMode = {
+            toggle: (isDarkActive) => {
+                isDarkMode = isDarkActive; // Actualizar estado global
+                UI.toggleClass(DOM.html, 'dark', isDarkMode);
+                // Actualizar switch de modo oscuro
+                const dmSwitch = DOM.darkModeSwitch;
+                UI.toggleClass(dmSwitch, 'bg-primary-dark', isDarkMode);
+                UI.toggleClass(dmSwitch, 'bg-gray-300', !isDarkMode); // Tailwind bg-gray-300 es para light mode inactivo
+                UI.toggleClass(dmSwitch, 'dark:bg-gray-700', !isDarkMode); // Tailwind dark:bg-gray-700 es para dark mode inactivo
+                dmSwitch.querySelector('.toggle-dot').style.transform = isDarkMode ? 'translateX(20px)' : 'translateX(0)';
+                dmSwitch.dataset.active = isDarkMode.toString();
+                
+                localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+                GenericToggles.updateAllVisuals();
+                Navigation.updateActiveStyles(currentTabId);
+                NotificationHandler.updateBadges();
+                UI.createIconSelector();
+                ExploreHandler.renderRecommendations(); // Re-render explore cards for potential color changes
+            },
+            init: () => {
+                DOM.darkModeSwitch.addEventListener('click', () => DarkMode.toggle(!isDarkMode));
+                const savedMode = localStorage.getItem('darkMode');
+                DarkMode.toggle(savedMode === 'enabled');
+            }
+        };
         
-        // Fallback para imágenes
-        document.querySelectorAll('.placeholder-image, .avatar-image-lg').forEach(img => {
-            img.onerror = function() {
-                const isAvatar = img.classList.contains('avatar-image-lg');
-                const size = isAvatar ? '112x112' : '600x250';
-                this.src = `https://placehold.co/${size}/e5e7eb/4b5563?text=Error&font=inter`;
-            };
-        });
-    });
+        const GenericToggles = {
+            updateVisual: (button, isActive) => {
+                const dot = button.querySelector('.toggle-dot');
+                const activeBg = isDarkMode ? 'bg-toggle-active-dark' : 'bg-toggle-active-light';
+                const inactiveBgLight = 'bg-gray-300';
+                const inactiveBgDark = 'dark:bg-gray-700';
+
+                button.classList.remove('bg-toggle-active-light', 'bg-toggle-active-dark', inactiveBgLight, inactiveBgDark);
+                
+                if (isActive) {
+                    dot.style.transform = 'translateX(20px)';
+                    UI.addClass(button, activeBg);
+                } else {
+                    dot.style.transform = 'translateX(0)';
+                    UI.addClass(button, isDarkMode ? inactiveBgDark : inactiveBgLight);
+                }
+                button.dataset.active = isActive.toString();
+            },
+            updateAllVisuals: () => DOM.genericToggles.forEach(btn => GenericToggles.updateVisual(btn, btn.dataset.active === "true")),
+            init: () => {
+                DOM.genericToggles.forEach(button => {
+                    GenericToggles.updateVisual(button, button.dataset.active === "true");
+                    button.addEventListener('click', () => GenericToggles.updateVisual(button, !(button.dataset.active === "true")));
+                });
+            }
+        };
+
+        const Navigation = {
+            renderItems: () => {
+                UI.setHTML(DOM.mobileNavContainer, '');
+                UI.setHTML(DOM.desktopNavContainer, '');
+                const unreadNotifs = NotificationHandler.getUnreadCount();
+
+                NAV_ITEMS.forEach(item => {
+                    const isNotifTab = item.isNotificationTab;
+                    const badgeCount = isNotifTab ? unreadNotifs : 0;
+                    
+                    const createButtonHTML = (icon, text, type) => {
+                        const badgeVisibleClass = badgeCount > 0 ? 'visible' : '';
+                        const badgeTopRightMobile = isNotifTab ? '!top-[-6px] !right-[-8px]' : '';
+                        const badgeTopRightDesktop = isNotifTab ? '!top-1 !right-1 lg:!top-1.5 lg:!right-1.5' : '';
+                        const badgeSurfaceVar = type === 'mobile' ? '--mobile-nav-bg' : '--desktop-nav-bg';
+
+                        return `
+                            <div class="relative">
+                                <i class="${icon} ${type === 'mobile' ? 'h-5 w-5' : 'text-lg lg:text-xl w-6 text-center'} nav-icon"></i>
+                                ${isNotifTab ? `<span class="notification-badge ${badgeVisibleClass} ${type === 'mobile' ? badgeTopRightMobile : badgeTopRightDesktop}" style="--surface-color: var(${badgeSurfaceVar}, white);">${badgeCount || ''}</span>` : ''}
+                            </div>
+                            <span class="text-xs mt-1 ${type === 'desktop' ? 'ml-3 hidden lg:block text-sm' : ''}">${text}</span>`;
+                    };
+                    
+                    const createButton = (html, type) => {
+                        const btn = document.createElement('button');
+                        btn.className = type === 'mobile' 
+                            ? "relative flex flex-col items-center group p-2.5 rounded-xl w-1/3 transition-all"
+                            : "relative w-full flex items-center p-2.5 lg:p-3 rounded-lg hover:bg-nav-item-hover-light dark:hover:bg-nav-item-hover-dark transition-colors";
+                        btn.dataset.tab = item.id;
+                        UI.setHTML(btn, html);
+                        return btn;
+                    };
+                    
+                    DOM.mobileNavContainer.appendChild(createButton(createButtonHTML(item.icon, item.text, 'mobile'), 'mobile'));
+                    DOM.desktopNavContainer.appendChild(createButton(createButtonHTML(item.icon, item.text, 'desktop'), 'desktop'));
+                });
+                Navigation.attachListeners();
+                Navigation.updateActiveStyles(currentTabId || NAV_ITEMS[0].id); // Ensure styles are applied after re-render
+            },
+            attachListeners: () => { /* Same as before */ 
+                document.querySelectorAll('[data-tab]').forEach(button => {
+                    button.addEventListener('click', () => {
+                        Navigation.setActiveTab(button.dataset.tab);
+                        if (button.closest('#mobile-navbar')) {
+                            const icon = button.querySelector('.nav-icon');
+                            UI.addClass(icon, 'animated');
+                            icon.onanimationend = () => UI.removeClass(icon, 'animated');
+                        }
+                    });
+                });
+            },
+            setActiveTab: (tabId) => { /* Same as before, ensure currentTabId is updated */
+                if (currentTabId === tabId && UI.isVisible(document.getElementById(`tab-${tabId}`))) return;
+
+                if (currentTabId) UI.hide(document.getElementById(`tab-${currentTabId}`));
+                
+                DOM.tabContents.forEach(content => UI.removeClass(content, 'active'));
+                
+                const activeContent = document.getElementById(`tab-${tabId}`);
+                if (activeContent) {
+                    UI.show(activeContent);
+                    void activeContent.offsetWidth; 
+                    UI.addClass(activeContent, 'active');
+                }
+                currentTabId = tabId; // Update global state
+
+                Navigation.updateActiveStyles(tabId);
+                const activeItemData = NAV_ITEMS.find(item => item.id === tabId);
+                if (DOM.headerSubtitle && activeItemData) UI.setText(DOM.headerSubtitle, activeItemData.subtitle);
+                
+                localStorage.setItem('activeTab', tabId);
+                if (DOM.mainContentArea) DOM.mainContentArea.scrollTop = 0;
+
+                if (tabId !== 'explorar' && UI.isVisible(DOM.searchResultsContainer)) SearchHandler.showDefault();
+                if (tabId === 'alertas') NotificationHandler.render();
+                if (tabId === 'explorar' && UI.isVisible(DOM.searchResultsContainer)) { /* No hacer nada si ya hay resultados */ } 
+                else if (tabId === 'explorar') { ExploreHandler.renderRecommendations(); SearchHandler.showDefault(); }
+            },
+            updateActiveStyles: (activeTabId) => { /* Same as before, ensure it uses isDarkMode global state */
+                if (!activeTabId) return; // Guard clause if currentTabId is null initially
+                document.querySelectorAll('[data-tab]').forEach(btn => {
+                    const icon = btn.querySelector('.nav-icon');
+                    const textSpan = btn.querySelector('span:not(.notification-badge)'); // Get the text span
+                    const isActive = btn.dataset.tab === activeTabId;
+
+                    // Base non-active colors
+                    const baseIconColor = isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary';
+                    const baseTextColor = isDarkMode ? 'text-text-dark-secondary' : 'text-text-light-secondary';
+                    
+                    // Active colors
+                    const activeIconColor = isDarkMode ? 'text-primary-dark' : 'text-primary-light';
+                    const activeTextColor = isDarkMode ? 'text-primary-dark' : 'text-primary-light';
+
+                    // Reset classes first
+                    UI.removeClass(btn, 'bg-nav-item-active-light', 'dark:bg-nav-item-active-dark');
+                    UI.removeClass(icon, 'text-primary-light', 'dark:text-primary-dark', 'text-text-light-secondary', 'dark:text-text-dark-secondary');
+                    if (textSpan) {
+                        UI.removeClass(textSpan, 'text-primary-light', 'dark:text-primary-dark', 'text-text-light-secondary', 'dark:text-text-dark-secondary', 'font-semibold');
+                    }
+
+                    // Apply active or inactive classes
+                    if (isActive) {
+                        UI.addClass(btn, isDarkMode ? 'dark:bg-nav-item-active-dark' : 'bg-nav-item-active-light');
+                        UI.addClass(icon, activeIconColor);
+                        if (textSpan) {
+                            UI.addClass(textSpan, activeTextColor, 'font-semibold');
+                        }
+                    } else {
+                        UI.addClass(icon, baseIconColor);
+                        if (textSpan) {
+                            UI.addClass(textSpan, baseTextColor);
+                        }
+                    }
+                });
+                // Update badge background color variables
+                const mobileNavBg = getComputedStyle(DOM.mobileNavContainer.parentElement).backgroundColor;
+                document.querySelectorAll('#mobile-navbar .notification-badge').forEach(b => b.style.setProperty('--surface-color', mobileNavBg));
+                
+                const desktopNavBg = getComputedStyle(DOM.desktopNavContainer.parentElement).backgroundColor;
+                document.querySelectorAll('#desktop-sidebar .notification-badge').forEach(b => b.style.setProperty('--surface-color', desktopNavBg));
+            },
+            init: () => { /* Same as before */
+                Navigation.renderItems(); // Render first
+                const savedTab = localStorage.getItem('activeTab') || NAV_ITEMS[0].id;
+                Navigation.setActiveTab(savedTab); // Then set active tab
+            }
+        };
+
+        const PostHandler = { /* Mostly same, ensure UI.showToast is used */
+            renderFeed: () => {
+                const feedHtml = posts.map(post => `
+                    <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent dark:shadow-fluent-dark p-4 animate-fade-in">
+                        <div class="flex items-center mb-2">
+                            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-700 mr-3 text-lg ${isDarkMode ? 'text-primary-dark' : 'text-primary-light'}"><i class="${post.icon}"></i></span>
+                            <h3 class="font-semibold text-md">${post.title}</h3>
+                        </div>
+                        <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary mb-1 text-xs">${post.category}</p>
+                        <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary">${post.content.substring(0,150)}${post.content.length > 150 ? '...' : ''}</p>
+                    </div>
+                `).join('');
+                UI.setHTML(DOM.postsFeedContainer, `<h2 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary px-1">Feed Reciente</h2>` + (feedHtml || ''));
+                UI.toggleClass(DOM.emptyFeedMessage, 'hidden', posts.length > 0);
+            },
+            create: (e) => { /* Same spinner and toast logic */ 
+                e.preventDefault();
+                const title = UI.getValue(DOM.newPostForm.elements['post-title']);
+                const content = UI.getValue(DOM.newPostForm.elements['post-content']);
+                const category = UI.getValue(DOM.newPostForm.elements['post-category']);
+                
+                const btnText = DOM.publishPostBtn.querySelector('.btn-text');
+                const spinner = DOM.publishPostBtn.querySelector('.spinner');
+
+                UI.hide(btnText); UI.show(spinner); DOM.publishPostBtn.disabled = true;
+
+                setTimeout(() => { 
+                    posts.unshift({ id: Date.now(), title, content, category, icon: selectedPostIcon });
+                    PostHandler.renderFeed();
+                    DOM.newPostForm.reset();
+                    selectedPostIcon = availablePostIcons[0]; 
+                    UI.createIconSelector(); 
+                    ModalManager.close(DOM.newPostModal);
+                    UI.showToast('¡Post publicado con éxito!');
+                    
+                    UI.show(btnText); UI.hide(spinner); DOM.publishPostBtn.disabled = false;
+                }, 1000);
+            },
+            init: () => { /* Same as before */
+                if (DOM.createNewPostBtn) DOM.createNewPostBtn.addEventListener('click', () => {
+                    selectedPostIcon = availablePostIcons[0]; 
+                    UI.createIconSelector();
+                    ModalManager.open(DOM.newPostModal);
+                });
+                if (DOM.newPostForm) DOM.newPostForm.addEventListener('submit', PostHandler.create);
+                PostHandler.renderFeed();
+            }
+        };
+
+        const NotificationHandler = { /* Mostly same, ensure UI module is used */
+            getUnreadCount: () => notifications.filter(n => !n.read).length,
+            render: () => {
+                if (!DOM.notificationsList) return;
+                UI.setHTML(DOM.notificationsList, notifications.map(n => `
+                    <div class="p-3.5 rounded-lg flex items-start space-x-3 transition-all duration-200 ${n.read ? 'opacity-60 hover:opacity-80' : 'bg-primary-light/10 dark:bg-primary-dark/10 hover:bg-primary-light/20 dark:hover:bg-primary-dark/20'}">
+                        <div class="w-8 h-8 rounded-full ${n.read ? 'bg-slate-200 dark:bg-slate-700' : 'bg-primary-light dark:bg-primary-dark'} text-white dark:text-opacity-90 flex items-center justify-center flex-shrink-0 text-sm"><i class="${n.icon}"></i></div>
+                        <div class="flex-1">
+                            <p class="font-semibold text-sm ${n.read ? '' : 'text-text-light-primary dark:text-text-dark-primary'}">${n.title}</p>
+                            <p class="text-xs text-text-light-secondary dark:text-text-dark-secondary mt-0.5">${n.description || ''}</p>
+                            <p class="text-xs ${n.read ? 'text-slate-400 dark:text-slate-500' : 'text-primary-light dark:text-primary-dark'} mt-1">${n.time}</p>
+                        </div>
+                        ${!n.read ? `<button data-id="${n.id}" class="mark-as-read-single-btn w-2.5 h-2.5 rounded-full bg-primary-light dark:bg-primary-dark mt-1 flex-shrink-0" title="Marcar como leída"></button>` : ''}
+                    </div>
+                `).join('') || '<p class="text-center text-text-light-secondary dark:text-text-dark-secondary py-4">No hay notificaciones nuevas.</p>');
+                
+                NotificationHandler.updateBadges();
+                DOM.notificationsList.querySelectorAll('.mark-as-read-single-btn').forEach(btn => 
+                    btn.addEventListener('click', (e) => NotificationHandler.markOneAsRead(parseInt(e.currentTarget.dataset.id)))
+                );
+            },
+            updateBadges: () => Navigation.renderItems(), // This will re-render nav items with correct badge counts
+            markOneAsRead: (id) => { /* Same */ 
+                const notif = notifications.find(n => n.id === id);
+                if (notif) notif.read = true;
+                NotificationHandler.render(); // Re-render list in the tab
+            },
+            markAllRead: () => { /* Same */
+                notifications.forEach(n => n.read = true);
+                NotificationHandler.render(); // Re-render list in the tab
+            },
+            init: () => { /* Same */
+                if (DOM.markAllReadBtn) DOM.markAllReadBtn.addEventListener('click', NotificationHandler.markAllRead);
+                // NotificationHandler.updateBadges(); // Called by Navigation.init
+            }
+        };
+        
+        const ExploreHandler = {
+            renderRecommendations: () => {
+                if (!DOM.exploreRecommendationsGrid) return;
+                DOM.exploreRecommendationsGrid.innerHTML = exploreRecommendations.map(rec => `
+                    <div class="explore-card bg-surface-light dark:bg-surface-elevated-dark rounded-lg shadow-fluent dark:shadow-fluent-dark overflow-hidden cursor-pointer group">
+                        <div class="aspect-square ${rec.color} flex items-center justify-center">
+                           <img src="${rec.image}" alt="${rec.title}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-semibold text-sm truncate group-hover:text-primary-light dark:group-hover:text-primary-dark">${rec.title}</h3>
+                            <p class="text-xs text-text-light-secondary dark:text-text-dark-secondary">${rec.type}</p>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            init: () => {
+                ExploreHandler.renderRecommendations();
+            }
+        };
+
+        const SearchHandler = { /* Mostly same, ensure UI module is used */
+            sampleSuggestions: ['Tailwind CSS', 'IA Proyectos', 'Diseño Fluent', 'JavaScript Novedades', 'Web Performance', 'Microfrontends'],
+            sampleResults: [ /* Same */
+                { title: 'Guía Tailwind CSS', description: 'Domina Tailwind CSS...', category: 'WebDev', image: 'https://placehold.co/300x150/3b82f6/ffffff?text=Tailwind&font=inter' },
+                { title: 'Chatbot con IA', description: 'Crea tu chatbot...', category: 'IA', image: 'https://placehold.co/300x150/8b5cf6/ffffff?text=IA+Chatbot&font=inter' },
+            ],
+            handleInput: () => { /* Same */
+                const query = UI.getValue(DOM.searchInput).toLowerCase().trim();
+                if (query.length < 2) {
+                    UI.hide(DOM.searchSuggestionsContainer);
+                    if (query.length === 0 && UI.isVisible(DOM.searchResultsContainer)) SearchHandler.showDefault();
+                    return;
+                }
+                const filtered = SearchHandler.sampleSuggestions.filter(s => s.toLowerCase().includes(query));
+                SearchHandler.renderSuggestions(filtered);
+            },
+            renderSuggestions: (suggestions) => { /* Same */
+                UI.setHTML(DOM.searchSuggestionsContainer, suggestions.slice(0, 5).map(s => 
+                    `<div class="p-3 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer text-sm transition-colors" data-suggestion="${s}">${s}</div>`
+                ).join(''));
+                UI.toggleClass(DOM.searchSuggestionsContainer, 'hidden', suggestions.length === 0);
+            },
+            perform: (query) => { /* Same */
+                UI.hide(DOM.searchSuggestionsContainer);
+                UI.hide(DOM.exploreDefaultContent);
+                UI.show(DOM.searchResultsContainer);
+                UI.setHTML(DOM.searchResultsContainer, `
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-lg font-semibold">Resultados para "${query}"</h2>
+                        <button id="clear-search-btn" class="text-sm text-primary-light dark:text-primary-dark hover:underline">Limpiar</button>
+                    </div>
+                    ${SearchHandler.sampleResults.map(r => `
+                        <div class="bg-surface-light dark:bg-surface-elevated-dark rounded-xl shadow-fluent p-4 flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-4">
+                            <img src="${r.image}" alt="${r.title}" class="w-full sm:w-32 h-auto sm:h-24 object-cover rounded-lg shrink-0">
+                            <div class="flex-1"><h3 class="font-semibold text-md mb-1">${r.title}</h3><p class="text-xs text-text-light-secondary dark:text-text-dark-secondary mb-1.5">${r.category}</p><p class="text-sm">${r.description}</p></div>
+                        </div>
+                    `).join('')}
+                `);
+                document.getElementById('clear-search-btn').addEventListener('click', SearchHandler.showDefault);
+            },
+            showDefault: () => { /* Same */
+                UI.setValue(DOM.searchInput, '');
+                UI.hide(DOM.searchResultsContainer); UI.setHTML(DOM.searchResultsContainer, '');
+                UI.show(DOM.exploreDefaultContent);
+                ExploreHandler.renderRecommendations(); // Ensure recommendations are visible
+            },
+            init: () => { /* Same */
+                if (!DOM.searchInput) return;
+                DOM.searchInput.addEventListener('input', SearchHandler.handleInput);
+                DOM.searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && UI.getValue(DOM.searchInput).trim()) SearchHandler.perform(UI.getValue(DOM.searchInput).trim()); });
+                DOM.searchSuggestionsContainer.addEventListener('click', (e) => {
+                    if (e.target.dataset.suggestion) {
+                        UI.setValue(DOM.searchInput, e.target.dataset.suggestion);
+                        SearchHandler.perform(e.target.dataset.suggestion);
+                    }
+                });
+                document.addEventListener('click', (e) => { 
+                    if (DOM.searchInput && DOM.searchSuggestionsContainer && !DOM.searchInput.contains(e.target) && !DOM.searchSuggestionsContainer.contains(e.target)) UI.hide(DOM.searchSuggestionsContainer);
+                });
+            }
+        };
+        
+        const init = () => {
+            ModalManager.init();
+            DarkMode.init(); // This will also call GenericToggles.updateAllVisuals and Navigation.updateActiveStyles
+            GenericToggles.init(); // Initialize their listeners
+            Navigation.init(); 
+            PostHandler.init();
+            NotificationHandler.init(); // Call after Navigation.init
+            ExploreHandler.init();
+            SearchHandler.init();
+            
+            document.querySelectorAll('.placeholder-image, .avatar-image-lg').forEach(img => {
+                img.onerror = function() { this.src = `https://placehold.co/${img.classList.contains('avatar-image-lg') ? '112x112' : '600x250'}/e5e7eb/4b5563?text=Error&font=inter`; };
+            });
+        };
+
+        return { init };
+    })();
+
+    App.init();
     </script>
 </body>
 </html>
