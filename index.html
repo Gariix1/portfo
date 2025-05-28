@@ -4,248 +4,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Demos</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/htmx.org@1.8.4"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
+    <title>Portfolio Interactivo - Gary Taboada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script> <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"> <style>
         html,
         body {
             min-height: 100vh;
-            margin-left: 10px;
+            margin: 0; /* Quitado margin-left: 10px; para consistencia */
             padding: 0;
+            font-family: 'Inter', sans-serif; /* Fuente más moderna */
         }
 
         body {
-            background: linear-gradient(-45deg, #90f3b993, #eb7ea880, #71c7e67e, #a6e6d7a6);
-            background-size: 200% 200%;
-            animation: gradient 15s ease infinite;
+            background: linear-gradient(-45deg, #a8edea, #fed6e3, #a1c4fd, #c2e9fb); /* Gradiente más suave y profesional */
+            background-size: 400% 400%;
+            animation: gradientBG 18s ease infinite;
             background-attachment: fixed;
-            /* Esto evita que el fondo se repita al scroll */
+            display: flex; /* Para alinear sidebar y contenido */
         }
 
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
+        @keyframes gradientBG { /* Renombrado para claridad */
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .sidebar-expanded {
-            width: 250px;
+        #sidebar {
+            background: rgba(255, 255, 255, 0.6); /* Vidrio más sutil */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(209, 213, 219, 0.3); /* Borde más suave */
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
         }
 
-        .sidebar-collapsed {
-            width: 60px;
-        }
+        .sidebar-expanded { width: 260px; }
+        .sidebar-collapsed { width: 72px; } /* Ancho para iconos y un poco de padding */
 
         .sidebar-content {
-            transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
         }
-
-        .sidebar-collapsed .sidebar-content:not(.icon) {
+        
+        .sidebar-collapsed .sidebar-item-text,
+        .sidebar-collapsed .submenu-icon-indicator { /* Ocultar texto y flecha de submenu */
             opacity: 0;
             visibility: hidden;
+            width: 0; /* Para que no ocupe espacio */
+            overflow: hidden; /* Evitar que se muestre parcialmente */
         }
-
-        .sidebar-expanded .sidebar-content {
+        
+        .sidebar-expanded .sidebar-item-text,
+        .sidebar-expanded .submenu-icon-indicator {
             opacity: 1;
             visibility: visible;
+            width: auto;
+        }
+        
+        #mainContentWrapper { /* Nuevo wrapper para el contenido principal */
+            flex-grow: 1;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; /* Padding general para el wrapper */
+            overflow-y: auto; /* Para scroll si el contenido es largo */
+            height: 100vh; /* Ocupar toda la altura */
         }
 
-        .sidebar-collapsed~#mainContent {
-            margin-left: 60px;
-            /* Igual al ancho de .sidebar-collapsed */
+        #mainContent {
+            background: rgba(255, 255, 255, 0.75); /* Vidrio un poco más opaco para legibilidad */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px; /* Bordes más redondeados */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más suave */
+            padding: 2rem; /* Padding interno del contenido */
+            max-width: 1200px; /* Ancho máximo para el contenido */
+            margin: 0 auto; /* Centrar el contenido si es más estrecho */
         }
+        
+        .sidebar-expanded + #mainContentWrapper { margin-left: 260px; }
+        .sidebar-collapsed + #mainContentWrapper { margin-left: 72px; }
 
 
-        .icon {
-            min-width: 1.5rem;
+        .menu-icon { /* Clase específica para iconos del menú */
+            min-width: 2rem; /* Espacio para el icono */
+            text-align: center;
         }
 
         #toggleSidebar {
-            transition: all 0.3s ease-out;
-            z-index: 60;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 60; /* Asegurar que esté sobre el sidebar */
+            /* Posicionamiento dinámico por JS */
         }
-
-        .sidebar-collapsed #toggleSidebar {
-            transform: translateX(50px);
-        }
-
+        
         .submenu {
             max-height: 0;
             overflow: hidden;
-            transition: all 0.3s ease-out;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
             opacity: 0;
             transform: translateY(-10px);
             visibility: hidden;
+            background-color: rgba(0,0,0,0.03); /* Fondo sutil para submenu */
         }
 
         .submenu.expanded {
-            max-height: 500px;
+            max-height: 500px; /* Suficiente para varios items */
             opacity: 1;
             transform: translateY(0);
             visibility: visible;
         }
 
-        .fa-chevron-down {
+        .submenu-icon-indicator { /* Para la flecha del submenu */
             transition: transform 0.3s ease-out;
         }
 
-        .fa-chevron-down.rotated {
+        .submenu-icon-indicator.rotated {
             transform: rotate(180deg);
         }
 
-        #sidebar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        #mainContent {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 1rem;
-            margin-right: 20px;
-            margin-left: 250px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-
-        /* Estilos para las palabras resaltadas */
+        /* Estilos para palabras resaltadas */
         .highlight-word {
-            background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1, #96e6a1);
-            background-size: 200% auto;
+            background: linear-gradient(120deg, #f87171, #60a5fa, #34d399, #fbbf24); /* Colores más vibrantes */
+            background-size: 300% auto; /* Tamaño para animación */
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
-            animation: shine 3s linear infinite;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            padding: 0 4px;
+            animation: shineEffect 4s linear infinite; /* Renombrado y ajustado */
+            font-weight: 700; /* bold */
         }
 
-        @keyframes shine {
+        @keyframes shineEffect {
             to {
-                background-position: 200% center;
+                background-position: 300% center;
             }
         }
-
-        /* Efecto de brillo */
-        .highlight-word::after {
-            content: '';
+        
+        /* Perfil Profesional Mejorado */
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            padding: 2.5rem;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border-bottom: 1px solid #e5e7eb; /* gray-200 */
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #4ade80; /* green-400 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);
+        }
+        .profile-title h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* extrabold */
+            color: #15803d; /* green-700 */
+            line-height: 1.2;
+        }
+        .profile-title p {
+            font-size: 1.125rem; /* text-lg */
+            color: #4b5563; /* gray-600 */
+            margin-top: 0.25rem;
+        }
+        .profile-section-title {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* semibold */
+            color: #16a34a; /* green-600 */
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #86efac; /* green-300 */
+            display: inline-block; /* Para que el borde solo ocupe el texto */
+        }
+        .profile-quote {
+            background-color: #f0fdf4; /* green-50 */
+            border-left: 4px solid #22c55e; /* green-500 */
+            padding: 1rem 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        .profile-quote p {
+            font-style: italic;
+            color: #374151; /* gray-700 */
+        }
+        .profile-quote span {
+            display: block;
+            text-align: right;
+            font-style: normal;
+            font-weight: 500;
+            color: #16a34a; /* green-600 */
+            margin-top: 0.5rem;
+        }
+        .tech-grid div {
+            background-color: #f9fafb; /* gray-50 */
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .tech-grid div:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+        }
+        .project-list li {
+            padding-left: 1.25rem; /* pl-5 */
+            position: relative;
+        }
+        .project-list li::before {
+            content: "💼"; /* O un icono de FontAwesome */
             position: absolute;
-            top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shimmer 2s infinite;
+            color: #22c55e; /* green-500 */
+        }
+        .soft-skills-list li {
+            padding-left: 1.25rem;
+            position: relative;
+        }
+        .soft-skills-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            color: #f59e0b; /* amber-500 */
         }
 
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
     </style>
 </head>
 
-<body class="flex">
-    <!-- Sidebar -->
+<body class="flex text-gray-800">
     <div id="sidebar"
-        class="sidebar-expanded fixed top-0 left-0 h-full text-gray-800 transition-all duration-300 ease-in-out z-50 shadow-lg border-r border-gray-200 overflow-x-hidden"
-        aria-label="Sidebar">
-        <div class="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-green-600 sidebar-content">Menu</h2>
-        </div>
+        class="sidebar-expanded fixed top-0 left-0 h-full text-gray-800 z-50 shadow-lg overflow-y-auto">
+        <div class="flex items-center justify-between p-4 h-16 border-b border-gray-200/50">
+            <h2 class="text-xl font-bold text-green-700 sidebar-item-text">Menú Principal</h2>
+            </div>
         <nav class="mt-4">
             <ul>
                 <li class="menu-item">
                     <a href="#"
-                        class="block px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center"
-                        hx-get="/content/index" hx-target="#mainContent">
-                        <i class="fas fa-home icon mr-3"></i>
-                        <span class="sidebar-content">Inicio</span>
+                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors duration-200 rounded-md mx-2"
+                        hx-get="./content/index_content.html" hx-target="#mainContent" hx-swap="innerHTML"
+                        title="Inicio">
+                        <i class="fas fa-home menu-icon"></i>
+                        <span class="sidebar-item-text ml-3">Inicio</span>
                     </a>
                 </li>
                 <li class="menu-item">
                     <button
-                        class="w-full text-left px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center justify-between"
-                        aria-expanded="false">
-                        <div class="flex items-center">
-                            <i class="fas fa-cogs icon mr-3"></i>
-                            <span class="sidebar-content">Portfo A</span>
-                        </div>
-                        <i class="fas fa-chevron-down sidebar-content"></i>
+                        class="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors duration-200 rounded-md mx-2"
+                        aria-expanded="false" title="Portafolio A">
+                        <span class="flex items-center">
+                            <i class="fas fa-briefcase menu-icon"></i> <span class="sidebar-item-text ml-3">Portafolio A</span>
+                        </span>
+                        <i class="fas fa-chevron-down submenu-icon-indicator sidebar-item-text text-xs"></i>
                     </button>
-                    <ul class="submenu pl-6 bg-green-50" aria-hidden="true">
+                    <ul class="submenu ml-4" aria-hidden="true">
                         <li><a href="./content/service1.html"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="./content/service1.html" hx-target="#mainContent">Demos</a></li>
+                                class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-200 hover:text-green-800 transition-colors duration-200 rounded-md my-1 ml-2 mr-1 sidebar-item-text"
+                                hx-get="./content/service1.html" hx-target="#mainContent" hx-swap="innerHTML">Demos de Proyectos</a></li>
                         <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service2" hx-target="#mainContent">Pronto...</a></li>
-                        <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service3" hx-target="#mainContent">Pronto...</a></li>
+                                class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-200 hover:text-green-800 transition-colors duration-200 rounded-md my-1 ml-2 mr-1 sidebar-item-text"
+                                hx-get="/content/service2_placeholder.html" hx-target="#mainContent" hx-swap="innerHTML">Próximamente...</a></li>
                     </ul>
                 </li>
-            </ul>
+                </ul>
         </nav>
     </div>
 
-    <!-- Botón de toggle -->
     <button id="toggleSidebar"
-        class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out">
+        class="fixed top-4 bg-green-600 text-white p-2.5 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 shadow-lg">
         <i class="fas fa-bars"></i>
     </button>
 
-    <!-- Contenido principal -->
-    <main id="mainContent" class="flex-grow p-6 ml-60 transition-all duration-300 ease-in-out">
-        <h1 class="text-3xl font-bold text-green-600 mb-4">Hola, Bienvenido.</h1>
-        <p class="text-gray-700">Esta página de inicio interactiva cuenta con animaciones y funcionalidades, como una
-            plantilla para un sistema con una barra lateral escalable sin usar plantillas preconstruidas, siguiendo un
-            estilo puro con personalización desde cero, específicamente para mostrar habilidades en bruto. En la barra
-            lateral, en la sección <b>Portfo A</b>, la opción <b>Demos</b>, allí podemos encontrar tarjetas con demos en
-            desarrollo. Por cierto, este sitio aún está en construcción, pero sirve como una buena base del
-            <span class="highlight-word relative inline-block">diseño</span> y
-            <span class="highlight-word relative inline-block">desarrollo</span> que se puede crear.
-        </p><br>
-        <p class="text-gray-700"> Adicionalmente, esta es una introduccion acerca de mi:</p>
-
-
-        <section class="p-6">
-            <div class="bg-white shadow-xl rounded-xl p-8 max-w-5xl mx-auto">
-                <div class="mb-6 border-b pb-4">
-                    <h1 class="text-4xl font-extrabold text-green-700">Gary Taboada</h1>
-                    <p class="text-lg text-gray-700 mt-1">Desarrollador de Software | Backend, Frontend & Sistemas ERP
-                    </p>
+    <div id="mainContentWrapper">
+        <main id="mainContent" class="flex-grow">
+            <h1 class="text-4xl font-extrabold text-green-700 mb-6">¡Bienvenido a Mi Espacio Digital!</h1>
+            <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                Esta es una demostración interactiva de una aplicación web con un diseño moderno y funcionalidades dinámicas.
+                Explora la barra lateral para navegar por las diferentes secciones. Este proyecto está construido desde cero,
+                mostrando un enfoque en <span class="highlight-word">diseño limpio</span> y <span class="highlight-word">desarrollo eficiente</span>.
+            </p>
+            <p class="text-gray-600 mb-8">
+                En la sección <strong>Portafolio A > Demos de Proyectos</strong>, encontrarás ejemplos de trabajos y experimentos en desarrollo.
+                ¡Gracias por tu visita!
+            </p>
+            
+            <section class="profile-card mt-12">
+                <div class="profile-header">
+                    <div class="profile-avatar">GT</div>
+                    <div class="profile-title">
+                        <h1>Gary Taboada</h1>
+                        <p>Desarrollador de Software | Backend, Frontend & Sistemas ERP</p>
+                    </div>
                 </div>
-                <blockquote class="mt-8 border-l-4 border-green-400 pl-4 italic text-gray-600">
-                    "Impulsado por la curiosidad, guiado por un propósito y comprometido con crear soluciones que
-                    importan."
-                    <br>
-                    <span class="text-sm">— Gary Taboada</span>
-                </blockquote> <br><hr><br>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="profile-quote">
+                    <p>"Impulsado por la curiosidad, guiado por un propósito y comprometido con crear soluciones que importan."</p>
+                    <span>— Gary Taboada</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-8">
                     <div>
-                        <h2 class="text-2xl font-semibold text-green-600 mb-2">Perfil Profesional</h2>
-                        <p class="text-gray-700">
+                        <h2 class="profile-section-title">Perfil Profesional</h2>
+                        <p class="text-gray-700 leading-relaxed">
                             Desarrollador de software con experiencia en <strong>backend</strong>,
                             <strong>frontend</strong> y <strong>sistemas ERP</strong>. Especializado en la creación de
                             soluciones <strong>robustas</strong>, <strong>escalables</strong> y
@@ -257,33 +323,33 @@
                     </div>
 
                     <div>
-                        <h2 class="text-2xl font-semibold text-green-600 mb-2">Contacto</h2>
-                        <ul class="text-gray-700 space-y-1">
-                            <li><strong>Email:</strong> <a href="mailto:fasza212@gmail.com"
+                        <h2 class="profile-section-title">Contacto</h2>
+                        <ul class="text-gray-700 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-envelope mr-3 text-green-500"></i><a href="mailto:fasza212@gmail.com"
                                     class="text-blue-600 hover:underline">fasza212@gmail.com</a></li>
-                            <li><strong>Teléfono:</strong> <a href="tel:+593992678478"
+                            <li class="flex items-center"><i class="fas fa-phone mr-3 text-green-500"></i><a href="tel:+593992678478"
                                     class="text-blue-600 hover:underline">(+593) 99 267 8478</a></li>
-                            <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/gary-taboada-2b381320a"
-                                    target="_blank" class="text-blue-600 hover:underline">gary-taboada</a></li>
+                            <li class="flex items-center"><i class="fab fa-linkedin mr-3 text-green-500"></i><a href="https://www.linkedin.com/in/gary-taboada-2b381320a"
+                                    target="_blank" class="text-blue-600 hover:underline">linkedin.com/in/gary-taboada</a></li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="mt-8">
-                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Tecnologías Destacadas</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-gray-700">
+                <div class="mt-10">
+                    <h2 class="profile-section-title">Tecnologías Destacadas</h2>
+                    <div class="tech-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-700 mt-4 text-sm">
                         <div><strong>Lenguajes:</strong> Python, Java, C#, PHP, JavaScript, TypeScript</div>
-                        <div><strong>Frameworks:</strong> Flask, Django, Symfony, Node.js, PrimeNG</div>
-                        <div><strong>Bases de Datos:</strong> OracleDB, PostgreSQL, SQL Server, MySQL</div>
-                        <div><strong>Frontend:</strong> HTML5, CSS3, Tailwind CSS, SCSS</div>
-                        <div><strong>Herramientas:</strong> Postman, Figma, Visual Studio, NetBeans, IntelliJ</div>
-                        <div><strong>Diseño:</strong> Adobe XD, Photoshop, Illustrator, CapCut, Canva</div>
+                        <div><strong>Frameworks:</strong> Flask, Django, Symfony, Node.js, PrimeNG, Angular</div>
+                        <div><strong>Bases de Datos:</strong> OracleDB, PostgreSQL, SQL Server, MySQL, MongoDB</div>
+                        <div><strong>Frontend:</strong> HTML5, CSS3, Tailwind CSS, SCSS, React</div>
+                        <div><strong>Herramientas:</strong> Docker, Git, Postman, VS Code, IntelliJ, Jira</div>
+                        <div><strong>Diseño:</strong> Figma, Adobe XD, Photoshop, Illustrator, CapCut, Canva</div>
                     </div>
                 </div>
 
-                <div class="mt-8">
-                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Proyectos Relevantes</h2>
-                    <ul class="space-y-4 text-gray-700 list-disc pl-5">
+                <div class="mt-10">
+                    <h2 class="profile-section-title">Proyectos Relevantes</h2>
+                    <ul class="space-y-4 text-gray-700 project-list mt-4">
                         <li>
                             <strong>Modernización de Sysprev – Tecservin Ltda.:</strong> Migración completa del sistema
                             de seguros de PHP a Flask, rediseño de interfaz con Tailwind CSS e integración de servicios
@@ -301,9 +367,9 @@
                     </ul>
                 </div>
 
-                <div class="mt-8">
-                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Habilidades Blandas</h2>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-700 list-disc pl-5">
+                <div class="mt-10">
+                    <h2 class="profile-section-title">Habilidades Blandas</h2>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-gray-700 soft-skills-list mt-4">
                         <li>Resolución de problemas y pensamiento crítico</li>
                         <li>Trabajo en equipo multidisciplinario</li>
                         <li>Adaptabilidad a nuevas tecnologías</li>
@@ -313,57 +379,111 @@
                     </ul>
                 </div>
 
-                <div class="mt-8">
-                    <h2 class="text-2xl font-semibold text-green-600 mb-2">Idiomas</h2>
-                    <p class="text-gray-700">
-                        <strong>Español:</strong> Nativo &nbsp;|&nbsp; <strong>Inglés:</strong> C2 Proficiente
+                <div class="mt-10">
+                    <h2 class="profile-section-title">Idiomas</h2>
+                    <p class="text-gray-700 mt-2">
+                        <span class="font-semibold">Español:</span> Nativo &nbsp;|&nbsp; <span class="font-semibold">Inglés:</span> C2 Proficiente (EF SET)
                     </p>
                 </div>
-            </div>
-        </section>
+            </section>
 
-
-    </main>
+        </main>
+    </div>
 
     <script>
         const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
+        const mainContentWrapper = document.getElementById('mainContentWrapper'); // Usar el wrapper
         const toggleButton = document.getElementById('toggleSidebar');
+        const sidebarItemsText = document.querySelectorAll('.sidebar-item-text'); // Todos los textos
+        const submenuIconIndicators = document.querySelectorAll('.submenu-icon-indicator');
 
-        toggleButton.style.left = '208px'; // Posición inicial cuando está expandido
+        // Función para establecer la posición inicial del botón de toggle
+        function setToggleButtonPosition(isExpanded) {
+            if (isExpanded) {
+                toggleButton.style.left = '230px'; // Posición cuando está expandido (sidebar width - button width/2 - some offset)
+                toggleButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            } else {
+                toggleButton.style.left = '20px';  // Posición cuando está colapsado
+                toggleButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            }
+        }
+        
+        // Estado inicial del sidebar (ej. expandido por defecto)
+        let isSidebarExpanded = true; // Puedes cambiar esto o leerlo de localStorage
+        sidebar.classList.toggle('sidebar-expanded', isSidebarExpanded);
+        sidebar.classList.toggle('sidebar-collapsed', !isSidebarExpanded);
+        mainContentWrapper.style.marginLeft = isSidebarExpanded ? '260px' : '72px';
+        setToggleButtonPosition(isSidebarExpanded);
+
 
         function toggleSidebar() {
-            const isExpanded = sidebar.classList.contains('sidebar-expanded');
-            sidebar.classList.toggle('sidebar-expanded', !isExpanded);
-            sidebar.classList.toggle('sidebar-collapsed', isExpanded);
-            toggleButton.style.left = isExpanded ? '16px' : '208px';
-            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
+            isSidebarExpanded = !isSidebarExpanded; // Cambia el estado
+            sidebar.classList.toggle('sidebar-expanded', isSidebarExpanded);
+            sidebar.classList.toggle('sidebar-collapsed', !isSidebarExpanded);
+            
+            // Ajustar margen del contenido principal
+            mainContentWrapper.style.marginLeft = isSidebarExpanded ? '260px' : '72px';
+            
+            setToggleButtonPosition(isSidebarExpanded);
+
+            // Si se colapsa y hay submenús abiertos, cerrarlos
+            if (!isSidebarExpanded) {
+                document.querySelectorAll('.submenu.expanded').forEach(submenu => {
+                    const button = submenu.previousElementSibling;
+                    toggleSubmenu(button, false); // Forzar cierre
+                });
+            }
         }
 
         toggleButton.addEventListener('click', toggleSidebar);
 
         document.querySelectorAll('.menu-item > button').forEach(button => {
-            button.addEventListener('click', function () {
-                if (sidebar.classList.contains('sidebar-collapsed')) {
-                    toggleSidebar();
-                    setTimeout(() => toggleSubmenu(this), 300);
+            button.addEventListener('click', function (event) {
+                event.stopPropagation(); // Prevenir que el click se propague si no es necesario
+                // Si el sidebar está colapsado, primero expandirlo
+                if (!isSidebarExpanded) {
+                    toggleSidebar(); // Esto ya actualiza isSidebarExpanded
+                    // Esperar a que la animación del sidebar termine antes de abrir el submenu
+                    setTimeout(() => {
+                        toggleSubmenu(this, true); // Forzar apertura
+                    }, 300); // Coincide con la duración de la transición del sidebar
                 } else {
-                    toggleSubmenu(this);
+                    toggleSubmenu(this); // Comportamiento normal
                 }
             });
         });
 
-        function toggleSubmenu(button) {
+        function toggleSubmenu(button, forceState) { // forceState puede ser true (abrir) o false (cerrar)
             const submenu = button.nextElementSibling;
-            const icon = button.querySelector('.fa-chevron-down');
+            const icon = button.querySelector('.submenu-icon-indicator');
+            let expand;
 
-            submenu.classList.toggle('expanded');
-            icon.classList.toggle('rotated');
+            if (typeof forceState === 'boolean') {
+                expand = forceState;
+            } else {
+                expand = !submenu.classList.contains('expanded');
+            }
 
-            button.setAttribute('aria-expanded', submenu.classList.contains('expanded'));
-            submenu.setAttribute('aria-hidden', !submenu.classList.contains('expanded'));
+            submenu.classList.toggle('expanded', expand);
+            if(icon) icon.classList.toggle('rotated', expand);
+
+            button.setAttribute('aria-expanded', expand);
+            submenu.setAttribute('aria-hidden', !expand);
         }
+
+        // Cargar contenido inicial (opcional, si quieres que "Inicio" se cargue por defecto)
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simular clic en el enlace de inicio para cargar el contenido
+            const initialLink = sidebar.querySelector('a[hx-get="./content/index_content.html"]');
+            if (initialLink) {
+                //htmx.process(initialLink); // No es necesario un clic manual, HTMX lo maneja si está en el DOM
+                // O, si quieres forzar la carga:
+                 htmx.ajax('GET', initialLink.getAttribute('hx-get'), { target: '#mainContent', swap: 'innerHTML'});
+            }
+             // Asegurar que el estado del botón de toggle sea correcto al cargar
+            setToggleButtonPosition(sidebar.classList.contains('sidebar-expanded'));
+        });
+
     </script>
 </body>
-
 </html>
