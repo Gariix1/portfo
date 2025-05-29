@@ -1,92 +1,43 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service 1 - Portfolio</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        .portfolio-item img {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .portfolio-item:hover img {
-            transform: scale(1.05);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-
-<body class="bg-gray-100 text-gray-800">
-    <div class="container mx-auto py-10">
-        <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Diseño Web</h1>
-
-
-        <!-- Galería de Proyectos -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-
-            <!-- Demo 1 -->
-            <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x300.png?text=Demo+1" alt="Demo 1"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 1</h2>
-                    <p class="text-sm text-gray-600 mb-4">Un formulario con validaciones en tiempo real para mejorar la
-                        experiencia del usuario haciendo más eficiente el proceso de completar la información.</p>
-
-                    <a href="./content/demos/demo1.html"
-                        class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
-                        más</a>
-                </div>
+<div class="container mx-auto py-10">
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Demos de Proyectos</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="portfolio-item fluent-card overflow-hidden">
+            <img src="https://placehold.co/400x300/a1c4fd/1f2937?text=Demo+Formulario" alt="Demo Formulario"
+                 class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-green-600 mb-2">Demo Formulario</h2>
+                <p class="text-sm text-gray-600 mb-4 h-20 overflow-y-auto">Un formulario con validaciones en tiempo real para mejorar la experiencia del usuario haciendo más eficiente el proceso de completar la información.</p>
+                <a href="./content/demos/demo1.html" target="_blank" rel="noopener noreferrer"
+                   class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-200">Ver Demo</a>
             </div>
-
-            <!-- Demo 2 -->
-            <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x300.png?text=Demo+2" alt="Demo 2"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 2</h2>
-                    <p class="text-sm text-gray-600 mb-4">Aquí tenemos un proyecto enfocado en el diseño móvil, que aún
-                        está en desarrollo. (Recomiendo usar un dispositivo móvil para una mejor visualización.)</p>
-                    <a href="./content/demos/demo2.html"
-                        class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
-                        más</a>
-                </div>
+        </div>
+        <div class="portfolio-item fluent-card overflow-hidden">
+            <img src="https://placehold.co/400x300/fed6e3/1f2937?text=Demo+Móvil" alt="Demo Móvil"
+                 class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-green-600 mb-2">Demo Móvil</h2>
+                <p class="text-sm text-gray-600 mb-4 h-20 overflow-y-auto">Proyecto enfocado en diseño móvil (en desarrollo). Se recomienda visualizar en dispositivo móvil.</p>
+                <a href="./content/demos/demo2.html" target="_blank" rel="noopener noreferrer"
+                   class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg transition-colors duration-200">Ver Demo</a>
             </div>
-
-            <!-- Demo 3 -->
-            <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x300.png?text=Demo+3" alt="Demo 3"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 3 (Pronto)</h2>
-                    <p class="text-sm text-gray-600 mb-4">Aquí habrá una nueva demo que mostrará más diseños, la cual
-                        aún no está implementada.</p>
-                    <a href="#"
-                        class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
-                        más</a>
-                </div>
+        </div>
+        <div class="portfolio-item fluent-card overflow-hidden opacity-70">
+            <img src="https://placehold.co/400x300/c2e9fb/4b5563?text=Demo+3+(Pronto)" alt="Demo 3 Próximamente"
+                 class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-green-600 mb-2">Demo 3 (Pronto)</h2>
+                <p class="text-sm text-gray-600 mb-4 h-20 overflow-y-auto">Nueva demo con más diseños. Aún no implementada.</p>
+                <span class="block text-center text-white bg-gray-400 px-4 py-2 rounded-lg cursor-not-allowed">Ver más</span>
             </div>
-
-            <!-- Demo 4 -->
-            <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
-                <img src="https://via.placeholder.com/400x300.png?text=Demo+4" alt="Demo 4"
-                    class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 4 (Pronto)</h2>
-                    <p class="text-sm text-gray-600 mb-4">Aquí habrá una nueva demo que mostrará más diseños, la cual
-                        aún no está implementada.</p>
-                    <a href="#"
-                        class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
-                        más</a>
-                </div>
+        </div>
+         <div class="portfolio-item fluent-card overflow-hidden opacity-70">
+            <img src="https://placehold.co/400x300/a8edea/4b5563?text=Demo+4+(Pronto)" alt="Demo 4 Próximamente"
+                 class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold text-green-600 mb-2">Demo 4 (Pronto)</h2>
+                <p class="text-sm text-gray-600 mb-4 h-20 overflow-y-auto">Nueva demo con más diseños. Aún no implementada.</p>
+                <span class="block text-center text-white bg-gray-400 px-4 py-2 rounded-lg cursor-not-allowed">Ver más</span>
             </div>
-
-            <!-- Añadir más proyectos según sea necesario esto lo usaremos en el futuro -->
         </div>
     </div>
-</body>
-
-</html>
+</div>
