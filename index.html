@@ -1,588 +1,371 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="es" class="scroll-smooth"
+      x-data="{
+          darkMode: localStorage.getItem('darkMode') === 'true' ||
+                    (!('darkMode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches),
+          toggleDarkMode() {
+              this.darkMode = !this.darkMode;
+              localStorage.setItem('darkMode', this.darkMode);
+              if (this.darkMode) {
+                  document.documentElement.classList.add('dark');
+              } else {
+                  document.documentElement.classList.remove('dark');
+              }
+          }
+      }"
+      x-init="() => {
+          if (darkMode) {
+              document.documentElement.classList.add('dark');
+          } else {
+              document.documentElement.classList.remove('dark');
+          }
+          $watch('darkMode', val => { // Asegura que la clase se actualice si darkMode cambia por fuera
+              if (val) {
+                  document.documentElement.classList.add('dark');
+              } else {
+                  document.documentElement.classList.remove('dark');
+              }
+          })
+      }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Interactivo - Gary Taboada</title>
+    <title>Portafolio - Gary Taboada</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <style>
-        html,
-        body {
-            min-height: 100vh;
-            margin: 0; /* Quitado margin-left: 10px; para consistencia */
-            padding: 0;
-            font-family: 'Inter', sans-serif; /* Fuente más moderna */
-        }
-
-        body {
-            background: linear-gradient(-45deg, #a8edea, #fed6e3, #a1c4fd, #c2e9fb); /* Gradiente más suave y profesional */
-            background-size: 400% 400%;
-            animation: gradientBG 18s ease infinite;
-            background-attachment: fixed;
-            display: flex; /* Para alinear sidebar y contenido */
-        }
-
-        @keyframes gradientBG { /* Renombrado para claridad */
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        #sidebar {
-            background: rgba(255, 255, 255, 0.6); /* Vidrio más sutil */
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(209, 213, 219, 0.3); /* Borde más suave */
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave */
-        }
-
-        .sidebar-expanded { width: 260px; }
-        .sidebar-collapsed { width: 72px; } /* Ancho para iconos y un poco de padding */
-
-        .sidebar-content {
-            transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
-        }
-        
-        .sidebar-collapsed .sidebar-item-text,
-        .sidebar-collapsed .submenu-icon-indicator { /* Ocultar texto y flecha de submenu */
-            opacity: 0;
-            visibility: hidden;
-            width: 0; /* Para que no ocupe espacio */
-            overflow: hidden; /* Evitar que se muestre parcialmente */
-        }
-        
-        .sidebar-expanded .sidebar-item-text,
-        .sidebar-expanded .submenu-icon-indicator {
-            opacity: 1;
-            visibility: visible;
-            width: auto;
-        }
-        
-        #mainContentWrapper { /* Nuevo wrapper para el contenido principal */
-            flex-grow: 1;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px; /* Padding general para el wrapper */
-            overflow-y: auto; /* Para scroll si el contenido es largo */
-            height: 100vh; /* Ocupar toda la altura */
-        }
-
-        #mainContent {
-            background: rgba(255, 255, 255, 0.75); /* Vidrio un poco más opaco para legibilidad */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 12px; /* Bordes más redondeados */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra más suave */
-            padding: 2rem; /* Padding interno del contenido */
-            max-width: 1200px; /* Ancho máximo para el contenido */
-            margin: 0 auto; /* Centrar el contenido si es más estrecho */
-        }
-        
-        .sidebar-expanded + #mainContentWrapper { margin-left: 260px; }
-        .sidebar-collapsed + #mainContentWrapper { margin-left: 72px; }
-
-
-        .menu-icon { /* Clase específica para iconos del menú */
-            min-width: 2rem; /* Espacio para el icono */
-            text-align: center;
-        }
-
-        #toggleSidebar {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 60; /* Asegurar que esté sobre el sidebar */
-            /* Posicionamiento dinámico por JS */
-        }
-        
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
-            opacity: 0;
-            transform: translateY(-10px);
-            visibility: hidden;
-            background-color: rgba(0,0,0,0.03); /* Fondo sutil para submenu */
-        }
-
-        .submenu.expanded {
-            max-height: 500px; /* Suficiente para varios items */
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
-        }
-
-        .submenu-icon-indicator { /* Para la flecha del submenu */
-            transition: transform 0.3s ease-out;
-        }
-
-        .submenu-icon-indicator.rotated {
-            transform: rotate(180deg);
-        }
-
-        /* Estilos para palabras resaltadas */
-        .highlight-word {
-            background: linear-gradient(120deg, #f87171, #60a5fa, #34d399, #fbbf24); /* Colores más vibrantes */
-            background-size: 300% auto; /* Tamaño para animación */
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shineEffect 4s linear infinite; /* Renombrado y ajustado */
-            font-weight: 700; /* bold */
-        }
-
-        @keyframes shineEffect {
-            to {
-                background-position: 300% center;
+    <script>
+        // Configuración de Tailwind para modo oscuro (necesaria si no usas un archivo tailwind.config.js)
+        // Para la CDN, la configuración de darkMode: 'class' es implícita si usas la clase 'dark' en <html>
+        tailwind.config = {
+          darkMode: 'class', // o 'media' si prefieres basarte solo en el sistema
+          theme: {
+            extend: {
+              // Aquí puedes añadir colores personalizados para modo oscuro si lo necesitas
             }
+          }
         }
-        
-        /* Perfil Profesional Mejorado */
-        .profile-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
-            padding: 2.5rem;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* El color de fondo base se manejará con Tailwind ahora */
         }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            border-bottom: 1px solid #e5e7eb; /* gray-200 */
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
+        /* Estilos para scroll-snap (opcional, para navegación por secciones) */
+        /* .snap-container { scroll-snap-type: y mandatory; } */
+        /* .snap-section { scroll-snap-align: start; } */
+
+        /* Pequeña animación para las tarjetas de demo al pasar el cursor */
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .profile-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background-color: #4ade80; /* green-400 */
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            font-weight: bold;
-            box-shadow: 0 4px 10px rgba(74, 222, 128, 0.4);
-        }
-        .profile-title h1 {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 800; /* extrabold */
-            color: #15803d; /* green-700 */
-            line-height: 1.2;
-        }
-        .profile-title p {
-            font-size: 1.125rem; /* text-lg */
-            color: #4b5563; /* gray-600 */
-            margin-top: 0.25rem;
-        }
-        .profile-section-title {
-            font-size: 1.5rem; /* text-2xl */
-            font-weight: 600; /* semibold */
-            color: #16a34a; /* green-600 */
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #86efac; /* green-300 */
-            display: inline-block; /* Para que el borde solo ocupe el texto */
-        }
-        .profile-quote {
-            background-color: #f0fdf4; /* green-50 */
-            border-left: 4px solid #22c55e; /* green-500 */
-            padding: 1rem 1.5rem;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-        .profile-quote p {
-            font-style: italic;
-            color: #374151; /* gray-700 */
-        }
-        .profile-quote span {
-            display: block;
-            text-align: right;
-            font-style: normal;
-            font-weight: 500;
-            color: #16a34a; /* green-600 */
-            margin-top: 0.5rem;
-        }
-        /* Estilos para la sección de tecnologías mejorada */
-        .tech-category-card {
-            background-color: #f9fafb; /* gray-50 */
-            padding: 1.5rem; /* p-6 */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
-            transition: box-shadow 0.3s ease-in-out;
-        }
-        .tech-category-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-2xl */
-        }
-        .tech-category-title {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 600; /* semibold */
-            color: #15803d; /* green-700 */
-            margin-bottom: 1rem; /* mb-4 */
-            display: flex;
-            align-items: center;
-        }
-        .tech-category-title i {
-            margin-right: 0.75rem; /* mr-3 */
-            font-size: 1.5rem; /* text-2xl */
-            color: #22c55e; /* green-500 */
+        .dark .demo-card:hover { /* Sombra para modo oscuro */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
         }
         .tech-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.375rem 0.875rem; /* px-3.5 py-1.5 */
-            font-size: 0.8rem; /* text-xs */
-            font-weight: 500; /* medium */
-            line-height: 1;
-            border-radius: 9999px; /* rounded-full */
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+            transition: transform 0.2s ease-in-out;
         }
         .tech-badge:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08); /* Aumentar sombra en hover */
+            transform: scale(1.1);
         }
-        .tech-badge i {
-            margin-right: 0.375rem; /* mr-1.5 */
-        }
-        .project-list li {
-            padding-left: 1.25rem; /* pl-5 */
-            position: relative;
-        }
-        .project-list li::before {
-            content: "💼"; /* O un icono de FontAwesome */
-            position: absolute;
-            left: 0;
-            color: #22c55e; /* green-500 */
-        }
-        .soft-skills-list li {
-            padding-left: 1.25rem;
-            position: relative;
-        }
-        .soft-skills-list li::before {
-            content: "✨";
-            position: absolute;
-            left: 0;
-            color: #f59e0b; /* amber-500 */
-        }
-
+        /* Estilo para evitar el FOUC (Flash Of Unstyled Content) en elementos Alpine */
+        [x-cloak] { display: none !important; }
     </style>
 </head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
-<body class="flex text-gray-800">
-    <div id="sidebar"
-        class="sidebar-expanded fixed top-0 left-0 h-full text-gray-800 z-50 shadow-lg overflow-y-auto">
-        <div class="flex items-center justify-between p-4 h-16 border-b border-gray-200/50">
-            <h2 class="text-xl font-bold text-green-700 sidebar-item-text">Menú Principal</h2>
+    <div x-data="{ openMobileMenu: false }">
+
+        <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40 transition-colors duration-300">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20">
+                    <a href="#profile" @click="document.getElementById('profile').scrollIntoView({ behavior: 'smooth' });" class="text-2xl font-bold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-500 transition-colors">Gary Taboada</a>
+
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <a href="#profile" @click="document.getElementById('profile').scrollIntoView({ behavior: 'smooth' });" class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">Perfil</a>
+                        <a href="#demos" @click="document.getElementById('demos').scrollIntoView({ behavior: 'smooth' });" class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">Demos</a>
+                        <a href="#contact" @click="document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });" class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 transition-colors font-medium">Contacto</a>
+                        <button @click="toggleDarkMode"
+                                class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 focus:outline-none rounded-full p-2 transition-colors"
+                                aria-label="Toggle dark mode">
+                            <i x-show="!darkMode" class="fas fa-moon text-xl"></i>
+                            <i x-show="darkMode" class="fas fa-sun text-xl"></i>
+                        </button>
+                    </nav>
+
+                    <div class="md:hidden flex items-center space-x-3">
+                        <button @click="toggleDarkMode"
+                                class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 focus:outline-none rounded-full p-2 transition-colors"
+                                aria-label="Toggle dark mode">
+                            <i x-show="!darkMode" class="fas fa-moon text-xl"></i>
+                            <i x-show="darkMode" class="fas fa-sun text-xl"></i>
+                        </button>
+                        <button @click="openMobileMenu = !openMobileMenu" class="text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 focus:outline-none">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-        <nav class="mt-4">
-            <ul>
-                <li class="menu-item">
-                    <a href="#"
-                        class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors duration-200 rounded-md mx-2"
-                        hx-get="./content/index_content.html" hx-target="#mainContent" hx-swap="innerHTML"
-                        title="Inicio">
-                        <i class="fas fa-home menu-icon"></i>
-                        <span class="sidebar-item-text ml-3">Inicio</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <button
-                        class="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-green-100 hover:text-green-700 transition-colors duration-200 rounded-md mx-2"
-                        aria-expanded="false" title="Portafolio A">
-                        <span class="flex items-center">
-                            <i class="fas fa-briefcase menu-icon"></i> <span class="sidebar-item-text ml-3">Portafolio A</span>
-                        </span>
-                        <i class="fas fa-chevron-down submenu-icon-indicator sidebar-item-text text-xs"></i>
-                    </button>
-                    <ul class="submenu ml-4" aria-hidden="true">
-                        <li><a href="./content/service1.html"
-                                class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-200 hover:text-green-800 transition-colors duration-200 rounded-md my-1 ml-2 mr-1 sidebar-item-text"
-                                hx-get="./content/service1.html" hx-target="#mainContent" hx-swap="innerHTML">Demos de Proyectos</a></li>
-                        <li><a href="#"
-                                class="block px-4 py-2 text-sm text-gray-600 hover:bg-green-200 hover:text-green-800 transition-colors duration-200 rounded-md my-1 ml-2 mr-1 sidebar-item-text"
-                                hx-get="/content/service2_placeholder.html" hx-target="#mainContent" hx-swap="innerHTML">Próximamente...</a></li>
-                    </ul>
-                </li>
-                </ul>
-        </nav>
-    </div>
 
-    <button id="toggleSidebar"
-        class="fixed top-4 bg-green-600 text-white p-2.5 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 shadow-lg">
-        <i class="fas fa-bars"></i> </button>
+            <div x-show="openMobileMenu" x-cloak
+                 @click.away="openMobileMenu = false" class="md:hidden bg-white dark:bg-gray-800 shadow-lg absolute w-full transition-colors duration-300"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 transform -translate-y-2"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+                 x-transition:leave="transition ease-in duration-150"
+                 x-transition:leave-start="opacity-100 transform translate-y-0"
+                 x-transition:leave-end="opacity-0 transform -translate-y-2">
+                <nav class="flex flex-col items-center space-y-2 py-4">
+                    <a href="#profile" @click="openMobileMenu = false; document.getElementById('profile').scrollIntoView({ behavior: 'smooth' });" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-green-500 dark:hover:bg-green-600 hover:text-white dark:hover:text-gray-100 rounded-md w-full text-center transition-colors">Perfil</a>
+                    <a href="#demos" @click="openMobileMenu = false; document.getElementById('demos').scrollIntoView({ behavior: 'smooth' });" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-green-500 dark:hover:bg-green-600 hover:text-white dark:hover:text-gray-100 rounded-md w-full text-center transition-colors">Demos</a>
+                    <a href="#contact" @click="openMobileMenu = false; document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });" class="block px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-green-500 dark:hover:bg-green-600 hover:text-white dark:hover:text-gray-100 rounded-md w-full text-center transition-colors">Contacto</a>
+                </nav>
+            </div>
+        </header>
 
-    <div id="mainContentWrapper">
-        <main id="mainContent" class="flex-grow">
-            <h1 class="text-4xl font-extrabold text-green-700 mb-6">¡Bienvenido a Mi Espacio Digital!</h1>
-            <p class="text-lg text-gray-700 leading-relaxed mb-4">
-                Esta es una demostración interactiva de una aplicación web con un diseño moderno y funcionalidades dinámicas.
-                Explora la barra lateral para navegar por las diferentes secciones. Este proyecto está construido desde cero,
-                mostrando un enfoque en <span class="highlight-word">diseño limpio</span> y <span class="highlight-word">desarrollo eficiente</span>.
-            </p>
-            <p class="text-gray-600 mb-8">
-                En la sección <strong>Portafolio A > Demos de Proyectos</strong>, encontrarás ejemplos de trabajos y experimentos en desarrollo.
-                ¡Gracias por tu visita!
-            </p>
-            
-            <section class="profile-card mt-12">
-                <div class="profile-header">
-                    <div class="profile-avatar">GT</div>
-                    <div class="profile-title">
-                        <h1>Gary Taboada</h1>
-                        <p>Desarrollador de Software | Backend, Frontend & Sistemas ERP</p>
+        <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+            <section id="profile" class="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 md:p-10 my-8 snap-section transition-colors duration-300">
+                <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
+                    <div class="bg-green-500 dark:bg-green-600 text-white rounded-full h-24 w-24 sm:h-28 sm:w-28 flex items-center justify-center text-4xl font-bold shadow-md">GT</div>
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-100">Gary Taboada</h1>
+                        <p class="text-lg text-gray-600 dark:text-gray-300">Desarrollador de Software | Backend, Frontend & Sistemas ERP</p>
                     </div>
                 </div>
 
-                <div class="profile-quote">
-                    <p>"Impulsado por la curiosidad, guiado por un propósito y comprometido con crear soluciones que importan."</p>
-                    <span>— Gary Taboada</span>
+                <div class="my-8 p-6 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 dark:border-green-400 rounded-r-lg italic">
+                    <p class="text-gray-700 dark:text-gray-200 text-lg">"Impulsado por la curiosidad, guiado por un propósito y comprometido con crear soluciones que importan."</p>
+                    <span class="block text-right text-gray-600 dark:text-gray-400 mt-2">— Gary Taboada</span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-8">
-                    <div>
-                        <h2 class="profile-section-title">Perfil Profesional</h2>
-                        <p class="text-gray-700 leading-relaxed">
-                            Soy <strong>Desarrollador de Software</strong> con experiencia en <strong>desarrollo backend</strong>, <strong>frontend</strong> y de <strong>sistemas ERP</strong>. Creo soluciones <strong>robustas</strong>, <strong>eficientes</strong> y <strong>escalables</strong>, adaptadas a las necesidades del negocio. Mis herramientas principales incluyen <strong>Python (Flask, Django)</strong>, <strong>Java EE</strong>, <strong>PHP (Symfony)</strong> y <strong>Node.js</strong>, trabajando con bases de datos como <strong>OracleDB</strong>, <strong>PostgreSQL</strong> y <strong>SQL Server</strong>.
-                            <br><br>
-                            Me especializo en <strong>integración de sistemas</strong>, <strong>ETL pipelines</strong> y <strong>optimización de procesos</strong>, con sólidas habilidades en <strong>comunicación</strong>, <strong>resolución de problemas</strong> y <strong>adaptabilidad</strong>.
-                            <br><br>
-                            Además, tengo conocimientos sólidos en <strong>diseño web</strong>, utilizando herramientas como <strong>Figma</strong>, <strong>Adobe XD</strong>, <strong>Photoshop</strong>, <strong>Illustrator</strong>, <strong>Premiere</strong>, <strong>InDesign</strong>, <strong>CapCut</strong>, <strong>Canva</strong>, y manejo avanzado de <strong>Microsoft Office</strong>.
-                        </p>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-x-12 gap-y-8 mt-10">
+                    <div class="md:col-span-3">
+                        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5 border-b-2 border-green-500 dark:border-green-400 pb-2">Perfil Profesional</h2>
+                        <div class="text-gray-700 dark:text-gray-300 leading-relaxed space-y-4">
+                            <p>
+                                Soy <strong>Desarrollador de Software</strong> con experiencia en <strong>desarrollo backend</strong>, <strong>frontend</strong> y de <strong>sistemas ERP</strong>. Creo soluciones <strong>robustas</strong>, <strong>eficientes</strong> y <strong>escalables</strong>, adaptadas a las necesidades del negocio. Mis herramientas principales incluyen <strong class="text-green-600 dark:text-green-400">Python (Flask, Django)</strong>, <strong class="text-green-600 dark:text-green-400">Java EE</strong>, <strong class="text-green-600 dark:text-green-400">PHP (Symfony)</strong> y <strong class="text-green-600 dark:text-green-400">Node.js</strong>, trabajando con bases de datos como <strong class="text-green-600 dark:text-green-400">OracleDB</strong>, <strong class="text-green-600 dark:text-green-400">PostgreSQL</strong> y <strong class="text-green-600 dark:text-green-400">SQL Server</strong>.
+                            </p>
+                            <p>
+                                Me especializo en <strong>integración de sistemas</strong>, <strong>ETL pipelines</strong> y <strong>optimización de procesos</strong>, con sólidas habilidades en <strong>comunicación</strong>, <strong>resolución de problemas</strong> y <strong>adaptabilidad</strong>.
+                            </p>
+                            <p>
+                                Además, tengo conocimientos sólidos en <strong>diseño web</strong>, utilizando herramientas como <strong>Figma</strong>, <strong>Adobe XD</strong>, <strong>Photoshop</strong>, <strong>Illustrator</strong>, <strong>Premiere</strong>, <strong>InDesign</strong>, <strong>CapCut</strong>, <strong>Canva</strong>, y manejo avanzado de <strong>Microsoft Office</strong>.
+                            </p>
+                        </div>
                     </div>
 
-                    <div>
-                        <h2 class="profile-section-title">Contacto</h2>
-                        <ul class="text-gray-700 space-y-2">
-                            <li class="flex items-center"><i class="fas fa-envelope mr-3 text-green-500"></i><a href="mailto:fasza212@gmail.com"
-                                    class="text-blue-600 hover:underline">fasza212@gmail.com</a></li>
-                            <li class="flex items-center"><i class="fas fa-phone mr-3 text-green-500"></i><a href="tel:+593992678478"
-                                    class="text-blue-600 hover:underline">(+593) 99 267 8478</a></li>
-                            <li class="flex items-center"><i class="fab fa-linkedin mr-3 text-green-500"></i><a href="https://www.linkedin.com/in/gary-taboada-2b381320a"
-                                    target="_blank" class="text-blue-600 hover:underline">linkedin.com/in/gary-taboada</a></li>
+                    <div class="md:col-span-2" id="contact"> <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5 border-b-2 border-green-500 dark:border-green-400 pb-2">Contacto</h2>
+                        <ul class="text-gray-700 dark:text-gray-300 space-y-3">
+                            <li class="flex items-center group">
+                                <i class="fas fa-envelope mr-3 text-green-500 dark:text-green-400 text-xl group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors"></i>
+                                <a href="mailto:fasza212@gmail.com" class="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors">fasza212@gmail.com</a>
+                            </li>
+                            <li class="flex items-center group">
+                                <i class="fas fa-phone mr-3 text-green-500 dark:text-green-400 text-xl group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors"></i>
+                                <a href="tel:+593992678478" class="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors">(+593) 99 267 8478</a>
+                            </li>
+                            <li class="flex items-center group">
+                                <i class="fab fa-linkedin mr-3 text-green-500 dark:text-green-400 text-xl group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors"></i>
+                                <a href="https://www.linkedin.com/in/gary-taboada-2b381320a" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors">linkedin.com/in/gary-taboada</a>
+                            </li>
+                             <li class="flex items-center group">
+                                <i class="fab fa-github mr-3 text-green-500 dark:text-green-400 text-xl group-hover:text-green-600 dark:group-hover:text-green-300 transition-colors"></i>
+                                <a href="https://github.com/Fasza212" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors">github.com/Fasza212</a> </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="mt-10">
-                    <h2 class="profile-section-title">Tecnologías Destacadas</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-code"></i>Lenguajes</h3>
+                <div class="mt-12">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6 border-b-2 border-green-500 dark:border-green-400 pb-2">Tecnologías Destacadas</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-code mr-2 text-green-500 dark:text-green-400"></i>Lenguajes</h3>
                             <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-blue-500 text-white"><i class="fab fa-python"></i>Python</span>
-                                <span class="tech-badge bg-red-600 text-white"><i class="fab fa-java"></i>Java</span>
-                                <span class="tech-badge bg-purple-600 text-white"><i class="fas fa-laptop-code"></i>C#</span>
-                                <span class="tech-badge bg-indigo-500 text-white"><i class="fab fa-php"></i>PHP</span>
-                                <span class="tech-badge bg-yellow-400 text-gray-800"><i class="fab fa-js-square"></i>JavaScript</span>
-                                <span class="tech-badge bg-blue-400 text-white"><i class="fab fa-js"></i>TypeScript</span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-500 text-white"><i class="fab fa-python"></i><span>Python</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-red-600 text-white"><i class="fab fa-java"></i><span>Java</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-purple-600 text-white"><i class="fas fa-laptop-code"></i><span>C#</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-indigo-500 text-white"><i class="fab fa-php"></i><span>PHP</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-yellow-400 text-gray-800"><i class="fab fa-js-square"></i><span>JavaScript</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-400 text-white"><i class="fab fa-js"></i><span>TypeScript</span></span>
                             </div>
                         </div>
-
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-cogs"></i>Frameworks y Librerías</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-cogs mr-2 text-green-500 dark:text-green-400"></i>Frameworks y Librerías</h3>
                             <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-gray-700 text-white"><i class="fas fa-flask"></i>Flask</span>
-                                <span class="tech-badge bg-green-800 text-white"><i class="fas fa-leaf"></i>Django</span>
-                                <span class="tech-badge bg-black text-white"><i class="fab fa-symfony"></i>Symfony</span>
-                                <span class="tech-badge bg-green-500 text-white"><i class="fab fa-node-js"></i>Node.js</span>
-                                <span class="tech-badge bg-blue-700 text-white"><i class="fas fa-puzzle-piece"></i>PrimeNG</span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-gray-700 text-white"><i class="fas fa-flask"></i><span>Flask</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-green-800 text-white"><i class="fas fa-leaf"></i><span>Django</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-black text-white"><i class="fab fa-symfony"></i><span>Symfony</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-green-500 text-white"><i class="fab fa-node-js"></i><span>Node.js</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-700 text-white"><i class="fas fa-puzzle-piece"></i><span>PrimeNG</span></span>
                             </div>
                         </div>
-
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-database"></i>Bases de Datos</h3>
+                        <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-database mr-2 text-green-500 dark:text-green-400"></i>Bases de Datos</h3>
                             <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-red-700 text-white"><i class="fas fa-database"></i>OracleDB</span>
-                                <span class="tech-badge bg-blue-600 text-white"><i class="fas fa-database"></i>PostgreSQL</span>
-                                <span class="tech-badge bg-red-500 text-white"><i class="fas fa-server"></i>SQL Server</span>
-                                <span class="tech-badge bg-sky-600 text-white"><i class="fas fa-database"></i>MySQL</span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-red-700 text-white"><i class="fas fa-database"></i><span>OracleDB</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-600 text-white"><i class="fas fa-database"></i><span>PostgreSQL</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-red-500 text-white"><i class="fas fa-server"></i><span>SQL Server</span></span>
+                                <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-sky-600 text-white"><i class="fas fa-database"></i><span>MySQL</span></span>
                             </div>
                         </div>
-
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-desktop"></i>Frontend y UI</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-orange-500 text-white"><i class="fab fa-html5"></i>HTML5</span>
-                                <span class="tech-badge bg-blue-500 text-white"><i class="fab fa-css3-alt"></i>CSS3</span>
-                                <span class="tech-badge bg-pink-500 text-white"><i class="fab fa-sass"></i>SCSS</span>
-                                <span class="tech-badge bg-cyan-500 text-white"><i class="fas fa-wind"></i>Tailwind CSS</span>
-                                <span class="tech-badge bg-green-600 text-white"><i class="fas fa-spell-check"></i>Regex</span>
-                            </div>
-                        </div>
-                        
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-tools"></i>Herramientas y Entornos</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-orange-600 text-white"><i class="fas fa-space-shuttle"></i>Postman</span>
-                                <span class="tech-badge bg-purple-500 text-white"><i class="fab fa-figma"></i>Figma</span>
-                                <span class="tech-badge bg-yellow-500 text-gray-800"><i class="fas fa-project-diagram"></i>Lucidchart</span>
-                                <span class="tech-badge bg-blue-800 text-white"><i class="fas fa-code"></i>Visual Studio</span>
-                                <span class="tech-badge bg-sky-500 text-white"><i class="fas fa-code"></i>NetBeans</span>
-                                <span class="tech-badge bg-gray-800 text-white"><i class="fas fa-code"></i>IntelliJ IDEA</span>
-                            </div>
-                        </div>
-
-                        <div class="tech-category-card">
-                            <h3 class="tech-category-title"><i class="fas fa-paint-brush"></i>Diseño y Creatividad</h3>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="tech-badge bg-purple-500 text-white"><i class="fab fa-figma"></i>Figma</span>
-                                <span class="tech-badge bg-pink-600 text-white"><i class="fab fa-adobe"></i>Adobe XD</span>
-                                <span class="tech-badge bg-blue-600 text-white"><i class="fas fa-image"></i>Photoshop</span>
-                                <span class="tech-badge bg-orange-400 text-white"><i class="fas fa-pen-nib"></i>Illustrator</span>
-                                <span class="tech-badge bg-purple-700 text-white"><i class="fas fa-film"></i>Premiere Pro</span>
-                                <span class="tech-badge bg-pink-400 text-white"><i class="fas fa-book-open"></i>InDesign</span>
-                                <span class="tech-badge bg-black text-white"><i class="fas fa-cut"></i>CapCut</span>
-                                <span class="tech-badge bg-teal-500 text-white"><i class="fas fa-palette"></i>Canva</span>
-                            </div>
-                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                             <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-desktop mr-2 text-green-500 dark:text-green-400"></i>Frontend y UI</h3>
+                             <div class="flex flex-wrap gap-2">
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-orange-500 text-white"><i class="fab fa-html5"></i><span>HTML5</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-500 text-white"><i class="fab fa-css3-alt"></i><span>CSS3</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-pink-500 text-white"><i class="fab fa-sass"></i><span>SCSS</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-cyan-500 text-white"><i class="fas fa-wind"></i><span>Tailwind CSS</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-green-600 text-white"><i class="fas fa-spell-check"></i><span>Regex</span></span>
+                             </div>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                             <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-tools mr-2 text-green-500 dark:text-green-400"></i>Herramientas y Entornos</h3>
+                             <div class="flex flex-wrap gap-2">
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-orange-600 text-white"><i class="fas fa-space-shuttle"></i><span>Postman</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-purple-500 text-white"><i class="fab fa-figma"></i><span>Figma</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-yellow-500 text-gray-800"><i class="fas fa-project-diagram"></i><span>Lucidchart</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-800 text-white"><i class="fas fa-code"></i><span>Visual Studio</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-sky-500 text-white"><i class="fas fa-code"></i><span>NetBeans</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-gray-800 text-white"><i class="fas fa-code"></i><span>IntelliJ IDEA</span></span>
+                             </div>
+                         </div>
+                         <div class="bg-gray-50 dark:bg-gray-700/60 p-5 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                             <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center"><i class="fas fa-paint-brush mr-2 text-green-500 dark:text-green-400"></i>Diseño y Creatividad</h3>
+                             <div class="flex flex-wrap gap-2">
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-purple-500 text-white"><i class="fab fa-figma"></i><span>Figma</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-pink-600 text-white"><i class="fab fa-adobe"></i><span>Adobe XD</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-blue-600 text-white"><i class="fas fa-image"></i><span>Photoshop</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-orange-400 text-white"><i class="fas fa-pen-nib"></i><span>Illustrator</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-purple-700 text-white"><i class="fas fa-film"></i><span>Premiere Pro</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-pink-400 text-white"><i class="fas fa-book-open"></i><span>InDesign</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-black text-white"><i class="fas fa-cut"></i><span>CapCut</span></span>
+                                 <span class="tech-badge px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1.5 bg-teal-500 text-white"><i class="fas fa-palette"></i><span>Canva</span></span>
+                             </div>
+                         </div>
                     </div>
                 </div>
-                <div class="mt-10">
-                    <h2 class="profile-section-title">Proyectos Relevantes</h2>
-                    <ul class="space-y-4 text-gray-700 project-list mt-4">
-                        <li>
-                            <strong>Modernización de Sysprev – Tecservin Ltda.:</strong> Migración completa del sistema
+
+                <div class="mt-12">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5 border-b-2 border-green-500 dark:border-green-400 pb-2">Proyectos Relevantes</h2>
+                    <ul class="space-y-5 text-gray-700 dark:text-gray-300 mt-4">
+                        <li class="pb-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:pb-0">
+                            <strong class="text-green-700 dark:text-green-400">Modernización de Sysprev – Tecservin Ltda.:</strong> Migración completa del sistema
                             de seguros de PHP a Flask, rediseño de interfaz con Tailwind CSS e integración de servicios
                             SOAP/XML sobre OracleDB y PostgreSQL.
                         </li>
-                        <li>
-                            <strong>Módulo ERP – ALES Industries C.A.:</strong> Desarrollo sobre Dynamics AX 2012 usando
+                        <li class="pb-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:pb-0">
+                            <strong class="text-green-700 dark:text-green-400">Módulo ERP – ALES Industries C.A.:</strong> Desarrollo sobre Dynamics AX 2012 usando
                             MorphX/X++, integración de datos con .NET/CIL y aplicaciones web en Flask/Django conectadas
                             a SQL Server.
                         </li>
-                        <li>
-                            <strong>Pedidos para Airbnb – Amauta Tech:</strong> Desarrollo fullstack con Node.js,
+                        <li class="pb-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0 last:pb-0">
+                            <strong class="text-green-700 dark:text-green-400">Pedidos para Airbnb – Amauta Tech:</strong> Desarrollo fullstack con Node.js,
                             PrimeNG y SCSS; backend escalable y UI amigable orientada a usuarios finales.
                         </li>
                     </ul>
                 </div>
 
-                <div class="mt-10">
-                    <h2 class="profile-section-title">Habilidades Blandas</h2>
-                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-gray-700 soft-skills-list mt-4">
-                        <li>Resolución de problemas y pensamiento crítico</li>
-                        <li>Trabajo en equipo multidisciplinario</li>
-                        <li>Adaptabilidad a nuevas tecnologías</li>
-                        <li>Gestión del tiempo y enfoque en calidad</li>
-                        <li>Comunicación técnica clara</li>
-                        <li>Aprendizaje autónomo e investigación</li>
+                <div class="mt-12">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5 border-b-2 border-green-500 dark:border-green-400 pb-2">Habilidades Blandas</h2>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-gray-700 dark:text-gray-300 mt-4">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Resolución de problemas y pensamiento crítico</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Trabajo en equipo multidisciplinario</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Adaptabilidad a nuevas tecnologías</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Gestión del tiempo y enfoque en calidad</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Comunicación técnica clara</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-green-500 dark:text-green-400 mr-2"></i>Aprendizaje autónomo e investigación</li>
                     </ul>
                 </div>
 
-                <div class="mt-10">
-                    <h2 class="profile-section-title">Idiomas</h2>
-                    <p class="text-gray-700 mt-2">
+                <div class="mt-12">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5 border-b-2 border-green-500 dark:border-green-400 pb-2">Idiomas</h2>
+                    <p class="text-gray-700 dark:text-gray-300 mt-2 text-lg">
                         <span class="font-semibold">Español:</span> Nativo &nbsp;|&nbsp; <span class="font-semibold">Inglés:</span> C2 Proficiente (EF SET)
                     </p>
                 </div>
             </section>
 
+            <section id="demos" class="my-12 snap-section"> <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-4">Mis Demos</h2>
+                <p class="text-center text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto">
+                    Aquí puedes encontrar algunas demostraciones interactivas de mis proyectos y habilidades.
+                    Haz clic en una demo para ver más detalles o interactuar con ella.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="demo-card bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-700/50 overflow-hidden transition-all duration-300">
+                        <img src="https://placehold.co/600x400/34D399/FFFFFF?text=Demo+Formulario" alt="Demo Formulario Visual" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-green-600 dark:text-green-400 mb-2">Demo Formulario</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 h-20 overflow-y-auto">Un formulario con validaciones en tiempo real para mejorar la experiencia del usuario haciendo más eficiente el proceso de completar la información.</p>
+                            <a href="./content/demos/demo1.html" target="_blank" rel="noopener noreferrer"
+                               class="block w-full text-center text-white bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 px-4 py-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75">
+                                Ver Demo
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="demo-card bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-700/50 overflow-hidden transition-all duration-300">
+                         <img src="https://placehold.co/600x400/60A5FA/FFFFFF?text=Demo+Móvil" alt="Demo Móvil Visual" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-2">Demo Móvil</h3>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 h-20 overflow-y-auto">Proyecto enfocado en diseño móvil (en desarrollo). Se recomienda visualizar en dispositivo móvil (no olvides revisar las guias rapidas ;).</p>
+                             <a href="./content/demos/demo2.html" target="_blank" rel="noopener noreferrer"
+                                class="block w-full text-center text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
+                                 Ver Demo
+                             </a>
+                        </div>
+                    </div>
+
+                    <div class="demo-card bg-white dark:bg-gray-800 rounded-xl shadow-lg dark:shadow-gray-700/50 overflow-hidden transition-all duration-300 opacity-70 dark:opacity-60">
+                        <img src="https://placehold.co/600x400/c2e9fb/4b5563?text=Demo+3+(Pronto)" alt="Demo 3 Próximamente" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-500 dark:text-gray-400 mb-2">Demo 3 (Pronto)</h3>
+                            <p class="text-gray-400 dark:text-gray-500 text-sm mb-4 h-20 overflow-y-auto">Nueva demo con más diseños. Aún no implementada.</p>
+                            <span class="block text-center text-white bg-gray-400 dark:bg-gray-600 px-4 py-2 rounded-lg cursor-not-allowed">Ver más</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
+
+        <footer class="bg-gray-800 dark:bg-gray-900 text-gray-300 dark:text-gray-400 py-10 mt-12 transition-colors duration-300">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="mb-4">
+                    <a href="https://www.linkedin.com/in/gary-taboada-2b381320a" target="_blank" class="text-gray-400 hover:text-white dark:hover:text-green-400 mx-2 transition-colors"><i class="fab fa-linkedin fa-2x"></i></a>
+                    <a href="https://github.com/Fasza212" target="_blank" class="text-gray-400 hover:text-white dark:hover:text-green-400 mx-2 transition-colors"><i class="fab fa-github fa-2x"></i></a>
+                </div>
+                <p>&copy; <span x-text="new Date().getFullYear()"></span> Gary Taboada. Todos los derechos reservados.</p>
+                <p class="text-sm mt-1">Diseñado con <i class="fas fa-heart text-red-500"></i> y código.</p>
+            </div>
+        </footer>
+
+        <div class="fixed bottom-6 right-6 z-50 flex space-x-3 items-center">
+            <a href="#profile" @click="document.getElementById('profile').scrollIntoView({ behavior: 'smooth' });"
+               class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-full h-12 w-12 sm:w-auto sm:px-4 sm:py-2.5 flex items-center justify-center shadow-lg transition-all duration-150 ease-in-out hover:scale-105 group"
+               aria-label="Ir a Perfil">
+                <i class="fas fa-user text-xl"></i>
+                <span class="ml-2 hidden sm:inline text-sm font-medium">Perfil</span>
+            </a>
+            <a href="#demos" @click="document.getElementById('demos').scrollIntoView({ behavior: 'smooth' });"
+               class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-full h-12 w-12 sm:w-auto sm:px-4 sm:py-2.5 flex items-center justify-center shadow-lg transition-all duration-150 ease-in-out hover:scale-105 group"
+               aria-label="Ir a Demos">
+                <i class="fas fa-flask text-xl"></i>
+                <span class="ml-2 hidden sm:inline text-sm font-medium">Demos</span>
+            </a>
+            <a href="#contact" @click="document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });"
+               class="bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white rounded-full h-12 w-12 sm:w-auto sm:px-4 sm:py-2.5 flex items-center justify-center shadow-lg transition-all duration-150 ease-in-out hover:scale-105 group"
+               aria-label="Ir a Contacto">
+                <i class="fas fa-envelope text-xl"></i>
+                <span class="ml-2 hidden sm:inline text-sm font-medium">Contacto</span>
+            </a>
+        </div>
+
     </div>
-
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const mainContentWrapper = document.getElementById('mainContentWrapper'); // Usar el wrapper
-        const toggleButton = document.getElementById('toggleSidebar');
-        // const sidebarItemsText = document.querySelectorAll('.sidebar-item-text'); // No se usa directamente aquí
-        // const submenuIconIndicators = document.querySelectorAll('.submenu-icon-indicator'); // No se usa directamente aquí
-
-        // Función para establecer la posición y el icono del botón de toggle
-        function setToggleButtonState(isExpanded) {
-            if (isExpanded) {
-                toggleButton.style.left = '230px'; // Ajustar según el ancho del sidebar expandido y el tamaño del botón
-                toggleButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            } else {
-                toggleButton.style.left = '20px';  // Ajustar según el ancho del sidebar colapsado
-                toggleButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            }
-        }
-        
-        // Estado inicial del sidebar (ej. expandido por defecto)
-        // Leer de localStorage si se quiere persistencia, por ahora se establece a true.
-        let isSidebarExpanded = localStorage.getItem('sidebarExpanded') === 'false' ? false : true; // Default to true if not set or set to true
-
-
-        function applySidebarState(expanded) {
-            sidebar.classList.toggle('sidebar-expanded', expanded);
-            sidebar.classList.toggle('sidebar-collapsed', !expanded);
-            mainContentWrapper.style.marginLeft = expanded ? '260px' : '72px';
-            setToggleButtonState(expanded);
-            localStorage.setItem('sidebarExpanded', String(expanded)); // Guardar estado como string
-        }
-        
-        applySidebarState(isSidebarExpanded);
-
-
-        function toggleSidebar() {
-            isSidebarExpanded = !isSidebarExpanded; // Cambia el estado
-            applySidebarState(isSidebarExpanded);
-
-            // Si se colapsa y hay submenús abiertos, cerrarlos
-            if (!isSidebarExpanded) {
-                document.querySelectorAll('.submenu.expanded').forEach(submenu => {
-                    const button = submenu.previousElementSibling;
-                    if (button) { // Asegurarse de que el botón existe
-                         toggleSubmenuDisplay(button, false); // Forzar cierre
-                    }
-                });
-            }
-        }
-
-        toggleButton.addEventListener('click', toggleSidebar);
-
-        document.querySelectorAll('.menu-item > button').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation(); 
-                if (!isSidebarExpanded) {
-                    isSidebarExpanded = true; // Forzar expansión
-                    applySidebarState(true);
-                    // Esperar a que la animación del sidebar termine antes de abrir el submenu
-                    setTimeout(() => {
-                        toggleSubmenuDisplay(this, true); // Forzar apertura
-                    }, 300); 
-                } else {
-                    toggleSubmenuDisplay(this); // Comportamiento normal
-                }
-            });
-        });
-
-        function toggleSubmenuDisplay(button, forceState) { 
-            const submenu = button.nextElementSibling;
-            if (!submenu || !submenu.classList.contains('submenu')) return; // Asegurar que es un submenu
-            
-            const icon = button.querySelector('.submenu-icon-indicator');
-            let expand;
-
-            if (typeof forceState === 'boolean') {
-                expand = forceState;
-            } else {
-                expand = !submenu.classList.contains('expanded');
-            }
-
-            submenu.classList.toggle('expanded', expand);
-            if(icon && icon.classList.contains('submenu-icon-indicator')) { // Chequeo extra de la clase del icono
-                 icon.classList.toggle('rotated', expand);
-            }
-
-            button.setAttribute('aria-expanded', String(expand));
-            submenu.setAttribute('aria-hidden', String(!expand));
-        }
-
-        // Cargar contenido inicial
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar contenido inicial si existe el enlace y htmx está disponible
-            const initialLink = sidebar.querySelector('a[hx-get="./content/index_content.html"]');
-            if (initialLink && typeof htmx !== 'undefined' && htmx.ajax) { 
-                 htmx.ajax('GET', initialLink.getAttribute('hx-get'), { target: '#mainContent', swap: 'innerHTML'});
-            }
-            // Aplicar estado del sidebar al cargar
-            applySidebarState(isSidebarExpanded); 
-        });
-
-    </script>
 </body>
 </html>
