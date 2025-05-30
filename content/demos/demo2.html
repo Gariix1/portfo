@@ -30,7 +30,7 @@
                         'html-bg-light': '#f1f5f9', 
                         'html-bg-dark': '#111827',
                         // Colores para tarjetas de tutorial
-                        'card-tutorial-bg-light': '#f3f4f6', 'card-tutorial-bg-dark': '#27272a', // Un poco más oscuro para dark mode
+                        'card-tutorial-bg-light': '#f3f4f6', 'card-tutorial-bg-dark': '#27272a', 
                         'card-tutorial-hover-light': '#e5e7eb', 'card-tutorial-hover-dark': '#3f3f46',
                     },
                     animation: {
@@ -136,7 +136,7 @@
             backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); 
         }
         .toast-notification.mobile {
-            bottom: calc(3.5rem + 20px); /* Navbar height (approx 56px = 3.5rem) + 20px margin */
+            bottom: calc(3.5rem + 20px); 
             left: 50%; 
         }
         .toast-notification.desktop {
@@ -156,20 +156,19 @@
             will-change: transform; 
         }
 
-        /* Estilos para Tarjetas de Tutorial */
         .tutorial-card {
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
         }
         .tutorial-card:hover {
-            transform: translateY(-5px) scale(1.03); /* Efecto hover más pronunciado */
+            transform: translateY(-5px) scale(1.03); 
         }
         .tutorial-card-icon-container {
-            height: 80px; /* Reducido para mejor proporción en 2 columnas */
-            border-radius: 0.75rem; /* Más redondeado */
+            height: 80px; 
+            border-radius: 0.75rem; 
         }
         .tutorial-card-icon-container i {
-            font-size: 2.5rem; /* Ajustado */
+            font-size: 2.5rem; 
         }
         .keyword-tag {
             display: inline-block;
@@ -366,16 +365,15 @@
             { id: 'rec3', title: 'Diseño UX Inspirador', type: 'Recursos', image: 'https://placehold.co/400x400/ec4899/ffffff?text=UX&font=inter', color: 'bg-pink-500' },
         ];
         
-        // Datos de los Tutoriales con Temas de Color
         const tutorials = [
             {
                 id: 'tutorial-modo-oscuro',
                 title: 'Modo Oscuro',
-                cardDescription: 'Cambia el look. Fácil y rápido.',
+                cardDescription: 'Perfil > Config. General > Interruptor "Modo Oscuro".',
                 modalTitle: 'Explorando el Modo Oscuro',
                 icon: 'fas fa-moon',
                 keywords: ['Perfil', 'Modo Oscuro (toggle)', 'Cambio Instantáneo', 'Visualmente Cómodo', 'Guardado Automático'],
-                modalDescription: 'Activa el modo oscuro para una experiencia visual diferente, ideal para entornos con poca luz. Tu preferencia se guarda para la próxima vez.',
+                modalDescription: 'Activa el modo oscuro para una experiencia visual diferente. Encuéntralo en tu Perfil, sección Configuración General.',
                 colorTheme: {
                     bgLight: 'bg-indigo-100', iconLight: 'text-indigo-500',
                     bgDark: 'bg-indigo-700/40', iconDark: 'text-indigo-400',
@@ -386,11 +384,11 @@
             {
                 id: 'tutorial-crear-posts',
                 title: 'Crear Posts',
-                cardDescription: 'Comparte tus ideas. ¡Simple!',
+                cardDescription: 'Inicio > Acciones Rápidas > Botón "Nuevo Post".',
                 modalTitle: 'Publicando tu Primer Post',
                 icon: 'fas fa-plus-circle',
                 keywords: ['Inicio', 'Botón +', 'Modal Interactivo', 'Título', 'Icono', 'Contenido', 'Categoría', 'Publicar', 'Feedback Toast', 'Visible en Feed'],
-                modalDescription: 'Desde la pestaña Inicio (Abajo de estas guías rápidas), usa el botón "+" para abrir el modal, completa los campos y comparte tus pensamientos con la comunidad.',
+                modalDescription: 'Desde la pestaña Inicio, busca "Acciones Rápidas" (justo debajo de estas guías) y usa el botón "Nuevo Post" para abrir el modal, completa los campos y comparte.',
                 colorTheme: {
                     bgLight: 'bg-emerald-100', iconLight: 'text-emerald-500',
                     bgDark: 'bg-emerald-700/40', iconDark: 'text-emerald-400',
@@ -400,12 +398,12 @@
             },
             {
                 id: 'tutorial-navegacion',
-                title: 'Navegación Responsiva',
-                cardDescription: 'Se adapta a ti, en cualquier pantalla.',
+                title: 'Navegación',
+                cardDescription: 'Escritorio: Barra lateral. Móvil: Barra inferior.',
                 modalTitle: 'Descubriendo la Navegación Adaptable',
                 icon: 'fas fa-mobile-alt',
                 keywords: ['Escritorio: Barra Lateral', 'Móvil: Barra Inferior', 'Transición Automática', 'Iconos Claros', 'Acceso Rápido'],
-                modalDescription: 'La interfaz se ajusta automáticamente a tu dispositivo, ofreciendo una barra lateral en escritorio y una barra inferior compacta en móviles.',
+                modalDescription: 'La interfaz se ajusta automáticamente: barra lateral en pantallas grandes y una barra inferior compacta en móviles para fácil acceso a las pestañas.',
                 colorTheme: {
                     bgLight: 'bg-sky-100', iconLight: 'text-sky-500',
                     bgDark: 'bg-sky-700/40', iconDark: 'text-sky-400',
@@ -415,12 +413,12 @@
             },
             {
                 id: 'tutorial-alertas',
-                title: 'Alertas al Instante',
-                cardDescription: 'No te pierdas ninguna novedad.',
+                title: 'Alertas',
+                cardDescription: 'Navegación > Pestaña "Alertas" (icono campana).',
                 modalTitle: 'Gestionando tus Alertas',
                 icon: 'fas fa-bell',
                 keywords: ['Pestaña Alertas', 'Lista Clara', 'Leídas/No Leídas', 'Badge Contador', 'Marcar Leídas', 'Notificaciones de Acciones'],
-                modalDescription: 'Revisa tus notificaciones en la pestaña Alertas. Mantente al día con las interacciones y actualizaciones importantes.',
+                modalDescription: 'Revisa tus notificaciones en la pestaña "Alertas" (el icono de campana en la navegación). Mantente al día con las interacciones.',
                  colorTheme: {
                     bgLight: 'bg-rose-100', iconLight: 'text-rose-500',
                     bgDark: 'bg-rose-700/40', iconDark: 'text-rose-400',
@@ -430,12 +428,12 @@
             },
             {
                 id: 'tutorial-perfil',
-                title: 'Personaliza tu Perfil',
-                cardDescription: 'Tu espacio, tu estilo. Edítalo.',
+                title: 'Tu Perfil',
+                cardDescription: 'Perfil > "Editar Perfil" o clic en tu foto/icono.',
                 modalTitle: 'Configurando tu Espacio Personal',
                 icon: 'fas fa-user-edit',
                 keywords: ['Pestaña Perfil', 'Ver Info', 'Cambiar Icono', 'Editar Perfil (modal)', 'Nombre', 'Rol', 'Biografía', 'Guardar Cambios'],
-                modalDescription: 'Haz tuyo el espacio. Actualiza tu nombre, rol, biografía y elige un ícono que te represente desde la pestaña Perfil.',
+                modalDescription: 'Haz tuyo el espacio. Actualiza tu nombre, rol, biografía y elige un ícono que te represente desde la pestaña "Perfil", usando el botón "Editar Perfil" o haciendo clic en tu foto.',
                 colorTheme: {
                     bgLight: 'bg-amber-100', iconLight: 'text-amber-500',
                     bgDark: 'bg-amber-700/40', iconDark: 'text-amber-400',
@@ -446,7 +444,7 @@
         ];
 
 
-        const DOM = { /* Cache de elementos DOM */
+        const DOM = { 
             html: document.documentElement,
             mainContentArea: document.getElementById('main-content-area'),
             headerSubtitle: document.getElementById('headerSubtitle'),
@@ -482,7 +480,6 @@
             editProfileForm: document.getElementById('edit-profile-form'),
             saveProfileBtn: document.getElementById('save-profile-btn'),
             accountSecurityStatus: document.getElementById('account-security-status'),
-            // Tutoriales
             tutorialCardsGrid: document.getElementById('tutorial-cards-grid'),
             modalTutorial: document.getElementById('modal-tutorial'),
             tutorialModalTitle: document.getElementById('tutorial-modal-title'),
