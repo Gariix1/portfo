@@ -262,6 +262,81 @@
                 padding-bottom: 1.5rem;
                 scroll-padding-bottom: 1.5rem;
             }
+        }
+        /* Overscroll background continuity */
+        :root {
+            --overscroll-bg-light: linear-gradient(to bottom right, #f1f5f9 0%, #f8fafc 48%, #f3f4f6 100%);
+            --overscroll-bg-dark: linear-gradient(to bottom right, #111827 0%, #111827 52%, #0f172a 100%);
+        }
+
+        html,
+        body,
+        body.bg-gradient-to-br,
+        #app-content-wrapper {
+            background-color: #f1f5f9 !important;
+            background-image: var(--overscroll-bg-light) !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            background-position: center top !important;
+        }
+
+        html.dark,
+        html.dark body,
+        html.dark body.bg-gradient-to-br,
+        html.dark #app-content-wrapper {
+            background-color: #111827 !important;
+            background-image: var(--overscroll-bg-dark) !important;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            background-position: center top !important;
+        }
+
+        body {
+            position: relative;
+        }
+
+        #app-content-wrapper {
+            position: relative;
+            isolation: isolate;
+        }
+
+        #app-content-wrapper::before {
+            content: "";
+            position: fixed;
+            inset: -100vh 0;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #f1f5f9;
+            background-image: var(--overscroll-bg-light);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center top;
+        }
+
+        html.dark #app-content-wrapper::before {
+            background-color: #111827;
+            background-image: var(--overscroll-bg-dark);
+        }
+
+        main#main-content-area {
+            background: transparent;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            html,
+            body,
+            body.bg-gradient-to-br,
+            #app-content-wrapper {
+                background-attachment: scroll !important;
+                background-size: cover !important;
+            }
+
+            #app-content-wrapper::before {
+                inset: -120vh 0;
+                min-height: 340vh;
+                transform: translateZ(0);
+                will-change: transform;
+            }
         }    </style>
 </head>
 
