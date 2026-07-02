@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MObile View Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -12,11 +13,36 @@
         }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Safari fallback styles for Tailwind CDN-generated classes */
+        .bg-white\/70 {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .border-gray-200\/50 {
+            border-color: rgba(229, 231, 235, 0.5);
+        }
+
+        .backdrop-blur-lg {
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+        }
+
+        .hover\:scale-\[1\.02\]:hover {
+            transform: scale(1.02);
+        }
+
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .bg-white\/70 {
+                background-color: rgba(255, 255, 255, 0.95);
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen font-sans">
 
-    <!-- Contenedor Principal con animación de entrada -->
+    <!-- Contenedor Principal con animaciÃ³n de entrada -->
     <div class="max-w-md mx-auto min-h-screen flex flex-col transition-all duration-300" id="mainContainer">
 
         <!-- Encabezado con efecto de cristal -->
@@ -27,7 +53,7 @@
             <p class="text-gray-500 animate-fade-in">For better experience, I recommend to use a mobile device.</p>
         </header>
 
-        <!-- Sección principal con scroll suave -->
+        <!-- SecciÃ³n principal con scroll suave -->
         <main class="flex-1 overflow-y-auto p-4 space-y-6" style="scroll-behavior: smooth;">
 
             <!-- Tarjeta 1 con hover y click animations -->
@@ -77,9 +103,9 @@
                 </div>
             </div>
 
-            <!-- Lista de configuración con switches animados -->
+            <!-- Lista de configuraciÃ³n con switches animados -->
             <div class="bg-white rounded-2xl shadow-lg p-6 mb-4">
-                <h2 class="text-lg font-bold text-gray-800 mb-4">Configuración</h2>
+                <h2 class="text-lg font-bold text-gray-800 mb-4">ConfiguraciÃ³n</h2>
                 <ul class="divide-y divide-gray-100">
                     <li class="py-4 flex justify-between items-center">
                         <div class="flex items-center space-x-3">
@@ -123,7 +149,7 @@
 
         </main>
 
-        <!-- Barra de navegación con indicador activo -->
+        <!-- Barra de navegaciÃ³n con indicador activo -->
         <nav class="bg-white/70 backdrop-blur-lg border-t border-gray-200/50 sticky bottom-0">
             <div class="flex justify-between px-6 py-4">
                 <button class="flex flex-col items-center group">
@@ -162,7 +188,7 @@
     </div>
 
     <script>
-        // Animación de entrada para el perfil
+        // AnimaciÃ³n de entrada para el perfil
         const profileCard = document.getElementById('profileCard');
 
         const observer = new IntersectionObserver((entries) => {
@@ -178,7 +204,7 @@
         profileCard.style.transition = 'all 0.6s ease-out';
         observer.observe(profileCard);
 
-        // Animación de los switches
+        // AnimaciÃ³n de los switches
         document.querySelectorAll('button').forEach(button => {
             if (button.classList.contains('w-14')) {
                 button.addEventListener('click', () => {

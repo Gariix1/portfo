@@ -1,3 +1,26 @@
+$ErrorActionPreference = "Stop"
+
+Write-Host "Applying Safari + HTMX fix..." -ForegroundColor Cyan
+
+$utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+
+function Write-TextFile {
+    param(
+        [Parameter(Mandatory = $true)][string]$Path,
+        [Parameter(Mandatory = $true)][string]$Content
+    )
+
+    $fullPath = Join-Path (Get-Location) $Path
+    $dir = Split-Path $fullPath -Parent
+
+    if (!(Test-Path -LiteralPath $dir)) {
+        New-Item -ItemType Directory -Force -Path $dir | Out-Null
+    }
+
+    [System.IO.File]::WriteAllText($fullPath, $Content, $utf8NoBom)
+}
+
+$indexHtml = @'
 <!DOCTYPE html>
 <html lang="en">
 
@@ -236,7 +259,7 @@
         </nav>
     </div>
 
-    <!-- BotÃ³n de toggle -->
+    <!-- Botón de toggle -->
     <button id="toggleSidebar"
         class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out"
         aria-label="Toggle sidebar">
@@ -297,3 +320,148 @@
 </body>
 
 </html>
+'@
+
+$homePartial = @'
+<h1 class="text-3xl font-bold text-green-600 mb-4">Principal Content</h1>
+<p class="text-gray-700">This interactive homepage features animations and functionalities, such as a template
+    for a system with a scalable sidebar without using pre-built templates, following a pure style with
+    customization from scratch, specifically to showcase raw skills. In the Sidebar the <b>Portfo A</b> section,
+    the <b>Demos</b> option, there we can find cards with demos in development. By the way, this site is still
+    under construction, but it serves as a good base of the
+    <span class="highlight-word relative inline-block">design</span> and
+    <span class="highlight-word relative inline-block">development</span> that can be created.
+</p>
+'@
+
+$servicePartial = @'
+<div class="container mx-auto py-10">
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Web Design Portfolio</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+        <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="https://via.placeholder.com/400x300.png?text=Demo+1" alt="Demo 1"
+                class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 1</h2>
+                <p class="text-sm text-gray-600 mb-4">A form with real-time validations to enhance the user
+                    experience by making the information completion process more efficient.</p>
+                <a href="content/demos/demo1.html"
+                    class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
+                    más</a>
+            </div>
+        </div>
+
+        <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="https://via.placeholder.com/400x300.png?text=Demo+2" alt="Demo 2"
+                class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 2</h2>
+                <p class="text-sm text-gray-600 mb-4">Here we have a project focused on mobile design, which is
+                    still in progress. (I recommended to use a mobile device for
+                    better visualization.)</p>
+                <a href="content/demos/demo2.html"
+                    class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
+                    más</a>
+            </div>
+        </div>
+
+        <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="https://via.placeholder.com/400x300.png?text=Demo+3" alt="Demo 3"
+                class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 3 (Soon)</h2>
+                <p class="text-sm text-gray-600 mb-4">Here, there will be a new demo showcasing more designs, which
+                    is not yet implemented.</p>
+                <a href="#"
+                    class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
+                    más</a>
+            </div>
+        </div>
+
+        <div class="portfolio-item bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="https://via.placeholder.com/400x300.png?text=Demo+4" alt="Demo 4"
+                class="w-full h-48 object-cover">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-green-600 mb-2">Demo 4 (Soon)</h2>
+                <p class="text-sm text-gray-600 mb-4">Here, there will be a new demo showcasing more designs, which
+                    is not yet implemented.</p>
+                <a href="#"
+                    class="block text-center text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded">Ver
+                    más</a>
+            </div>
+        </div>
+    </div>
+</div>
+'@
+
+Write-TextFile -Path "index.html" -Content $indexHtml
+Write-TextFile -Path "content/partials/home.html" -Content $homePartial
+Write-TextFile -Path "content/partials/service1.html" -Content $servicePartial
+
+$service1Path = "content/service1.html"
+if (Test-Path -LiteralPath $service1Path) {
+    $service1 = Get-Content -LiteralPath $service1Path -Raw
+    $service1 = $service1.Replace('href="./content/demos/demo1.html"', 'href="./demos/demo1.html"')
+    $service1 = $service1.Replace('href="./content/demos/demo2.html"', 'href="./demos/demo2.html"')
+    Write-TextFile -Path $service1Path -Content $service1
+}
+
+$demo1Path = "content/demos/demo1.html"
+if (Test-Path -LiteralPath $demo1Path) {
+    $demo1 = Get-Content -LiteralPath $demo1Path -Raw
+    $demo1 = $demo1.Replace('background-attachment: fixed;', 'background-attachment: scroll;')
+    Write-TextFile -Path $demo1Path -Content $demo1
+}
+
+$demo2Path = "content/demos/demo2.html"
+if (Test-Path -LiteralPath $demo2Path) {
+    $demo2 = Get-Content -LiteralPath $demo2Path -Raw
+
+    if ($demo2 -notmatch 'tailwindcss@2\.2\.19') {
+        $demo2 = $demo2.Replace(
+            '<title>MObile View Demo</title>',
+            '<title>MObile View Demo</title>' + "`r`n" + '    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">'
+        )
+    }
+
+    if ($demo2 -notmatch 'Safari fallback styles') {
+        $fallbackStyles = @'
+    <style>
+        /* Safari fallback styles for Tailwind CDN-generated classes */
+        .bg-white\/70 {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .border-gray-200\/50 {
+            border-color: rgba(229, 231, 235, 0.5);
+        }
+
+        .backdrop-blur-lg {
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+        }
+
+        .hover\:scale-\[1\.02\]:hover {
+            transform: scale(1.02);
+        }
+
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .bg-white\/70 {
+                background-color: rgba(255, 255, 255, 0.95);
+            }
+        }
+    </style>
+'@
+        $demo2 = $demo2.Replace('</head>', $fallbackStyles + "`r`n</head>")
+    }
+
+    Write-TextFile -Path $demo2Path -Content $demo2
+}
+
+if (Test-Path -LiteralPath "_patch_tmp") {
+    Remove-Item -LiteralPath "_patch_tmp" -Recurse -Force
+}
+
+Write-Host "Done. Now run: git status" -ForegroundColor Green
