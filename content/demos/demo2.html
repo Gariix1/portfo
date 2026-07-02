@@ -178,7 +178,121 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
-    </style>
+
+        /* Safari compatibility fallbacks */
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body,
+        main#main-content-area,
+        #desktop-sidebar nav {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            html {
+                min-height: -webkit-fill-available;
+            }
+
+            body {
+                min-height: -webkit-fill-available;
+            }
+
+            .min-h-screen {
+                min-height: -webkit-fill-available !important;
+            }
+
+            .h-screen {
+                height: -webkit-fill-available !important;
+            }
+
+            .sticky {
+                position: -webkit-sticky;
+                position: sticky;
+            }
+        }
+
+        .backdrop-blur,
+        .backdrop-blur-sm {
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        .backdrop-blur-md {
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+        }
+
+        .backdrop-blur-lg {
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+        }
+
+        .backdrop-blur-xl {
+            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(24px);
+        }
+
+        .bg-white\/60 {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .bg-white\/70 {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .bg-white\/80 {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .bg-white\/90 {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .border-white\/10 {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .border-white\/20 {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .border-gray-200\/50 {
+            border-color: rgba(229, 231, 235, 0.5);
+        }
+
+        .dark .dark\:bg-gray-800\/60 {
+            background-color: rgba(31, 41, 55, 0.6);
+        }
+
+        .dark .dark\:bg-gray-800\/70 {
+            background-color: rgba(31, 41, 55, 0.7);
+        }
+
+        .dark .dark\:bg-gray-800\/80 {
+            background-color: rgba(31, 41, 55, 0.8);
+        }
+
+        .dark .dark\:bg-gray-900\/80 {
+            background-color: rgba(17, 24, 39, 0.8);
+        }
+
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .bg-white\/60,
+            .bg-white\/70,
+            .bg-white\/80 {
+                background-color: rgba(255, 255, 255, 0.96);
+            }
+
+            .dark .dark\:bg-gray-800\/60,
+            .dark .dark\:bg-gray-800\/70,
+            .dark .dark\:bg-gray-800\/80,
+            .dark .dark\:bg-gray-900\/80 {
+                background-color: rgba(17, 24, 39, 0.98);
+            }
+        }    </style>
 </head>
 
 <body class="font-inter text-text-light-primary dark:text-text-dark-primary bg-gradient-to-br from-slate-100 to-gray-100 dark:from-surface-dark dark:to-gray-900 md:flex antialiased">
