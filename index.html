@@ -11,17 +11,29 @@
     <style>
         html,
         body {
-            min-height: 100vh;
-            margin-left: 10px;
+            min-height: 100%;
+            margin: 0;
             padding: 0;
         }
 
         body {
+            min-height: 100vh;
             background: linear-gradient(-45deg, #90f3b993, #eb7ea880, #71c7e67e, #a6e6d7a6);
             background-size: 200% 200%;
             animation: gradient 15s ease infinite;
-            background-attachment: fixed;
-            /* Esto evita que el fondo se repita al scroll */
+            background-attachment: scroll;
+            overflow-x: hidden;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            html,
+            body {
+                min-height: -webkit-fill-available;
+            }
+
+            body {
+                min-height: -webkit-fill-available;
+            }
         }
 
         @keyframes gradient {
@@ -62,9 +74,7 @@
 
         .sidebar-collapsed~#mainContent {
             margin-left: 60px;
-            /* Igual al ancho de .sidebar-collapsed */
         }
-
 
         .icon {
             min-width: 1.5rem;
@@ -105,14 +115,14 @@
 
         #sidebar {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
         }
 
         #mainContent {
             background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
             border-radius: 1rem;
             margin-right: 20px;
             margin-left: 250px;
@@ -121,12 +131,29 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
 
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            #sidebar,
+            #mainContent {
+                background: rgba(255, 255, 255, 0.95);
+            }
+        }
 
-        /* Estilos para las palabras resaltadas */
+        .portfolio-item img {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .portfolio-item:hover img {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
         .highlight-word {
+            position: relative;
+            overflow: hidden;
             background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1, #96e6a1);
             background-size: 200% auto;
             color: transparent;
+            -webkit-text-fill-color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
             animation: shine 3s linear infinite;
@@ -141,7 +168,6 @@
             }
         }
 
-        /* Efecto de brillo */
         .highlight-word::after {
             content: '';
             position: absolute;
@@ -176,9 +202,9 @@
         <nav class="mt-4">
             <ul>
                 <li class="menu-item">
-                    <a href="#"
+                    <a href="index.html"
                         class="block px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center"
-                        hx-get="/content/index" hx-target="#mainContent">
+                        hx-get="content/partials/home.html" hx-target="#mainContent" hx-swap="innerHTML">
                         <i class="fas fa-home icon mr-3"></i>
                         <span class="sidebar-content">Home</span>
                     </a>
@@ -194,24 +220,26 @@
                         <i class="fas fa-chevron-down sidebar-content"></i>
                     </button>
                     <ul class="submenu pl-6 bg-green-50" aria-hidden="true">
-                        <li><a href="./content/service1.html"
+                        <li><a href="content/service1.html"
                                 class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="./content/service1.html" hx-target="#mainContent">Demos</a></li>
+                                hx-get="content/partials/service1.html" hx-target="#mainContent"
+                                hx-swap="innerHTML">Demos</a></li>
                         <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service2" hx-target="#mainContent">Soon...</a></li>
+                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content">Soon...</a>
+                        </li>
                         <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="/content/service3" hx-target="#mainContent">Soon...</a></li>
+                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content">Soon...</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
         </nav>
     </div>
 
-    <!-- Botón de toggle -->
+    <!-- BotÃ³n de toggle -->
     <button id="toggleSidebar"
-        class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out">
+        class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out"
+        aria-label="Toggle sidebar">
         <i class="fas fa-bars"></i>
     </button>
 
@@ -230,11 +258,9 @@
 
     <script>
         const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
         const toggleButton = document.getElementById('toggleSidebar');
 
-        // Asegurar que el botón de toggle esté en la posición correcta inicialmente
-        toggleButton.style.left = '208px'; // Posición inicial cuando está expandido
+        toggleButton.style.left = '208px';
 
         function toggleSidebar() {
             const isExpanded = sidebar.classList.contains('sidebar-expanded');
@@ -242,9 +268,6 @@
             sidebar.classList.toggle('sidebar-collapsed', isExpanded);
             toggleButton.style.left = isExpanded ? '16px' : '208px';
             toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
-
-            // Ya no necesitamos modificar mainContent.style.marginLeft aquí
-            // porque lo manejamos con CSS
         }
 
         toggleButton.addEventListener('click', toggleSidebar);
