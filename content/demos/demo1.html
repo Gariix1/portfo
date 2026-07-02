@@ -315,9 +315,9 @@
         const inputs = form.querySelectorAll('input, select');
 
         const patterns = {
-            name: /^[a-zA-ZÃ€-Ã¿\s]{2,200}$/,
-            Lastname: /^[a-zA-ZÃ€-Ã¿\s]{2,200}$/,
-            Address: /^[a-zA-Z0-9Ã€-Ã¿\s\#\.\,]{5,100}$/,
+            name: /^[a-zA-ZÀ-ÿ\s]{2,200}$/,
+            Lastname: /^[a-zA-ZÀ-ÿ\s]{2,200}$/,
+            Address: /^[a-zA-Z0-9À-ÿ\s\#\.\,]{5,100}$/,
             phone: /^[0-9]{7,15}$/,
             identificacion: /^[a-zA-Z0-9]{9,16}$/
         };
@@ -408,7 +408,7 @@
             button.disabled = true;
 
             setTimeout(() => {
-                showNotification('Â¡Register Completed!', 'success');
+                showNotification('¡Register Completed!', 'success');
                 button.textContent = 'Register';
                 button.disabled = false;
                 form.reset();
