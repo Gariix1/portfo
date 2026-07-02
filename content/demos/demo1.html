@@ -14,7 +14,7 @@
             background: linear-gradient(-45deg, #fdbcb4, #ade2b3, #a7d7e9, #f7d5a1);
             background-size: 400% 400%;
             animation: gradient 55s ease infinite;
-            background-attachment: fixed;
+            background-attachment: scroll;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -133,7 +133,41 @@
             color: #2563eb; /* blue-600 */
         }
 
-    </style>
+
+        /* Safari compatibility fallbacks */
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            background-attachment: scroll !important;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            html {
+                min-height: -webkit-fill-available;
+            }
+
+            body {
+                min-height: -webkit-fill-available;
+            }
+
+            .min-h-screen {
+                min-height: -webkit-fill-available !important;
+            }
+
+            .h-screen {
+                height: -webkit-fill-available !important;
+            }
+
+            .sticky {
+                position: -webkit-sticky;
+                position: sticky;
+            }
+        }    </style>
 </head>
 
 <body class="bg-gradient-to-br from-orange-300 via-green-200 to-blue-300">

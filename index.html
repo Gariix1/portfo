@@ -44,7 +44,7 @@
           }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,7 +75,108 @@
         }
         /* Estilo para evitar el FOUC (Flash Of Unstyled Content) en elementos Alpine */
         [x-cloak] { display: none !important; }
-    </style>
+
+        /* Safari compatibility fallbacks */
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            html {
+                min-height: -webkit-fill-available;
+            }
+
+            body {
+                min-height: -webkit-fill-available;
+            }
+
+            .min-h-screen {
+                min-height: -webkit-fill-available !important;
+            }
+
+            .h-screen {
+                height: -webkit-fill-available !important;
+            }
+
+            .sticky {
+                position: -webkit-sticky;
+                position: sticky;
+            }
+        }
+
+        .backdrop-blur,
+        .backdrop-blur-sm {
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        .backdrop-blur-md {
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+        }
+
+        .backdrop-blur-lg {
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
+        }
+
+        .backdrop-blur-xl {
+            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(24px);
+        }
+
+        .bg-white\/60 {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .bg-white\/70 {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .bg-white\/80 {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .bg-white\/90 {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark .dark\:bg-gray-800\/60 {
+            background-color: rgba(31, 41, 55, 0.6);
+        }
+
+        .dark .dark\:bg-gray-800\/70 {
+            background-color: rgba(31, 41, 55, 0.7);
+        }
+
+        .dark .dark\:bg-gray-800\/80 {
+            background-color: rgba(31, 41, 55, 0.8);
+        }
+
+        .dark .dark\:bg-gray-900\/80 {
+            background-color: rgba(17, 24, 39, 0.8);
+        }
+
+        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+            .bg-white\/60,
+            .bg-white\/70,
+            .bg-white\/80 {
+                background-color: rgba(255, 255, 255, 0.96);
+            }
+
+            .dark .dark\:bg-gray-800\/60,
+            .dark .dark\:bg-gray-800\/70,
+            .dark .dark\:bg-gray-800\/80,
+            .dark .dark\:bg-gray-900\/80 {
+                background-color: rgba(17, 24, 39, 0.98);
+            }
+        }    </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
 
