@@ -178,7 +178,91 @@
             font-size: 0.75rem;
             font-weight: 500;
         }
-    </style>
+
+        /* Overscroll, viewport and safe-area refinements */
+        html {
+            min-height: 100%;
+            height: auto !important;
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+            overscroll-behavior-y: auto;
+        }
+
+        body {
+            min-height: 100%;
+            height: auto !important;
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+            overscroll-behavior-y: auto;
+        }
+
+        #app-content-wrapper {
+            min-height: 100svh;
+            min-height: 100dvh;
+        }
+
+        #desktop-sidebar {
+            height: 100svh;
+            height: 100dvh;
+        }
+
+        #desktop-sidebar nav,
+        main#main-content-area {
+            min-height: 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        main#main-content-area {
+            overscroll-behavior-y: auto;
+            padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+            scroll-padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        #desktop-sidebar nav {
+            overscroll-behavior-y: contain;
+        }
+
+        #mobile-navbar {
+            bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        .toast-notification.mobile {
+            bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+        }
+
+        .modal-content {
+            max-height: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+        }
+
+        .modal-overlay.is-closing {
+            animation: fadeOut 0.25s ease-in forwards;
+            pointer-events: none;
+        }
+
+        .modal-overlay.is-closing .modal-content {
+            animation: modalLeave 0.25s cubic-bezier(0.55, 0.09, 0.68, 0.53) forwards;
+        }
+
+        @supports not (height: 100dvh) {
+            #app-content-wrapper {
+                min-height: -webkit-fill-available;
+            }
+
+            #desktop-sidebar {
+                height: -webkit-fill-available;
+            }
+
+            .modal-content {
+                max-height: calc(100vh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+            }
+        }
+
+        @media (min-width: 768px) {
+            main#main-content-area {
+                padding-bottom: 1.5rem;
+                scroll-padding-bottom: 1.5rem;
+            }
+        }    </style>
 </head>
 
 <body class="font-inter text-text-light-primary dark:text-text-dark-primary bg-gradient-to-br from-slate-100 to-gray-100 dark:from-surface-dark dark:to-gray-900 md:flex antialiased">
@@ -585,10 +669,12 @@
             open: (modalElement) => {
                 if (!modalElement) return;
                 UI.removeClass(modalElement, 'hidden');
+                UI.removeClass(modalElement, 'is-closing');
                 void modalElement.offsetWidth; 
                 UI.removeClass(modalElement.querySelector('.modal-content'),'animate-modal-leave'); 
                 UI.addClass(modalElement.querySelector('.modal-content'),'animate-modal-enter');
                 DOM.html.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden';
             },
             close: (modalElement) => {
                 if (!modalElement || !UI.isVisible(modalElement) || UI.isVisible(modalElement.querySelector('.animate-modal-leave'))) return;
@@ -596,13 +682,15 @@
                 const modalContent = modalElement.querySelector('.modal-content');
                 UI.removeClass(modalContent,'animate-modal-enter'); 
                 UI.addClass(modalContent,'animate-modal-leave');
-                UI.addClass(modalElement, 'modal-overlay.hidden'); 
+                UI.addClass(modalElement, 'is-closing'); 
 
                 setTimeout(() => {
                     UI.addClass(modalElement, 'hidden'); 
+                    UI.removeClass(modalElement, 'is-closing');
                     UI.removeClass(modalContent,'animate-modal-leave'); 
                     if (!document.querySelector('.modal-overlay:not(.hidden)')) {
                         DOM.html.style.overflow = '';
+                        document.body.style.overflow = '';
                     }
                 }, 250); 
             },
@@ -620,7 +708,7 @@
                 const dmSwitch = DOM.darkModeSwitch;
                 UI.toggleClass(dmSwitch, 'bg-primary-dark', isDarkMode);
                 UI.toggleClass(dmSwitch, 'bg-gray-300', !isDarkMode); 
-                UI.toggleClass(dmSwitch, 'dark:bg-gray-700', !isDarkMode && isDarkMode); 
+                UI.toggleClass(dmSwitch, 'dark:bg-gray-700', !isDarkMode); 
                 dmSwitch.querySelector('.toggle-dot').style.transform = isDarkMode ? 'translateX(20px)' : 'translateX(0)';
                 dmSwitch.dataset.active = isDarkMode.toString();
                 
