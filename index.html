@@ -1,299 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Interactive Demos</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/htmx.org@1.8.4"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        html,
-        body {
-            min-height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            min-height: 100vh;
-            background: linear-gradient(-45deg, #90f3b993, #eb7ea880, #71c7e67e, #a6e6d7a6);
-            background-size: 200% 200%;
-            animation: gradient 15s ease infinite;
-            background-attachment: scroll;
-            overflow-x: hidden;
-        }
-
-        @supports (-webkit-touch-callout: none) {
-            html,
-            body {
-                min-height: -webkit-fill-available;
-            }
-
-            body {
-                min-height: -webkit-fill-available;
-            }
-        }
-
-        @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .sidebar-expanded {
-            width: 250px;
-        }
-
-        .sidebar-collapsed {
-            width: 60px;
-        }
-
-        .sidebar-content {
-            transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
-        }
-
-        .sidebar-collapsed .sidebar-content:not(.icon) {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .sidebar-expanded .sidebar-content {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .sidebar-collapsed~#mainContent {
-            margin-left: 60px;
-        }
-
-        .icon {
-            min-width: 1.5rem;
-        }
-
-        #toggleSidebar {
-            transition: all 0.3s ease-out;
-            z-index: 60;
-        }
-
-        .sidebar-collapsed #toggleSidebar {
-            transform: translateX(50px);
-        }
-
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: all 0.3s ease-out;
-            opacity: 0;
-            transform: translateY(-10px);
-            visibility: hidden;
-        }
-
-        .submenu.expanded {
-            max-height: 500px;
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
-        }
-
-        .fa-chevron-down {
-            transition: transform 0.3s ease-out;
-        }
-
-        .fa-chevron-down.rotated {
-            transform: rotate(180deg);
-        }
-
-        #sidebar {
-            background: rgba(255, 255, 255, 0.8);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        #mainContent {
-            background: rgba(255, 255, 255, 0.8);
-            -webkit-backdrop-filter: blur(8px);
-            backdrop-filter: blur(8px);
-            border-radius: 1rem;
-            margin-right: 20px;
-            margin-left: 250px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
-            #sidebar,
-            #mainContent {
-                background: rgba(255, 255, 255, 0.95);
-            }
-        }
-
-        .portfolio-item img {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .portfolio-item:hover img {
-            transform: scale(1.05);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .highlight-word {
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(120deg, #ff6b6b, #4ecdc4, #45b7d1, #96e6a1);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-text-fill-color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: shine 3s linear infinite;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-            padding: 0 4px;
-        }
-
-        @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
-        }
-
-        .highlight-word::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portafolio de Gary Taboada: desarrollo de software, APIs, integraciones, automatización e IA aplicada." />
+  <title>Gary Taboada | Desarrollador de Software</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .mesh {
+      background:
+        radial-gradient(circle at 10% 15%, rgba(16,185,129,.18), transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(59,130,246,.18), transparent 28%),
+        radial-gradient(circle at 75% 80%, rgba(139,92,246,.15), transparent 30%),
+        #07111f;
+    }
+    .glass {
+      background: rgba(15, 23, 42, .62);
+      border: 1px solid rgba(148, 163, 184, .16);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .chip { border: 1px solid rgba(148,163,184,.22); }
+  </style>
 </head>
+<body class="mesh min-h-screen text-slate-100">
+  <header class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <a href="#inicio" class="font-extrabold tracking-tight text-white">GT<span class="text-emerald-400">.</span></a>
+      <div class="flex items-center gap-5 text-sm text-slate-300">
+        <a class="hover:text-white" href="#proyectos">Proyectos</a>
+        <a class="hover:text-white" href="#stack">Stack</a>
+        <a class="hover:text-white" href="#contacto">Contacto</a>
+      </div>
+    </nav>
+  </header>
 
-<body class="flex">
-    <!-- Sidebar -->
-    <div id="sidebar"
-        class="sidebar-expanded fixed top-0 left-0 h-full text-gray-800 transition-all duration-300 ease-in-out z-50 shadow-lg border-r border-gray-200 overflow-x-hidden"
-        aria-label="Sidebar">
-        <div class="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 class="text-xl font-bold text-green-600 sidebar-content">Menu</h2>
-        </div>
-        <nav class="mt-4">
-            <ul>
-                <li class="menu-item">
-                    <a href="index.html"
-                        class="block px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center"
-                        hx-get="content/partials/home.html" hx-target="#mainContent" hx-swap="innerHTML">
-                        <i class="fas fa-home icon mr-3"></i>
-                        <span class="sidebar-content">Home</span>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <button
-                        class="w-full text-left px-4 py-2 hover:bg-green-100 transition-colors duration-200 focus:outline-none focus:bg-green-200 flex items-center justify-between"
-                        aria-expanded="false">
-                        <div class="flex items-center">
-                            <i class="fas fa-cogs icon mr-3"></i>
-                            <span class="sidebar-content">Portfo A</span>
-                        </div>
-                        <i class="fas fa-chevron-down sidebar-content"></i>
-                    </button>
-                    <ul class="submenu pl-6 bg-green-50" aria-hidden="true">
-                        <li><a href="content/service1.html"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content"
-                                hx-get="content/partials/service1.html" hx-target="#mainContent"
-                                hx-swap="innerHTML">Demos</a></li>
-                        <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content">Soon...</a>
-                        </li>
-                        <li><a href="#"
-                                class="block px-4 py-1 hover:bg-green-200 transition-colors duration-200 focus:outline-none focus:bg-green-300 sidebar-content">Soon...</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-    <!-- BotÃ³n de toggle -->
-    <button id="toggleSidebar"
-        class="fixed top-4 left-52 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out"
-        aria-label="Toggle sidebar">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Contenido principal -->
-    <main id="mainContent" class="flex-grow p-6 ml-60 transition-all duration-300 ease-in-out">
-        <h1 class="text-3xl font-bold text-green-600 mb-4">Principal Content</h1>
-        <p class="text-gray-700">This interactive homepage features animations and functionalities, such as a template
-            for a system with a scalable sidebar without using pre-built templates, following a pure style with
-            customization from scratch, specifically to showcase raw skills. In the Sidebar the <b>Portfo A</b> section,
-            the <b>Demos</b> option, there we can find cards with demos in development. By the way, this site is still
-            under construction, but it serves as a good base of the
-            <span class="highlight-word relative inline-block">design</span> and
-            <span class="highlight-word relative inline-block">development</span> that can be created.
+  <main>
+    <section id="inicio" class="mx-auto grid max-w-6xl gap-10 px-5 pb-20 pt-20 md:grid-cols-[1.25fr_.75fr] md:pt-28">
+      <div>
+        <p class="mb-4 text-sm font-semibold uppercase tracking-[.22em] text-emerald-400">Software · APIs · Automatización</p>
+        <h1 class="max-w-4xl text-5xl font-extrabold leading-[1.05] tracking-tight text-white md:text-7xl">
+          Gary Taboada
+        </h1>
+        <h2 class="mt-4 text-2xl font-semibold text-slate-200 md:text-3xl">Desarrollador de Software</h2>
+        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+          Construyo soluciones de principio a fin: backend, APIs, interfaces web, persistencia de datos e integraciones.
+          Actualmente estoy incorporando IA generativa a productos reales, manteniendo separada la lógica determinística
+          de las tareas donde un modelo aporta valor.
         </p>
-    </main>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#proyectos" class="rounded-xl bg-emerald-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-emerald-300">Ver proyectos</a>
+          <a href="https://github.com/Gariix1" target="_blank" rel="noreferrer" class="rounded-xl border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition hover:bg-white/10">GitHub</a>
+        </div>
+      </div>
 
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const toggleButton = document.getElementById('toggleSidebar');
+      <aside class="glass rounded-3xl p-6 shadow-2xl shadow-black/20">
+        <p class="text-sm font-semibold text-slate-400">Enfoque</p>
+        <div class="mt-5 space-y-5">
+          <div>
+            <p class="font-semibold text-white">Backend & APIs</p>
+            <p class="mt-1 text-sm leading-6 text-slate-400">Servicios REST, validaciones, reglas de negocio y persistencia.</p>
+          </div>
+          <div>
+            <p class="font-semibold text-white">Integraciones</p>
+            <p class="mt-1 text-sm leading-6 text-slate-400">Conexión entre aplicaciones, datos y procesos empresariales.</p>
+          </div>
+          <div>
+            <p class="font-semibold text-white">IA aplicada</p>
+            <p class="mt-1 text-sm leading-6 text-slate-400">Uso de modelos vía API para resolver tareas generativas dentro de productos existentes.</p>
+          </div>
+        </div>
+      </aside>
+    </section>
 
-        toggleButton.style.left = '208px';
+    <section id="stack" class="mx-auto max-w-6xl px-5 py-16">
+      <div class="mb-8">
+        <p class="text-sm font-semibold uppercase tracking-[.2em] text-emerald-400">Tecnologías</p>
+        <h2 class="mt-2 text-3xl font-bold text-white">Stack con el que construyo</h2>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">Python</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">FastAPI</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">Flask</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">Java</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">TypeScript</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">JavaScript</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">React</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">SQL</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">SQLite</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">REST APIs</span>
+        <span class="chip rounded-full bg-white/5 px-4 py-2 text-sm">Git</span>
+      </div>
+    </section>
 
-        function toggleSidebar() {
-            const isExpanded = sidebar.classList.contains('sidebar-expanded');
-            sidebar.classList.toggle('sidebar-expanded', !isExpanded);
-            sidebar.classList.toggle('sidebar-collapsed', isExpanded);
-            toggleButton.style.left = isExpanded ? '16px' : '208px';
-            toggleButton.innerHTML = '<i class="fas fa-bars"></i>';
-        }
+    <section id="proyectos" class="mx-auto max-w-6xl px-5 py-16">
+      <div class="mb-8">
+        <p class="text-sm font-semibold uppercase tracking-[.2em] text-emerald-400">Proyectos</p>
+        <h2 class="mt-2 text-3xl font-bold text-white">Lo que he construido</h2>
+        <p class="mt-3 max-w-2xl text-slate-400">Prioricé proyectos con código real y arquitectura visible sobre una lista larga de demos incompletas.</p>
+      </div>
 
-        toggleButton.addEventListener('click', toggleSidebar);
+      <div class="grid gap-6 md:grid-cols-2">
+        <article class="glass rounded-3xl p-7 md:col-span-2">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div class="mb-3 inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-semibold text-emerald-300">Proyecto destacado</div>
+              <h3 class="text-2xl font-bold text-white">Frendo · Secret Friend Web App</h3>
+            </div>
+            <a href="https://github.com/Gariix1/frendo_project" target="_blank" rel="noreferrer" class="text-sm font-semibold text-emerald-300 hover:text-emerald-200">Ver repositorio →</a>
+          </div>
+          <p class="mt-4 max-w-4xl leading-7 text-slate-300">
+            Aplicación full-stack para organizar juegos de amigo secreto sin cuentas. Incluye API con FastAPI,
+            frontend React + TypeScript, persistencia SQLite, autenticación administrativa, tokens únicos,
+            reglas de sorteo, listas de deseos, enlaces compartibles y pruebas unitarias.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-2 text-xs text-slate-300">
+            <span class="chip rounded-full bg-white/5 px-3 py-1">Python</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">FastAPI</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">React</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">TypeScript</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">SQLite</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">REST</span>
+          </div>
+          <div class="mt-6 rounded-2xl border border-violet-400/20 bg-violet-400/10 p-4">
+            <p class="font-semibold text-violet-200">IA aplicada · en desarrollo</p>
+            <p class="mt-1 text-sm leading-6 text-slate-300">Asistente de regalos que usa un modelo generativo para recomendaciones, mientras presupuesto, permisos, sorteo y reglas de negocio permanecen en lógica tradicional.</p>
+          </div>
+        </article>
 
-        document.querySelectorAll('.menu-item > button').forEach(button => {
-            button.addEventListener('click', function () {
-                if (sidebar.classList.contains('sidebar-collapsed')) {
-                    toggleSidebar();
-                    setTimeout(() => toggleSubmenu(this), 300);
-                } else {
-                    toggleSubmenu(this);
-                }
-            });
-        });
+        <article class="glass rounded-3xl p-7">
+          <h3 class="text-xl font-bold text-white">BI Landing Page</h3>
+          <p class="mt-3 leading-7 text-slate-300">Aplicación Flask con renderizado del lado del servidor, formularios, validaciones y flujos de inscripción para equipos y clubes.</p>
+          <div class="mt-5 flex flex-wrap gap-2 text-xs">
+            <span class="chip rounded-full bg-white/5 px-3 py-1">Python</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">Flask</span>
+            <span class="chip rounded-full bg-white/5 px-3 py-1">HTML</span>
+          </div>
+          <a href="https://github.com/Gariix1/bi_landing_page" target="_blank" rel="noreferrer" class="mt-6 inline-block text-sm font-semibold text-emerald-300 hover:text-emerald-200">Ver repositorio →</a>
+        </article>
 
-        function toggleSubmenu(button) {
-            const submenu = button.nextElementSibling;
-            const icon = button.querySelector('.fa-chevron-down');
+        <article class="glass rounded-3xl p-7">
+          <h3 class="text-xl font-bold text-white">Demos de interfaz</h3>
+          <p class="mt-3 leading-7 text-slate-300">Ejercicios de UI y validación construidos desde cero para experimentar con interacción, responsive design y experiencia de usuario.</p>
+          <a href="content/service1.html" class="mt-6 inline-block text-sm font-semibold text-emerald-300 hover:text-emerald-200">Ver demos →</a>
+        </article>
+      </div>
+    </section>
 
-            submenu.classList.toggle('expanded');
-            icon.classList.toggle('rotated');
+    <section class="mx-auto max-w-6xl px-5 py-16">
+      <div class="glass rounded-3xl p-8 md:p-10">
+        <p class="text-sm font-semibold uppercase tracking-[.2em] text-violet-300">Criterio de ingeniería</p>
+        <h2 class="mt-2 text-3xl font-bold text-white">IA cuando aporta valor; lógica tradicional cuando debe ser determinística.</h2>
+        <div class="mt-7 grid gap-6 md:grid-cols-2">
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p class="font-semibold text-white">Lógica tradicional</p>
+            <p class="mt-2 text-sm leading-6 text-slate-400">Validaciones, permisos, presupuesto, persistencia, estados y reglas que deben producir resultados predecibles.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p class="font-semibold text-white">IA generativa</p>
+            <p class="mt-2 text-sm leading-6 text-slate-400">Interpretación de preferencias, recomendaciones y generación de alternativas donde la flexibilidad del modelo sí ayuda.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            button.setAttribute('aria-expanded', submenu.classList.contains('expanded'));
-            submenu.setAttribute('aria-hidden', !submenu.classList.contains('expanded'));
-        }
-    </script>
+    <section id="contacto" class="mx-auto max-w-6xl px-5 pb-24 pt-16 text-center">
+      <p class="text-sm font-semibold uppercase tracking-[.2em] text-emerald-400">Contacto</p>
+      <h2 class="mt-3 text-4xl font-bold text-white">¿Hablamos?</h2>
+      <p class="mx-auto mt-4 max-w-xl text-slate-400">Puedes revisar mi código, proyectos y evolución directamente en GitHub.</p>
+      <a href="https://github.com/Gariix1" target="_blank" rel="noreferrer" class="mt-7 inline-flex rounded-xl bg-white px-5 py-3 font-semibold text-slate-950 transition hover:bg-slate-200">github.com/Gariix1</a>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 px-5 py-7 text-center text-sm text-slate-500">
+    Gary Taboada · Portafolio de desarrollo de software
+  </footer>
 </body>
-
 </html>
