@@ -5,13 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Portafolio profesional de Gary Taboada, desarrollador de software con experiencia en aplicaciones web y móviles, backend, sistemas empresariales, ERP Dynamics AX 2012 R3, APIs, integraciones y QA técnico.">
     <meta name="theme-color" content="#15803d">
+    <link rel="canonical" href="https://gariix1.github.io/portfo/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_EC">
+    <meta property="og:title" content="Portafolio | Gary Taboada">
+    <meta property="og:description" content="Desarrollador de software: aplicaciones web y móviles, backend, ERP, APIs e integraciones.">
+    <meta property="og:url" content="https://gariix1.github.io/portfo/">
+    <meta name="twitter:card" content="summary">
     <title>Portafolio | Gary Taboada</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <script>
+        /* Antes de pintar: activa .js (animaciones de entrada) y aplica el tema guardado, sin destello. */
+        (function (d) {
+            d.classList.add('js');
+            try {
+                var t = localStorage.getItem('portfolio-theme');
+                if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) d.classList.add('dark');
+            } catch (e) {}
+        })(document.documentElement);
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/shared.css">
     <link rel="stylesheet" href="assets/styles.css">
+    <script src="assets/shared.js" defer></script>
     <script src="assets/app.js" defer></script>
 </head>
 <body>
@@ -35,23 +55,13 @@
                 <button class="icon-button theme-toggle" type="button" aria-label="Activar modo oscuro" aria-pressed="false">
                     <i class="fa-solid fa-moon" aria-hidden="true"></i>
                 </button>
-                <button class="icon-button menu-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
-                    <i class="fa-solid fa-bars" aria-hidden="true"></i>
-                </button>
             </div>
         </div>
-
-        <nav id="mobile-menu" class="mobile-menu" aria-label="Navegación móvil" hidden>
-            <a href="#perfil">Perfil</a>
-            <a href="#experiencia">Experiencia</a>
-            <a href="#demos">Demos</a>
-            <a href="#contacto">Contacto</a>
-        </nav>
     </header>
 
     <main id="contenido-principal" class="container main-content">
         <section id="perfil" class="panel profile-panel" aria-labelledby="profile-title">
-            <div class="profile-heading">
+            <div class="profile-heading reveal">
                 <div class="avatar" aria-hidden="true">GT</div>
                 <div>
                     <h1 id="profile-title">Gary Taboada</h1>
@@ -59,8 +69,8 @@
                 </div>
             </div>
 
-            <div class="profile-grid" style="margin-top: 2rem;">
-                <article>
+            <div class="profile-grid">
+                <article class="reveal" style="--i:1">
                     <h2>Perfil profesional</h2>
                     <div class="prose">
                         <p>Desarrollador de software con experiencia en <strong>aplicaciones web y móviles</strong>, <strong>backend con Java</strong>, <strong>sistemas empresariales</strong>, <strong>ERP Dynamics AX 2012 R3</strong>, <strong>APIs</strong>, <strong>webhooks</strong>, <strong>consultas SQL</strong>, pruebas con <strong>Cypress/Postman</strong> e <strong>integración de datos</strong>.</p>
@@ -68,7 +78,7 @@
                     </div>
                 </article>
 
-                <aside id="contacto" aria-labelledby="contact-title">
+                <aside id="contacto" class="reveal" style="--i:2" aria-labelledby="contact-title">
                     <h2 id="contact-title">Contacto</h2>
                     <ul class="contact-list">
                         <li><i class="fa-solid fa-envelope" aria-hidden="true"></i><a href="mailto:fasza212@gmail.com">fasza212@gmail.com</a></li>
@@ -82,28 +92,28 @@
 
             <section class="profile-section" aria-labelledby="tech-title">
                 <h2 id="tech-title">Habilidades técnicas</h2>
-                <div class="tech-grid">
-                    <article class="info-card">
+                <div class="tech-grid" data-stagger="pop">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-server" aria-hidden="true"></i>Backend</h3>
                         <div class="badges"><span>Java</span><span>Python</span><span>PHP</span><span>C#</span><span>Node.js</span><span>REST APIs</span><span>SOAP</span><span>Webhooks</span></div>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>Frontend y móvil</h3>
                         <div class="badges"><span>Angular</span><span>TypeScript</span><span>React Native</span><span>PrimeNG</span><span>Tailwind CSS</span><span>Bootstrap</span></div>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-database" aria-hidden="true"></i>Bases de datos</h3>
                         <div class="badges"><span>MySQL</span><span>SQL Server</span><span>OracleDB</span><span>PostgreSQL</span><span>SQL</span><span>Procedures</span><span>Triggers</span></div>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-gears" aria-hidden="true"></i>ERP</h3>
                         <div class="badges"><span>Dynamics AX 2012 R3</span><span>X++</span><span>MorphX</span><span>C# ETLs</span><span>Facturación electrónica</span></div>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-vial-circle-check" aria-hidden="true"></i>QA y herramientas</h3>
                         <div class="badges"><span>GitLab</span><span>GitHub</span><span>Jira / Atlassian</span><span>Postman</span><span>Cypress</span><span>Figma</span><span>Lucidchart</span></div>
                     </article>
-                    <article class="info-card">
+                    <article class="info-card lift">
                         <h3><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Proyecto personal · IA aplicada</h3>
                         <div class="badges"><span>FastAPI</span><span>React</span><span>TypeScript</span><span>SQLite</span><span>OpenAI API</span></div>
                     </article>
@@ -112,7 +122,7 @@
 
             <section id="experiencia" class="profile-section" aria-labelledby="experience-title">
                 <h2 id="experience-title">Experiencia</h2>
-                <ul class="project-list">
+                <ul class="project-list" data-stagger>
                     <li>
                         <strong>Desarrollador de Software y QA Técnico · Formos S.A. | Sep 2025 – Nov 2025</strong><br>
                         Desarrollo web y móvil con Angular, TypeScript y React Native; apoyo backend con Java y APIs; validaciones técnicas y funcionales con Cypress y Postman; webhooks en Python conectados con Jira/Atlassian y trabajo con GitLab, tickets, APIs y tokens de integración.
@@ -134,20 +144,20 @@
 
             <section class="profile-section" aria-labelledby="project-title">
                 <h2 id="project-title">Proyecto personal destacado</h2>
-                <ul class="project-list">
+                <ul class="project-list" data-stagger>
                     <li><strong>Frendo · Amigo Secreto con IA aplicada:</strong> aplicación full stack con FastAPI, React, TypeScript y SQLite. Integra un asistente de regalos mediante OpenAI API, con sesiones temporales y validación de salida en backend. La IA se utiliza para recomendaciones, mientras presupuesto, permisos, sorteo y reglas críticas permanecen bajo lógica determinística.</li>
                 </ul>
             </section>
 
             <div class="two-column-sections">
-                <section class="profile-section" aria-labelledby="education-title">
+                <section class="profile-section reveal" aria-labelledby="education-title">
                     <h2 id="education-title">Educación</h2>
                     <p><strong>Tecnólogo Superior en Desarrollo de Software</strong></p>
                     <p>Instituto Tecnológico Universitario Yavirac</p>
                     <p>2021 – 2023</p>
                 </section>
 
-                <section class="profile-section" aria-labelledby="languages-title">
+                <section class="profile-section reveal" style="--i:1" aria-labelledby="languages-title">
                     <h2 id="languages-title">Idiomas</h2>
                     <p><strong>Español:</strong> Nativo</p>
                     <p><strong>Inglés:</strong> Avanzado</p>
@@ -156,35 +166,35 @@
         </section>
 
         <section id="demos" class="demos-section" aria-labelledby="demos-title">
-            <h2 id="demos-title">Demos y proyectos</h2>
-            <p class="section-intro">Demostraciones interactivas y proyectos personales que complementan mi experiencia profesional.</p>
+            <h2 id="demos-title" class="reveal">Demos y proyectos</h2>
+            <p class="section-intro reveal" style="--i:1">Demostraciones interactivas y proyectos personales que complementan mi experiencia profesional.</p>
 
-            <div class="demo-grid">
-                <article class="demo-card">
-                    <img src="https://placehold.co/600x400/34D399/FFFFFF?text=Demo+Formulario" alt="Vista previa de la demo de formulario" loading="lazy">
+            <div class="demo-grid" data-stagger>
+                <article class="demo-card lift shine">
+                    <div class="demo-cover cover-green" aria-hidden="true"><i class="fa-solid fa-list-check"></i></div>
                     <div class="demo-body">
                         <h3>Demo de formulario</h3>
                         <p>Formulario con validaciones en tiempo real, autocompletado mediante API y una tabla interactiva de usuarios.</p>
-                        <a class="button button-green" href="content/demos/demo1.html" target="_blank" rel="noopener noreferrer">Ver demo</a>
+                        <a class="button button-green press" href="content/demos/demo1.html">Ver demo</a>
                     </div>
                 </article>
 
-                <article class="demo-card">
-                    <img src="https://placehold.co/600x400/60A5FA/FFFFFF?text=Demo+Móvil" alt="Vista previa de la demo móvil" loading="lazy">
+                <article class="demo-card lift shine">
+                    <div class="demo-cover cover-blue" aria-hidden="true"><i class="fa-solid fa-mobile-screen-button"></i></div>
                     <div class="demo-body">
                         <h3>Demo móvil</h3>
-                        <p>Prototipo de aplicación responsiva orientado a interacción y experiencia de usuario.</p>
-                        <a class="button button-blue" href="content/demos/demo2.html" target="_blank" rel="noopener noreferrer">Ver demo</a>
+                        <p>Prototipo de aplicación responsiva con navegación adaptable, modales, modo oscuro y datos simulados.</p>
+                        <a class="button button-blue press" href="content/demos/demo2.html">Ver demo</a>
                     </div>
                 </article>
 
-                <article class="demo-card">
-                    <img src="https://placehold.co/600x400/7C3AED/FFFFFF?text=Frendo+%2B+IA" alt="Vista previa del proyecto Frendo con IA aplicada" loading="lazy">
+                <article class="demo-card lift shine">
+                    <div class="demo-cover cover-violet" aria-hidden="true"><i class="fa-solid fa-gift"></i></div>
                     <div class="demo-body">
                         <h3>Frendo · Full stack + IA</h3>
                         <p>Aplicación de Amigo Secreto con FastAPI, React, SQLite y asistente de regalos con IA generativa.</p>
-                        <a class="button button-green" href="https://frendo-project-front.onrender.com" target="_blank" rel="noopener noreferrer">Abrir Frendo</a>
-                        <a class="button button-blue" style="margin-top: .65rem" href="https://github.com/Gariix1/frendo_project" target="_blank" rel="noopener noreferrer">Ver código</a>
+                        <a class="button button-green press" href="https://frendo-project-front.onrender.com" target="_blank" rel="noopener noreferrer">Abrir Frendo <span class="sr-only">(se abre en una pestaña nueva)</span></a>
+                        <a class="button button-blue button-stack press" href="https://github.com/Gariix1/frendo_project" target="_blank" rel="noopener noreferrer">Ver código <span class="sr-only">(se abre en una pestaña nueva)</span></a>
                     </div>
                 </article>
             </div>
@@ -202,7 +212,7 @@
         </div>
     </footer>
 
-    <nav class="floating-nav" aria-label="Accesos rápidos">
+    <nav class="floating-nav" aria-label="Navegación inferior">
         <a href="#perfil"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Perfil</span></a>
         <a href="#experiencia"><i class="fa-solid fa-briefcase" aria-hidden="true"></i><span>Experiencia</span></a>
         <a href="#demos"><i class="fa-solid fa-flask" aria-hidden="true"></i><span>Demos</span></a>

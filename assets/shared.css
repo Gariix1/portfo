@@ -1,0 +1,161 @@
+/* =========================================================
+   Sistema compartido de movimiento y componentes comunes
+   Usado por index.html y por las demos.
+
+   Reglas del sistema (para que nada entre en conflicto):
+   1. Solo se animan transform y opacity (compositor, sin repaints).
+   2. Las animaciones de entrada usan `animation ... backwards`, nunca
+      `forwards`: al terminar no dejan estilos fijos y no pisan los
+      transform de hover / :active.
+   3. Hover solo con puntero fino; en táctil se usa :active y la clase
+      .is-active (tarjeta centrada en pantalla) que pone shared.js.
+   4. Con prefers-reduced-motion todo queda estático y visible.
+   ========================================================= */
+
+:root {
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-in: cubic-bezier(0.55, 0.06, 0.68, 0.19);
+    --dur-fast: 0.18s;
+    --dur-base: 0.35s;
+    --dur-slow: 0.7s;
+    --lift-shadow: 0 22px 48px rgba(15, 23, 42, 0.18);
+    --brand: #15803d;
+    --brand-strong: #166534;
+}
+
+/* ---------- Keyframes (una sola definición por efecto) ---------- */
+@keyframes reveal-up {
+    from { opacity: 0; transform: translateY(22px); }
+}
+@keyframes reveal-pop {
+    from { opacity: 0; transform: scale(0.82); }
+}
+@keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-14px); }
+}
+@keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+@keyframes shine-sweep {
+    from { transform: translateX(-130%) skewX(-18deg); }
+    to { transform: translateX(260%) skewX(-18deg); }
+}
+@keyframes spin-once {
+    from { transform: rotate(-90deg) scale(0.4); opacity: 0; }
+    to { transform: rotate(0) scale(1); opacity: 1; }
+}
+
+/* ---------- Revelado al hacer scroll ----------
+   Solo se oculta el contenido si JS está activo (html.js), así
+   sin JS la página sigue siendo totalmente legible. */
+.js .reveal:not(.is-visible) { opacity: 0; transform: translateY(22px); }
+.js .reveal.is-visible {
+    animation: reveal-up var(--dur-slow) var(--ease-out) calc(var(--i, 0) * 70ms) backwards;
+}
+.js .reveal.reveal-pop.is-visible {
+    animation-name: reveal-pop;
+    animation-timing-function: var(--ease-spring);
+    animation-duration: 0.5s;
+    animation-delay: calc(var(--i, 0) * 35ms);
+}
+.js .reveal.reveal-left:not(.is-visible) { transform: translateX(-14px); }
+.js .reveal.reveal-left.is-visible { animation-name: slide-in-left; }
+
+/* ---------- Elevación / feedback ----------
+   .lift  -> tarjeta que se eleva (hover con mouse, .is-active en táctil)
+   .press -> se hunde al tocar (todos los dispositivos) */
+.lift,
+.press {
+    transition: transform var(--dur-base) var(--ease-out),
+                box-shadow var(--dur-base) var(--ease-out),
+                background-color var(--dur-fast) ease;
+    will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+    .lift:hover { transform: translateY(-6px); box-shadow: var(--lift-shadow); }
+}
+@media (hover: none) {
+    .lift.is-active { transform: translateY(-5px); box-shadow: var(--lift-shadow); }
+}
+.lift:active,
+.press:active { transform: scale(0.97); transition-duration: 0.08s; }
+
+/* Destello que cruza la tarjeta (hover con mouse o tarjeta activa en táctil) */
+.shine { position: relative; overflow: hidden; isolation: isolate; }
+.shine::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 40%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.38), transparent);
+    transform: translateX(-130%) skewX(-18deg);
+    pointer-events: none;
+    z-index: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+    .shine:hover::after { animation: shine-sweep 0.9s var(--ease-out); }
+}
+@media (hover: none) {
+    .shine.is-active::after { animation: shine-sweep 0.9s var(--ease-out); }
+}
+
+/* ---------- Botón de volver (todas las demos) ---------- */
+.back-link {
+    position: fixed;
+    top: max(0.9rem, env(safe-area-inset-top));
+    left: max(0.9rem, env(safe-area-inset-left));
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0.55rem 1.05rem 0.55rem 0.85rem;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #fff;
+    font: 600 0.92rem/1 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: slide-in-left 0.6s var(--ease-out) 0.15s backwards;
+    transition: transform var(--dur-base) var(--ease-out),
+                box-shadow var(--dur-base) var(--ease-out),
+                background-color var(--dur-fast) ease;
+}
+.back-link i { transition: transform var(--dur-base) var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+    .back-link:hover { background: var(--brand-strong); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26); }
+    .back-link:hover i { transform: translateX(-4px); }
+}
+.back-link:active { transform: scale(0.94); transition-duration: 0.08s; }
+.back-link:focus-visible { outline: 3px solid #fff; outline-offset: 3px; box-shadow: 0 0 0 6px var(--brand-strong); }
+
+/* Variante dentro de un encabezado (la usa la demo móvil) */
+.back-link--inline {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    margin-top: -1.375rem;
+    box-shadow: none;
+    animation-name: slide-in-left;
+}
+@media (max-width: 520px) {
+    .back-link--inline { padding: 0; width: 2.75rem; justify-content: center; }
+    .back-link--inline .back-link__label {
+        position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+}
+
+/* ---------- Movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+    .js .reveal:not(.is-visible) { opacity: 1; transform: none; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
