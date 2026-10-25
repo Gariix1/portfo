@@ -1,0 +1,180 @@
+/* Demo 2 · Prototipo móvil "FluentApp"
+   Utilidades -> assets/tailwind.css · tokens y movimiento comunes -> assets/shared.css
+   Aquí: layout base, componentes y animaciones propias (una sola definición por efecto). */
+
+:root {
+    --page-bg: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 48%, #f3f4f6 100%);
+    --sticky-search-bg: rgba(255, 255, 255, 0.95);
+    --brand: #3b82f6;           /* el botón de volver toma el color de la demo */
+    --brand-strong: #1d4ed8;
+}
+html.dark {
+    --page-bg: linear-gradient(135deg, #111827 0%, #111827 52%, #0f172a 100%);
+    --sticky-search-bg: rgba(17, 24, 39, 0.95);
+    --brand: #6d28d9;
+    --brand-strong: #5b21b6;
+}
+
+/* ---------- Base (sin !important, sin alturas contradictorias) ---------- */
+html { min-height: 100%; overflow-x: hidden; background-color: #f1f5f9; color-scheme: light; }
+html.dark { background-color: #111827; color-scheme: dark; }
+body {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+/* Fondo fijo propio: evita saltos de color al hacer overscroll en iOS */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--page-bg);
+    pointer-events: none;
+}
+#app-content-wrapper { min-height: 100vh; min-height: 100dvh; }
+#desktop-sidebar { position: sticky; top: 0; height: 100vh; height: 100dvh; align-self: flex-start; flex-shrink: 0; }
+#desktop-sidebar nav, main#main-content-area { min-height: 0; overscroll-behavior-y: contain; -webkit-overflow-scrolling: touch; }
+main#main-content-area {
+    background: transparent;
+    scroll-behavior: smooth;
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) { main#main-content-area { padding-bottom: 1.5rem; } }
+#mobile-navbar { bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #9ca3af40; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: #f9fafb30; }
+
+/* ---------- Keyframes ---------- */
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes tab-in { from { opacity: 0; transform: translateY(18px) scale(0.985); } }
+@keyframes icon-bounce { 0%, 100% { transform: scale(1); } 45% { transform: scale(1.35) translateY(-2px); } }
+@keyframes modal-in { from { opacity: 0; transform: translateY(28px) scale(0.95); } }
+@keyframes modal-out { to { opacity: 0; transform: translateY(24px) scale(0.96); } }
+@keyframes sheet-in { from { transform: translateY(100%); } }
+@keyframes sheet-out { to { transform: translateY(100%); } }
+@keyframes spinner-rotate { to { transform: rotate(360deg); } }
+@keyframes toast-in-mobile { from { opacity: 0; transform: translate(-50%, 24px) scale(0.95); } }
+@keyframes toast-out-mobile { to { opacity: 0; transform: translate(-50%, 24px) scale(0.95); } }
+@keyframes toast-in-desktop { from { opacity: 0; transform: translateX(28px) scale(0.95); } }
+@keyframes toast-out-desktop { to { opacity: 0; transform: translateX(28px) scale(0.95); } }
+@keyframes badge-ping { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.55); } 100% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } }
+
+/* ---------- Pestañas y entrada escalonada ---------- */
+.tab-content.active { animation: tab-in 0.45s var(--ease-out) backwards; }
+.stagger > * { animation: reveal-up 0.55s var(--ease-out) calc(var(--i, 0) * 55ms) backwards; }
+.stagger > :nth-child(1) { --i: 1; }  .stagger > :nth-child(2) { --i: 2; }
+.stagger > :nth-child(3) { --i: 3; }  .stagger > :nth-child(4) { --i: 4; }
+.stagger > :nth-child(5) { --i: 5; }  .stagger > :nth-child(6) { --i: 6; }
+.stagger > :nth-child(7) { --i: 7; }  .stagger > :nth-child(8) { --i: 8; }
+.nav-icon.animated { animation: icon-bounce 0.5s var(--ease-spring); }
+
+/* Botones de navegación: se hunden al tocar; hover solo con mouse */
+#mobile-navbar button, #desktop-sidebar button { transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-fast) ease, color var(--dur-fast) ease; }
+#mobile-navbar button:active, #desktop-sidebar button:active { transform: scale(0.92); transition-duration: 0.08s; }
+
+/* ---------- Tarjetas ---------- */
+.explore-card, .tutorial-card {
+    cursor: pointer;
+    transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), background-color var(--dur-fast) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+    .explore-card:hover, .tutorial-card:hover { transform: translateY(-5px); box-shadow: var(--lift-shadow); }
+}
+.explore-card:active, .tutorial-card:active { transform: scale(0.97); transition-duration: 0.08s; }
+.tutorial-card-icon-container { height: 80px; border-radius: 0.75rem; transition: transform var(--dur-base) var(--ease-spring); }
+.tutorial-card-icon-container i { font-size: 2.5rem; }
+@media (hover: hover) and (pointer: fine) { .tutorial-card:hover .tutorial-card-icon-container { transform: scale(1.06) rotate(-2deg); } }
+.tutorial-card:active .tutorial-card-icon-container { transform: scale(0.94); }
+.keyword-tag { display: inline-block; padding: 0.25rem 0.6rem; margin: 0.2rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; }
+
+/* Portadas generadas con CSS (sin imágenes externas) */
+.rec-cover { position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center; color: rgba(255, 255, 255, 0.92); overflow: hidden; }
+.rec-cover i { font-size: 2.75rem; transition: transform var(--dur-slow) var(--ease-spring); }
+.rec-cover::before { content: ""; position: absolute; width: 140%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 60%); transform: translate(-30%, -35%); }
+@media (hover: hover) and (pointer: fine) { .explore-card:hover .rec-cover i { transform: scale(1.18) rotate(-6deg); } }
+.explore-card:active .rec-cover i { transform: scale(0.9); }
+.result-cover { display: grid; place-items: center; width: 100%; height: 6rem; border-radius: 0.6rem; color: #fff; font-size: 1.75rem; }
+@media (min-width: 640px) { .result-cover { width: 8rem; flex: none; } }
+
+/* Perfil */
+.profile-picture-container {
+    width: 112px; height: 112px; margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 9999px; border: 3px solid var(--border-color, white);
+    background-color: #e5e7eb; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-size: 48px; color: var(--primary-color, #3b82f6);
+    position: relative; cursor: pointer;
+    transition: transform var(--dur-base) var(--ease-spring);
+}
+@media (hover: hover) and (pointer: fine) { .profile-picture-container:hover { transform: scale(1.06); } }
+.profile-picture-container:active { transform: scale(0.94); }
+.dark .profile-picture-container { background-color: #4b5563; --border-color: #374151; color: var(--primary-color-dark, #8b5cf6); }
+
+/* Buscador pegajoso */
+.search-input-container { position: sticky; top: -1px; z-index: 15; padding-block: 0.75rem; background-color: var(--sticky-search-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+
+/* Notificaciones */
+.notification-badge {
+    position: absolute; top: -4px; right: -4px; width: 18px; height: 18px;
+    border-radius: 50%; background-color: #ef4444; color: #fff;
+    font-size: 0.65rem; line-height: 14px; text-align: center; font-weight: 700;
+    border: 2px solid var(--surface-color); transform: scale(0);
+    transition: transform 0.35s var(--ease-spring);
+}
+.notification-badge.visible { transform: scale(1); animation: badge-ping 1.6s ease-out 2; }
+.post-card.is-new { animation: tab-in 0.5s var(--ease-out) backwards; }
+
+/* Selector de iconos */
+.icon-selector-btn { width: 36px; height: 36px; border: 2px solid transparent; transition: border-color var(--dur-fast) ease, background-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-spring); }
+.icon-selector-btn:active { transform: scale(0.88); }
+.icon-selector-btn.selected { border-color: var(--primary-color); background-color: var(--primary-color-alpha); }
+
+.spinner { display: inline-block; width: 1em; height: 1em; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spinner-rotate 0.8s linear infinite; }
+
+/* ---------- Modales: un único mecanismo (.hidden / .is-closing) ---------- */
+.modal-overlay {
+    position: fixed; inset: 0; z-index: 40;
+    display: flex; align-items: center; justify-content: center; padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    animation: fade-in 0.3s ease-out;
+}
+.dark .modal-overlay { background-color: rgba(0, 0, 0, 0.55); }
+.modal-overlay.hidden { display: none; }
+.modal-content {
+    z-index: 50; width: 100%; max-width: 500px;
+    max-height: calc(100dvh - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+    animation: modal-in 0.4s var(--ease-spring) backwards;
+}
+.modal-overlay.is-closing { animation: fade-out 0.25s ease-in forwards; pointer-events: none; }
+.modal-overlay.is-closing .modal-content { animation: modal-out 0.25s var(--ease-in) forwards; }
+/* En móvil los modales suben desde abajo, como una hoja */
+@media (max-width: 767px) {
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal-content { max-width: none; border-radius: 1.25rem 1.25rem 0 0; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); animation-name: sheet-in; animation-duration: 0.45s; animation-timing-function: var(--ease-out); }
+    .modal-overlay.is-closing .modal-content { animation-name: sheet-out; }
+}
+
+/* ---------- Toasts ---------- */
+.toast-notification {
+    position: fixed; z-index: 100; display: flex; align-items: center;
+    padding: 10px 16px; border-radius: 12px;
+    color: #fff; font-size: 0.875rem; line-height: 1.25rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+.toast-notification.mobile { bottom: calc(5rem + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); animation: toast-in-mobile 0.4s var(--ease-out) backwards; }
+.toast-notification.desktop { bottom: 24px; right: 24px; animation: toast-in-desktop 0.4s var(--ease-out) backwards; }
+.toast-notification.is-leaving.mobile { animation: toast-out-mobile 0.4s var(--ease-in) forwards; }
+.toast-notification.is-leaving.desktop { animation: toast-out-desktop 0.4s var(--ease-in) forwards; }
+.toast-icon { margin-right: 10px; font-size: 1.2em; }
